@@ -1,0 +1,60 @@
+.logosamples-page {
+
+  #root {
+    margin: 0 auto;
+  }
+
+  .logo {
+    height: 10em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+  }
+
+  .logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+  }
+
+  .logo.react:hover {
+    filter: drop-shadow(0 0 2em #fb9961ea);
+  }
+
+  /* .logo.flask:hover {
+    filter: drop-shadow(0 0 2em #fb61daaa);
+  } */
+
+  .logo.fastapi:hover {
+    filter: drop-shadow(0 0 2em #63fd52aa);
+  }
+
+  .logo.tailwind:hover {
+    filter: drop-shadow(0 0 2em #0ccaffaa);
+
+  }
+}
+
+
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
