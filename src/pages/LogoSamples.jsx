@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import reactLogo from "../assets/react.svg";
 import "./LogoSamples.css";
@@ -6,7 +5,6 @@ import "./LogoSamples.css";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const LogoSamples = () => {
-  const [users, setUsers] = useState([]);
   const [icons, setIcons] = useState([]);
 
   useEffect(() => {
