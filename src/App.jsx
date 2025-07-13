@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import UnderMaintenance from "./pages/UnderMaintenance";
 // import LogoSamples from "./pages/LogoSamples";
-// import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const rootRef = useRef(null);
@@ -16,7 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<UnderMaintenance />} />
             {/* <Route path="/logosamples" element={<LogoSamples />} /> */}
-            {/* <Route path="*" element={<NotFound />} /> */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       </div>
