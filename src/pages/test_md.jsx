@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, Calendar, Tag, Eye } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { ChevronLeft, Calendar, Tag, Eye } from "lucide-react";
 
 // マークダウンファイルの内容を文字列として定義
 const markdownFiles = {
@@ -196,80 +196,98 @@ measurePerformance('Component render', () => {
 });
 \`\`\`
 
-パフォーマンス改善の具体的な数値とともに解説します...`
+パフォーマンス改善の具体的な数値とともに解説します...`,
 };
 
 // フロントマター解析関数
 const parseFrontMatter = (content) => {
   const frontMatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
   const match = content.match(frontMatterRegex);
-  
+
   if (!match) {
     return { metadata: {}, content };
   }
-  
+
   const frontMatter = match[1];
   const markdownContent = match[2];
-  
+
   const metadata = {};
-  const lines = frontMatter.split('\n');
-  
-  lines.forEach(line => {
-    const colonIndex = line.indexOf(':');
+  const lines = frontMatter.split("\n");
+
+  lines.forEach((line) => {
+    const colonIndex = line.indexOf(":");
     if (colonIndex !== -1) {
       const key = line.substring(0, colonIndex).trim();
       let value = line.substring(colonIndex + 1).trim();
-      
+
       // 値の処理
       if (value.startsWith('"') && value.endsWith('"')) {
         value = value.slice(1, -1);
-      } else if (value.startsWith('[') && value.endsWith(']')) {
-        value = value.slice(1, -1).split(',').map(item => item.trim().replace(/"/g, ''));
-      } else if (value === 'true') {
+      } else if (value.startsWith("[") && value.endsWith("]")) {
+        value = value
+          .slice(1, -1)
+          .split(",")
+          .map((item) => item.trim().replace(/"/g, ""));
+      } else if (value === "true") {
         value = true;
-      } else if (value === 'false') {
+      } else if (value === "false") {
         value = false;
       }
-      
+
       metadata[key] = value;
     }
   });
-  
+
   return { metadata, content: markdownContent };
 };
 
 // シンプルなマークダウン変換関数
 const parseMarkdown = (content) => {
   let html = content;
-  
+
   // コードブロック（```で囲まれた部分）
   html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-    return `<pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-${lang || 'text'}">${code.trim()}</code></pre>`;
+    return `<pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto"><code class="language-${lang || "text"}">${code.trim()}</code></pre>`;
   });
-  
+
   // インラインコード
-  html = html.replace(/`([^`]+)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm">$1</code>');
-  
+  html = html.replace(
+    /`([^`]+)`/g,
+    '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm">$1</code>',
+  );
+
   // 見出し
-  html = html.replace(/^### (.*$)/gm, '<h3 class="text-lg font-semibold mt-6 mb-3">$1</h3>');
-  html = html.replace(/^## (.*$)/gm, '<h2 class="text-xl font-semibold mt-8 mb-4">$1</h2>');
-  html = html.replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold mt-8 mb-6">$1</h1>');
-  
+  html = html.replace(
+    /^### (.*$)/gm,
+    '<h3 class="text-lg font-semibold mt-6 mb-3">$1</h3>',
+  );
+  html = html.replace(
+    /^## (.*$)/gm,
+    '<h2 class="text-xl font-semibold mt-8 mb-4">$1</h2>',
+  );
+  html = html.replace(
+    /^# (.*$)/gm,
+    '<h1 class="text-2xl font-bold mt-8 mb-6">$1</h1>',
+  );
+
   // 太字
-  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  
+  html = html.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
   // リスト
   html = html.replace(/^- (.*$)/gm, '<li class="ml-4">• $1</li>');
-  
+
   // 段落
-  html = html.split('\n').map(line => {
-    line = line.trim();
-    if (line === '') return '<br>';
-    if (line.startsWith('<')) return line;
-    if (line.startsWith('•')) return line;
-    return `<p class="mb-4 leading-relaxed">${line}</p>`;
-  }).join('\n');
-  
+  html = html
+    .split("\n")
+    .map((line) => {
+      line = line.trim();
+      if (line === "") return "<br>";
+      if (line.startsWith("<")) return line;
+      if (line.startsWith("•")) return line;
+      return `<p class="mb-4 leading-relaxed">${line}</p>`;
+    })
+    .join("\n");
+
   return html;
 };
 
@@ -279,29 +297,34 @@ export default function ReactOnlyBlog() {
 
   useEffect(() => {
     // マークダウンファイルを解析して記事一覧を作成
-    const parsedArticles = Object.entries(markdownFiles).map(([slug, content]) => {
-      const { metadata, content: markdownContent } = parseFrontMatter(content);
-      
-      return {
-        slug,
-        ...metadata,
-        content: parseMarkdown(markdownContent)
-      };
-    });
-    
-    setArticles(parsedArticles.filter(article => article.published));
+    const parsedArticles = Object.entries(markdownFiles).map(
+      ([slug, content]) => {
+        const { metadata, content: markdownContent } =
+          parseFrontMatter(content);
+
+        return {
+          slug,
+          ...metadata,
+          content: parseMarkdown(markdownContent),
+        };
+      },
+    );
+
+    setArticles(parsedArticles.filter((article) => article.published));
   }, []);
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('ja-JP', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   const getTypeColor = (type) => {
-    return type === 'tech' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800';
+    return type === "tech"
+      ? "bg-blue-100 text-blue-800"
+      : "bg-green-100 text-green-800";
   };
 
   // 記事詳細表示
@@ -315,38 +338,47 @@ export default function ReactOnlyBlog() {
           <ChevronLeft size={20} />
           記事一覧に戻る
         </button>
-        
+
         <article className="bg-white rounded-lg shadow-sm border p-8">
           <div className="flex items-center gap-3 mb-4">
             <span className="text-2xl">{selectedArticle.emoji}</span>
-            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(selectedArticle.type)}`}>
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(selectedArticle.type)}`}
+            >
               {selectedArticle.type}
             </span>
           </div>
-          
+
           <h1 className="text-3xl font-bold mb-4">{selectedArticle.title}</h1>
-          
+
           <div className="flex items-center gap-4 mb-6 text-gray-600">
             <div className="flex items-center gap-1">
               <Calendar size={16} />
-              <span className="text-sm">{formatDate(selectedArticle.published_at)}</span>
+              <span className="text-sm">
+                {formatDate(selectedArticle.published_at)}
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <Tag size={16} />
               <div className="flex gap-1">
-                {selectedArticle.topics.map(topic => (
-                  <span key={topic} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                {selectedArticle.topics.map((topic) => (
+                  <span
+                    key={topic}
+                    className="text-xs bg-gray-100 px-2 py-1 rounded"
+                  >
                     {topic}
                   </span>
                 ))}
               </div>
             </div>
           </div>
-          
+
           <div className="prose prose-lg max-w-none">
-            <div 
+            <div
               className="article-content"
-              dangerouslySetInnerHTML={{ __html: selectedArticle.content || '' }} 
+              dangerouslySetInnerHTML={{
+                __html: selectedArticle.content || "",
+              }}
             />
           </div>
         </article>
@@ -373,29 +405,34 @@ export default function ReactOnlyBlog() {
               <div className="text-2xl">{article.emoji}</div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(article.type)}`}>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(article.type)}`}
+                  >
                     {article.type}
                   </span>
                   <span className="text-sm text-gray-500">
                     {formatDate(article.published_at)}
                   </span>
                 </div>
-                
+
                 <h2 className="text-xl font-semibold mb-3 hover:text-blue-600 transition-colors">
                   {article.title}
                 </h2>
-                
+
                 <div className="flex items-center gap-2 mb-3">
                   <Tag size={16} className="text-gray-400" />
                   <div className="flex gap-1 flex-wrap">
-                    {article.topics.map(topic => (
-                      <span key={topic} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                    {article.topics.map((topic) => (
+                      <span
+                        key={topic}
+                        className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
+                      >
                         {topic}
                       </span>
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <button className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1">
                     <Eye size={16} />

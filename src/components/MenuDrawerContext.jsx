@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
 const MenuDrawerContext = createContext();
 
@@ -14,4 +14,4 @@ export const MenuDrawerProvider = ({ children }) => {
       {children}
     </MenuDrawerContext.Provider>
   );
-}; 
+};

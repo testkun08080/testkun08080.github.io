@@ -14,7 +14,7 @@ const BlogList = () => {
           const { attributes } = fm(raw);
           const slug = path.split("/").pop().replace(".md", "");
           return { ...attributes, slug };
-        })
+        }),
       );
       // 日付で降順ソート（dateがある場合）
       loadedPosts.sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -32,19 +32,35 @@ const BlogList = () => {
             key={post.slug}
             className="bg-white border border-gray-200 rounded-lg shadow-md p-6 w-full max-w-xs flex flex-col hover:shadow-lg transition-shadow"
           >
-            <Link to={`/blog/${post.slug}`} className="flex items-center mb-2 hover:underline">
-              {post.emoji && <span className="text-2xl mr-2">{post.emoji}</span>}
+            <Link
+              to={`/blog/${post.slug}`}
+              className="flex items-center mb-2 hover:underline"
+            >
+              {post.emoji && (
+                <span className="text-2xl mr-2">{post.emoji}</span>
+              )}
               <span className="text-lg font-semibold">{post.title}</span>
             </Link>
-            {post.date && <div className="text-gray-500 text-sm mb-2">{post.date}</div>}
+            {post.date && (
+              <div className="text-gray-500 text-sm mb-2">{post.date}</div>
+            )}
             {post.topics && Array.isArray(post.topics) && (
               <div className="flex flex-wrap gap-2 mb-2">
                 {post.topics.map((topic) => (
-                  <span key={topic} className="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded">{topic}</span>
+                  <span
+                    key={topic}
+                    className="bg-teal-100 text-teal-700 text-xs px-2 py-1 rounded"
+                  >
+                    {topic}
+                  </span>
                 ))}
               </div>
             )}
-            {post.type && <span className="inline-block bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded">{post.type}</span>}
+            {post.type && (
+              <span className="inline-block bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded">
+                {post.type}
+              </span>
+            )}
           </div>
         ))}
       </div>
@@ -52,4 +68,4 @@ const BlogList = () => {
   );
 };
 
-export default BlogList; 
+export default BlogList;

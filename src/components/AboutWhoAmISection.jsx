@@ -1,33 +1,25 @@
-import React from 'react';
-import AboutProfileCard from './AboutProfileCard';
-import AboutQualifications from './AboutQualifications';
-import AboutTools from './AboutTools';
-import AboutProgrammingLanguages from './AboutProgrammingLanguages';
-import AboutHobbies from './AboutHobbies';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import AboutProfileCard from "./AboutProfileCard";
+import AboutQualifications from "./AboutQualifications";
+import AboutTools from "./AboutTools";
+import AboutProgrammingLanguages from "./AboutProgrammingLanguages";
+import AboutHobbies from "./AboutHobbies";
+import { useTranslation } from "react-i18next";
 
 const AboutWhoAmISection = () => {
   const { t } = useTranslation();
   return (
-    <section style={{ width: '100%', maxWidth: 1512, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 33, background: 'transparent' }}>
-      <h2 style={{
-        fontFamily: 'Inter',
-        fontWeight: 800,
-        color: '#000',
-        textAlign: 'center',
-        margin: 0,
-      }}
-      className="text-4xl font-extrabold text-black text-center m-0"
-      >
-        {t('about_section_title2')}
+    <section className="w-full max-w-[1512px] mx-auto flex flex-col items-center gap-[33px] bg-transparent">
+      <h2 className="font-[Inter] text-4xl font-extrabold text-black text-center m-0">
+        {t("about_section_title2")}
       </h2>
       {/* 縦並び: プロフィールカードと資格 */}
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 36, alignItems: 'center' }}>
+      <div className="w-full flex flex-col gap-3 items-center">
         <AboutProfileCard />
         <AboutQualifications />
       </div>
       {/* 横並び: ツール・言語・趣味 */}
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'row', gap: 36, justifyContent: 'center', alignItems: 'flex-start', marginTop: 36 }}>
+      <div className="w-full flex flex-row gap-5 justify-center items-start mt-9">
         <AboutTools />
         <AboutProgrammingLanguages />
         <AboutHobbies />
@@ -36,4 +28,4 @@ const AboutWhoAmISection = () => {
   );
 };
 
-export default AboutWhoAmISection; 
+export default AboutWhoAmISection;

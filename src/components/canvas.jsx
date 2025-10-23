@@ -1,58 +1,41 @@
-import { useEffect, useRef } from "react";
-
 /**
- * 全画面にノイズを描画するCanvasコンポーネント
+ * 全画面にノイズを描画するSVGコンポーネント
+ * SVG feTurbulenceフィルターを使用してノイズエフェクトを実現
+ *
+ * position: absolute - ページ全体に適用（スクロールと一緒に移動）
+ * これによりスクロール位置に関係なく一貫したノイズエフェクトを実現
  */
 const NoiseCanvas = () => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const dpr = window.devicePixelRatio || 1;
-    const resize = () => {
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      drawNoise();
-    };
-    const drawNoise = () => {
-      if (!ctx) return;
-      const w = canvas.width;
-      const h = canvas.height;
-      const imageData = ctx.createImageData(w, h);
-      for (let i = 0; i < w * h * 4; i += 4) {
-        const shade = Math.floor(Math.random() * 256);
-        imageData.data[i] = shade;
-        imageData.data[i + 1] = shade;
-        imageData.data[i + 2] = shade;
-        imageData.data[i + 3] = 20; // 0-255, alpha控えめ
-      }
-      ctx.putImageData(imageData, 0, 0);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-    return () => {
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
   return (
-    <canvas
-      ref={canvasRef}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
       style={{
-        position: "fixed",
+        position: "absolute",
         top: 0,
         left: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: 0,
+        width: "100%",
+        height: "100%",
+        minHeight: "100vh",
+        zIndex: 9999, // 最前面に表示
         pointerEvents: "none",
+        opacity: 1, // ノイズの不透明度を調整
+        mixBlendMode: "overlay", // ブレンドモードで自然に合成
       }}
       aria-hidden="true"
-    />
+    >
+      <defs>
+        <filter id="noiseFilter" x="0%" y="0%" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="3.22"
+            numOctaves="5"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+      </defs>
+      <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+    </svg>
   );
 };
 

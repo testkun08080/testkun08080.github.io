@@ -24,7 +24,11 @@ const BlogPost = () => {
   }, [slug]);
 
   if (notFound) {
-    return <div className="max-w-2xl mx-auto py-8 px-4">記事が見つかりませんでした。</div>;
+    return (
+      <div className="max-w-2xl mx-auto py-8 px-4">
+        記事が見つかりませんでした。
+      </div>
+    );
   }
   if (!post) {
     return <div className="max-w-2xl mx-auto py-8 px-4">読み込み中...</div>;
@@ -32,7 +36,9 @@ const BlogPost = () => {
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
-      <Link to="/blog" className="text-blue-600 hover:underline">← ブログ一覧へ</Link>
+      <Link to="/blog" className="text-blue-600 hover:underline">
+        ← ブログ一覧へ
+      </Link>
       <h1 className="text-3xl font-bold mt-4 mb-2">{post.title}</h1>
       <div className="text-gray-500 text-sm mb-6">{post.date}</div>
       <div className="prose max-w-none">
@@ -42,4 +48,4 @@ const BlogPost = () => {
   );
 };
 
-export default BlogPost; 
+export default BlogPost;

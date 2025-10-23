@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Commands
 
 ### Core Development
+
 ```bash
 # Start development server
 npm run dev
@@ -23,11 +24,13 @@ npm run deploy
 ```
 
 ### Testing
+
 This project doesn't have a dedicated test suite. Manual testing through the development server and visual inspection are the primary QA methods.
 
 ## Project Architecture
 
 ### Tech Stack
+
 - **Frontend**: React 19 with React Router DOM
 - **Build Tool**: Vite 6.x
 - **Styling**: Tailwind CSS 4.x + DaisyUI
@@ -38,7 +41,9 @@ This project doesn't have a dedicated test suite. Manual testing through the dev
 ### Key Architecture Patterns
 
 #### Route Structure
+
 The app uses a simple single-page application pattern with React Router:
+
 - `/` - Under maintenance page (default route)
 - `/sunaba` - Main sandbox/portfolio page
 - `/about` - About page with bilingual content
@@ -48,6 +53,7 @@ The app uses a simple single-page application pattern with React Router:
 - `*` - 404 Not Found page
 
 #### Component Architecture
+
 - **Global Context**: `MenuDrawerProvider` for mobile menu state
 - **Layout Components**: `Header`, `Footer`, `NoiseCanvas` (background effect)
 - **Page Components**: Located in `src/pages/`
@@ -55,6 +61,7 @@ The app uses a simple single-page application pattern with React Router:
 - **Menu System**: Context-based drawer navigation for mobile
 
 #### Internationalization (i18n)
+
 - **Languages**: Japanese (default) and English
 - **Implementation**: All translations centralized in `src/i18n.js`
 - **Usage Pattern**: Import `useTranslation` hook in components
@@ -62,6 +69,7 @@ The app uses a simple single-page application pattern with React Router:
 - **Translation Keys**: Nested structure with page-specific prefixes (e.g., `about_`, `reels_`)
 
 #### Blog System
+
 - **Content**: Markdown files in `src/blog/` directory
 - **Front-matter**: Uses `front-matter` library for metadata parsing
 - **Dynamic Loading**: Vite's `import.meta.glob` for dynamic imports
@@ -69,6 +77,7 @@ The app uses a simple single-page application pattern with React Router:
 - **Rendering**: ReactMarkdown for content display
 
 ### File Structure Conventions
+
 ```
 src/
 ├── components/          # Reusable React components
@@ -84,30 +93,35 @@ src/
 ## Development Guidelines
 
 ### Component Development
+
 - Use functional components with hooks
 - Follow React 19 patterns and best practices
 - Implement responsive design mobile-first with Tailwind
 - Use DaisyUI components when available for consistent styling
 
 ### Internationalization
+
 - Always use translation keys for user-facing text
 - Add both Japanese and English translations for new content
 - Use the `useTranslation` hook: `const { t } = useTranslation();`
 - Translation key naming: `section_element` (e.g., `about_name`, `reels_title`)
 
 ### Styling Approach
+
 - Primary: Tailwind CSS utility classes
 - Secondary: DaisyUI component classes
 - Custom styles: Use CSS modules or styled-components sparingly
 - Responsive: Mobile-first approach with Tailwind breakpoints
 
 ### Blog Content
+
 - Create markdown files in `src/blog/` with descriptive filenames
 - Include front-matter with at least `title` and `date` fields
 - Use slug-friendly filenames as they determine the URL structure
 - Content should be in markdown format for ReactMarkdown compatibility
 
 ### Deployment Notes
+
 - **GitHub Pages**: Automatic deployment via `npm run deploy`
 - **Base Path**: Configured for GitHub Pages in vite.config.js
 - **Build Output**: `dist/` directory (ignored by git)

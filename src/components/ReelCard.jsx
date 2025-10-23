@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 const ReelCard = ({ period, title, description, youtubeId }) => (
-  <div style={{ width: 360, borderRadius: 16, boxShadow: '0 2px 12px rgba(0,0,0,0.08)', background: '#fff', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <div style={{ width: '100%', height: 202, background: '#000' }}>
+  <div className="w-[360px] rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] bg-white overflow-hidden flex flex-col items-center">
+    <div className="w-full h-[202px] bg-black">
       <iframe
         width="100%"
         height="202"
@@ -11,10 +11,10 @@ const ReelCard = ({ period, title, description, youtubeId }) => (
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
-        style={{ display: 'block', borderRadius: '0', width: '100%', height: '100%' }}
+        className="block rounded-none w-full h-full"
       />
     </div>
-    <div style={{ padding: 16, width: '100%' }}>
+    <div className="p-4 w-full">
       <div className="text-xs text-[#888] mb-1">{period}</div>
       <h2 className="text-xl font-bold text-[#222] mb-2 mt-0">{title}</h2>
       <p className="text-base text-[#555] m-0">{description}</p>
@@ -22,4 +22,4 @@ const ReelCard = ({ period, title, description, youtubeId }) => (
   </div>
 );
 
-export default ReelCard; 
+export default ReelCard;

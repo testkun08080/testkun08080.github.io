@@ -1,83 +1,105 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Heart, Bookmark, Share2, User, Eye, ThumbsUp, MessageCircle } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Calendar,
+  Clock,
+  Heart,
+  Bookmark,
+  Share2,
+  User,
+  Eye,
+  ThumbsUp,
+  MessageCircle,
+} from "lucide-react";
 
 // SEO用のHelmet風コンポーネント
-const SEOHead = ({ title, description, keywords, author, publishedAt, image, url }) => {
+const SEOHead = ({
+  title,
+  description,
+  keywords,
+  author,
+  publishedAt,
+  image,
+  url,
+}) => {
   useEffect(() => {
     // タイトルの設定
-    document.title = title ? `${title} | Tech Blog` : 'Tech Blog - プログラミングと技術の記事';
-    
+    document.title = title
+      ? `${title} | Tech Blog`
+      : "Tech Blog - プログラミングと技術の記事";
+
     // メタタグの設定
     const setMetaTag = (name, content) => {
-      let meta = document.querySelector(`meta[name="${name}"]`) || 
-                 document.querySelector(`meta[property="${name}"]`);
+      let meta =
+        document.querySelector(`meta[name="${name}"]`) ||
+        document.querySelector(`meta[property="${name}"]`);
       if (!meta) {
-        meta = document.createElement('meta');
-        if (name.startsWith('og:') || name.startsWith('twitter:')) {
-          meta.setAttribute('property', name);
+        meta = document.createElement("meta");
+        if (name.startsWith("og:") || name.startsWith("twitter:")) {
+          meta.setAttribute("property", name);
         } else {
-          meta.setAttribute('name', name);
+          meta.setAttribute("name", name);
         }
         document.head.appendChild(meta);
       }
-      meta.setAttribute('content', content);
+      meta.setAttribute("content", content);
     };
 
     // 基本メタタグ
-    setMetaTag('description', description);
-    setMetaTag('keywords', keywords);
-    setMetaTag('author', author);
-    
+    setMetaTag("description", description);
+    setMetaTag("keywords", keywords);
+    setMetaTag("author", author);
+
     // OGP (Open Graph Protocol)
-    setMetaTag('og:title', title);
-    setMetaTag('og:description', description);
-    setMetaTag('og:type', 'article');
-    setMetaTag('og:url', url);
-    setMetaTag('og:image', image);
-    setMetaTag('og:site_name', 'Tech Blog');
-    
+    setMetaTag("og:title", title);
+    setMetaTag("og:description", description);
+    setMetaTag("og:type", "article");
+    setMetaTag("og:url", url);
+    setMetaTag("og:image", image);
+    setMetaTag("og:site_name", "Tech Blog");
+
     // Twitter Card
-    setMetaTag('twitter:card', 'summary_large_image');
-    setMetaTag('twitter:title', title);
-    setMetaTag('twitter:description', description);
-    setMetaTag('twitter:image', image);
-    
+    setMetaTag("twitter:card", "summary_large_image");
+    setMetaTag("twitter:title", title);
+    setMetaTag("twitter:description", description);
+    setMetaTag("twitter:image", image);
+
     // 記事用メタタグ
     if (publishedAt) {
-      setMetaTag('article:published_time', publishedAt);
-      setMetaTag('article:author', author);
+      setMetaTag("article:published_time", publishedAt);
+      setMetaTag("article:author", author);
     }
-    
+
     // 構造化データ (JSON-LD)
     const structuredData = {
       "@context": "https://schema.org",
       "@type": "Article",
-      "headline": title,
-      "description": description,
-      "author": {
+      headline: title,
+      description: description,
+      author: {
         "@type": "Person",
-        "name": author
+        name: author,
       },
-      "datePublished": publishedAt,
-      "publisher": {
+      datePublished: publishedAt,
+      publisher: {
         "@type": "Organization",
-        "name": "Tech Blog",
-        "url": "https://yourdomain.com"
+        name: "Tech Blog",
+        url: "https://yourdomain.com",
       },
-      "mainEntityOfPage": {
+      mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": url
-      }
+        "@id": url,
+      },
     };
-    
-    let jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+
+    let jsonLdScript = document.querySelector(
+      'script[type="application/ld+json"]',
+    );
     if (!jsonLdScript) {
-      jsonLdScript = document.createElement('script');
-      jsonLdScript.type = 'application/ld+json';
+      jsonLdScript = document.createElement("script");
+      jsonLdScript.type = "application/ld+json";
       document.head.appendChild(jsonLdScript);
     }
     jsonLdScript.textContent = JSON.stringify(structuredData);
-    
   }, [title, description, keywords, author, publishedAt, image, url]);
 
   return null;
@@ -106,7 +128,7 @@ const ZennBlog = () => {
       author: {
         name: "田中太郎",
         avatar: "https://via.placeholder.com/40x40/3B82F6/FFFFFF?text=T",
-        username: "tanaka_taro"
+        username: "tanaka_taro",
       },
       content: `# React + Vite で始める現代的なフロントエンド開発
 
@@ -209,7 +231,7 @@ React + Viteの組み合わせは、開発体験を大幅に向上させます�
 
 ---
 
-何か質問があれば、コメントでお気軽にお聞かせください！`
+何か質問があれば、コメントでお気軽にお聞かせください！`,
     },
     {
       id: 2,
@@ -226,7 +248,7 @@ React + Viteの組み合わせは、開発体験を大幅に向上させます�
       author: {
         name: "山田花子",
         avatar: "https://via.placeholder.com/40x40/EF4444/FFFFFF?text=Y",
-        username: "yamada_hanako"
+        username: "yamada_hanako",
       },
       content: `# TypeScript初心者が知っておくべき基本文法
 
@@ -347,7 +369,7 @@ export default Counter;
 
 TypeScriptの基本文法をマスターすることで、より安全で保守性の高いコードを書くことができます。最初は複雑に感じるかもしれませんが、慣れてくると開発効率が大幅に向上します。
 
-次回は、TypeScriptの高度な機能について詳しく解説します！`
+次回は、TypeScriptの高度な機能について詳しく解説します！`,
     },
     {
       id: 3,
@@ -364,7 +386,7 @@ TypeScriptの基本文法をマスターすることで、より安全で保守�
       author: {
         name: "佐藤次郎",
         avatar: "https://via.placeholder.com/40x40/10B981/FFFFFF?text=S",
-        username: "sato_jiro"
+        username: "sato_jiro",
       },
       content: `# CSS Grid と Flexbox の使い分け完全ガイド
 
@@ -510,8 +532,8 @@ CSS Gridは**2次元**のレイアウトシステムです。
 
 CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術です。それぞれの特徴を理解し、適切な場面で使い分けることで、効率的で保守性の高いCSSを書くことができます。
 
-実際の開発では、両方を組み合わせて使用することが多いので、どちらも習得することをおすすめします！`
-    }
+実際の開発では、両方を組み合わせて使用することが多いので、どちらも習得することをおすすめします！`,
+    },
   ];
 
   useEffect(() => {
@@ -519,7 +541,7 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
     // 初期状態でいいねとブックマークの状態を設定
     const initialLikes = {};
     const initialBookmarks = {};
-    sampleArticles.forEach(article => {
+    sampleArticles.forEach((article) => {
       initialLikes[article.id] = false;
       initialBookmarks[article.id] = false;
     });
@@ -529,69 +551,100 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
 
   const parseMarkdown = (content) => {
     let html = content
-      .replace(/^# (.+)$/gm, '<h1 class="text-3xl font-bold mb-6 text-gray-900">$1</h1>')
-      .replace(/^## (.+)$/gm, '<h2 class="text-2xl font-semibold mb-4 mt-8 text-gray-800">$1</h2>')
-      .replace(/^### (.+)$/gm, '<h3 class="text-xl font-semibold mb-3 mt-6 text-gray-800">$1</h3>')
-      .replace(/^#### (.+)$/gm, '<h4 class="text-lg font-semibold mb-2 mt-4 text-gray-800">$1</h4>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+      .replace(
+        /^# (.+)$/gm,
+        '<h1 class="text-3xl font-bold mb-6 text-gray-900">$1</h1>',
+      )
+      .replace(
+        /^## (.+)$/gm,
+        '<h2 class="text-2xl font-semibold mb-4 mt-8 text-gray-800">$1</h2>',
+      )
+      .replace(
+        /^### (.+)$/gm,
+        '<h3 class="text-xl font-semibold mb-3 mt-6 text-gray-800">$1</h3>',
+      )
+      .replace(
+        /^#### (.+)$/gm,
+        '<h4 class="text-lg font-semibold mb-2 mt-4 text-gray-800">$1</h4>',
+      )
+      .replace(
+        /\*\*(.+?)\*\*/g,
+        '<strong class="font-semibold text-gray-900">$1</strong>',
+      )
       .replace(/\*(.+?)\*/g, '<em class="italic">$1</em>')
-      .replace(/`(.+?)`/g, '<code class="bg-gray-100 text-red-600 px-1 py-0.5 rounded text-sm font-mono">$1</code>')
-      .replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-blue-500 bg-blue-50 p-4 my-4 italic text-gray-700">$1</blockquote>')
+      .replace(
+        /`(.+?)`/g,
+        '<code class="bg-gray-100 text-red-600 px-1 py-0.5 rounded text-sm font-mono">$1</code>',
+      )
+      .replace(
+        /^> (.+)$/gm,
+        '<blockquote class="border-l-4 border-blue-500 bg-blue-50 p-4 my-4 italic text-gray-700">$1</blockquote>',
+      )
       .replace(/^- (.+)$/gm, '<li class="ml-4 mb-1">$1</li>')
       .replace(/^\d+\. (.+)$/gm, '<li class="ml-4 mb-1">$1</li>')
-      .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" class="text-blue-600 hover:text-blue-800 underline" target="_blank">$1</a>')
-      .replace(/\n/g, '<br>');
+      .replace(
+        /\[(.+?)\]\((.+?)\)/g,
+        '<a href="$2" class="text-blue-600 hover:text-blue-800 underline" target="_blank">$1</a>',
+      )
+      .replace(/\n/g, "<br>");
 
     // コードブロックの処理
     html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-      return `<pre class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code class="language-${lang || 'text'} text-sm">${code.trim()}</code></pre>`;
+      return `<pre class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code class="language-${lang || "text"} text-sm">${code.trim()}</code></pre>`;
     });
 
     // リストの処理
-    html = html.replace(/(<li class="ml-4 mb-1">.*<\/li>)/g, '<ul class="list-disc list-inside space-y-1 mb-4">$1</ul>');
-    html = html.replace(/<\/ul><br><ul class="list-disc list-inside space-y-1 mb-4">/g, '');
+    html = html.replace(
+      /(<li class="ml-4 mb-1">.*<\/li>)/g,
+      '<ul class="list-disc list-inside space-y-1 mb-4">$1</ul>',
+    );
+    html = html.replace(
+      /<\/ul><br><ul class="list-disc list-inside space-y-1 mb-4">/g,
+      "",
+    );
 
     return html;
   };
 
   const handleLike = (articleId) => {
-    setLikes(prev => ({
+    setLikes((prev) => ({
       ...prev,
-      [articleId]: !prev[articleId]
+      [articleId]: !prev[articleId],
     }));
   };
 
   const handleBookmark = (articleId) => {
-    setBookmarks(prev => ({
+    setBookmarks((prev) => ({
       ...prev,
-      [articleId]: !prev[articleId]
+      [articleId]: !prev[articleId],
     }));
   };
 
   if (selectedArticle) {
     // 記事の概要を生成（SEO用）
-    const articleDescription = selectedArticle.content
-      .replace(/[#*`]/g, '')
-      .split('\n')
-      .find(line => line.length > 50)
-      ?.substring(0, 160) + '...' || 
+    const articleDescription =
+      selectedArticle.content
+        .replace(/[#*`]/g, "")
+        .split("\n")
+        .find((line) => line.length > 50)
+        ?.substring(0, 160) + "..." ||
       `${selectedArticle.title}について詳しく解説しています。`;
-    
+
     const articleUrl = `https://yourdomain.com/articles/${selectedArticle.slug}`;
     const articleImage = `https://yourdomain.com/og-images/${selectedArticle.slug}.jpg`;
-    
+
     return (
       <div className="min-h-screen bg-gray-50">
         <SEOHead
           title={selectedArticle.title}
           description={articleDescription}
-          keywords={selectedArticle.topics.join(', ')}
+          keywords={selectedArticle.topics.join(", ")}
           author={selectedArticle.author.name}
           publishedAt={selectedArticle.publishedAt}
           image={articleImage}
           url={articleUrl}
         />
-        
+
         {/* Header */}
         <header className="bg-white shadow-sm border-b">
           <div className="max-w-4xl mx-auto px-4 py-4">
@@ -603,7 +656,9 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
             </button>
             <div className="flex items-center space-x-3 mb-4">
               <span className="text-3xl">{selectedArticle.emoji}</span>
-              <h1 className="text-2xl font-bold text-gray-900">{selectedArticle.title}</h1>
+              <h1 className="text-2xl font-bold text-gray-900">
+                {selectedArticle.title}
+              </h1>
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
               <div className="flex items-center space-x-2">
@@ -616,7 +671,9 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
               </div>
               <div className="flex items-center space-x-1">
                 <Calendar className="w-4 h-4" />
-                <time dateTime={selectedArticle.publishedAt}>{selectedArticle.publishedAt}</time>
+                <time dateTime={selectedArticle.publishedAt}>
+                  {selectedArticle.publishedAt}
+                </time>
               </div>
               <div className="flex items-center space-x-1">
                 <Clock className="w-4 h-4" />
@@ -631,7 +688,9 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
           <article className="bg-white rounded-lg shadow-sm p-8 mb-8">
             <div
               className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: parseMarkdown(selectedArticle.content) }}
+              dangerouslySetInnerHTML={{
+                __html: parseMarkdown(selectedArticle.content),
+              }}
             />
           </article>
 
@@ -642,24 +701,34 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
                 <button
                   onClick={() => handleLike(selectedArticle.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-colors ${
-                    likes[selectedArticle.id] 
-                      ? 'bg-red-100 text-red-600' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    likes[selectedArticle.id]
+                      ? "bg-red-100 text-red-600"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
-                  <Heart className={`w-5 h-5 ${likes[selectedArticle.id] ? 'fill-current' : ''}`} />
-                  <span>{selectedArticle.likes + (likes[selectedArticle.id] ? 1 : 0)}</span>
+                  <Heart
+                    className={`w-5 h-5 ${likes[selectedArticle.id] ? "fill-current" : ""}`}
+                  />
+                  <span>
+                    {selectedArticle.likes +
+                      (likes[selectedArticle.id] ? 1 : 0)}
+                  </span>
                 </button>
                 <button
                   onClick={() => handleBookmark(selectedArticle.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-colors ${
-                    bookmarks[selectedArticle.id] 
-                      ? 'bg-blue-100 text-blue-600' 
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    bookmarks[selectedArticle.id]
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
                 >
-                  <Bookmark className={`w-5 h-5 ${bookmarks[selectedArticle.id] ? 'fill-current' : ''}`} />
-                  <span>{selectedArticle.bookmarks + (bookmarks[selectedArticle.id] ? 1 : 0)}</span>
+                  <Bookmark
+                    className={`w-5 h-5 ${bookmarks[selectedArticle.id] ? "fill-current" : ""}`}
+                  />
+                  <span>
+                    {selectedArticle.bookmarks +
+                      (bookmarks[selectedArticle.id] ? 1 : 0)}
+                  </span>
                 </button>
               </div>
               <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200">
@@ -683,12 +752,14 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
         url="https://yourdomain.com"
         image="https://yourdomain.com/og-image.jpg"
       />
-      
+
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <h1 className="text-3xl font-bold text-gray-900">Tech Blog</h1>
-          <p className="text-gray-600 mt-2">プログラミングと技術に関する記事を発信しています</p>
+          <p className="text-gray-600 mt-2">
+            プログラミングと技術に関する記事を発信しています
+          </p>
         </div>
       </header>
 
@@ -703,7 +774,13 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
             >
               <div className="p-6">
                 <div className="flex items-start space-x-4">
-                  <span className="text-3xl" role="img" aria-label={article.title}>{article.emoji}</span>
+                  <span
+                    className="text-3xl"
+                    role="img"
+                    aria-label={article.title}
+                  >
+                    {article.emoji}
+                  </span>
                   <div className="flex-1">
                     <h2 className="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
                       {article.title}
@@ -719,7 +796,9 @@ CSS GridとFlexboxは競合する技術ではなく、**補完し合う**技術�
                       </div>
                       <div className="flex items-center space-x-1">
                         <Calendar className="w-4 h-4" />
-                        <time dateTime={article.publishedAt}>{article.publishedAt}</time>
+                        <time dateTime={article.publishedAt}>
+                          {article.publishedAt}
+                        </time>
                       </div>
                       <div className="flex items-center space-x-1">
                         <Clock className="w-4 h-4" />

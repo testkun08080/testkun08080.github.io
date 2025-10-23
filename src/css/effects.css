@@ -1,0 +1,120 @@
+/* .effect-bg {
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), #ff00aa, #000);
+    color: white;
+    font-size: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.1s ease;
+} */
+
+
+/* .cursor-dot {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+} */
+
+body::after {
+    content: "";
+    position: fixed;
+    top: var(--y);
+    left: var(--x);
+    width: 15px;
+    height: 15px;
+    background: rgba(69, 110, 223, 0.8);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s linear;
+    mix-blend-mode: screen;
+
+}
+
+
+
+/* ripple effect */
+.ripple {
+    position: fixed;
+    width: 15px;
+    height: 15px;
+    background: rgba(69, 110, 223, 0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0);
+    animation: rippleEffect 0.6s ease-out forwards;
+}
+
+@keyframes rippleEffect {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+
+    70% {
+        transform: translate(-50%, -50%) scale(8);
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(10);
+        opacity: 0;
+    }
+}
+
+/* screen shake */
+@keyframes screenShake {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0) rotate(-0.5deg);
+    }
+
+    40% {
+        transform: translate(3px, 0) rotate(0.5deg);
+    }
+
+    60% {
+        transform: translate(-3px, 0) rotate(-0.5deg);
+    }
+
+    80% {
+        transform: translate(3px, 0) rotate(0.5deg);
+    }
+
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+}
+
+/* #root要素全体を揺らす（fixed要素は除外） */
+body.shake #root {
+    animation: screenShake 0.3s ease;
+}
+
+/* position: fixed/absoluteの要素は揺らさない */
+body.shake header,
+body.shake footer,
+body.shake svg[style*="position: fixed"],
+body.shake svg[style*="position: absolute"],
+body.shake [style*="position: fixed"],
+body.shake .fixed,
+body.shake .absolute {
+    animation: none !important;
+    transform: none !important;
+}
+
+/* NoiseCanvasなどのオーバーレイ要素も除外 */
+body.shake > svg {
+    animation: none !important;
+    transform: none !important;
+}

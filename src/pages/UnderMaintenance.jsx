@@ -1,5 +1,7 @@
 import onineko from "../assets/ojigi_animal_neko.png";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+
+import BulgeTextEffect from "./BulgeTextEffect";
 
 const UnderMaintenance = () => {
   const { t } = useTranslation();
@@ -11,13 +13,15 @@ const UnderMaintenance = () => {
           className="w-48 h-48 object-contain mb-4"
           alt="kouji neko"
         />
-        <h1 className="text-4xl font-bold mb-4">{t('undermaintenance_title')}</h1>
-        <p className="text-lg text-center mb-4">{t('undermaintenance_message')}</p>
+        <h1 className="text-4xl font-bold mb-4">
+          {t("undermaintenance_title")}
+        </h1>
+        <p className="text-lg text-center mb-4">
+          {t("undermaintenance_message")}
+        </p>
       </div>
     </div>
   );
 };
 
 export default UnderMaintenance;
-
-

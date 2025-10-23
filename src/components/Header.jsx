@@ -1,50 +1,72 @@
-import React from 'react';
-import homeIcon from '../assets/header_homebutton.png';
-import languageIcon from '../assets/header_languageicon.png';
-import menuIcon from '../assets/header_menuicon.svg';
-import { useMenuDrawer } from './MenuDrawerContext';
-import { useTranslation } from 'react-i18next';
+import React from "react";
+import { Link } from "react-router-dom";
+import homeIcon from "../assets/header_homebutton.png";
+import languageIcon from "../assets/header_languageicon.png";
+import menuIcon from "../assets/header_menuicon.svg";
+import { useMenuDrawer } from "./MenuDrawerContext";
+import { useTranslation } from "react-i18next";
+
+const navigationLinks = [
+  { key: "about", href: "/about" },
+  { key: "reels", href: "/reels" },
+  { key: "contact", href: "/contact" },
+];
 
 const Header = () => {
   const { openMenu } = useMenuDrawer();
   const { t, i18n } = useTranslation();
 
   const toggleLanguage = () => {
-    i18n.changeLanguage(i18n.language === 'ja' ? 'en' : 'ja');
+    i18n.changeLanguage(i18n.language === "ja" ? "en" : "ja");
   };
 
   return (
-    <header style={{
-      width: '100%',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      zIndex: 100,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '6px 60px',
-      gap: 19,
-      boxSizing: 'border-box',
-      // boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-    }}>
+    <header className="w-full fixed z-[100] flex items-center justify-between p-4 px-6 md:p-10 md:px-30 box-border">
       {/* ホームボタン */}
-      <a href="/" style={{ display: 'flex', alignItems: 'center', width: 32, height: 32 }}>
-        <img src={homeIcon} alt={t('home')} style={{ width: 32, height: 32 }} />
-      </a>
-      {/* 中央スペース */}
-      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '9px 103px' }} />
-      {/* 言語アイコン */}
-      <button onClick={toggleLanguage} style={{ background: 'none', border: 'none', padding: 0, marginRight: 19, cursor: 'pointer' }}>
-        <img src={languageIcon} alt={t('language')} style={{ width: 42, height: 42 }} />
-      </button>
-      <span style={{marginRight: 19, fontWeight: 'bold'}}>{i18n.language === 'ja' ? 'JA' : 'EN'}</span>
-      {/* メニューボタン */}
-      <button onClick={openMenu} style={{ background: 'none', border: 'none', padding: '4px 0', cursor: 'pointer', width: 32, height: 18.2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <img src={menuIcon} alt={t('menu')} style={{ width: 32, height: 18.2 }} />
-      </button>
+      <Link to="/" className="flex items-center w-8 h-8">
+        <img src={homeIcon} alt={t("home")} className="w-8 h-8" />
+      </Link>
+
+      {/* デスクトップナビゲーション（中央） */}
+      <nav className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 gap-8">
+        {navigationLinks.map((link) => (
+          <Link
+            key={link.key}
+            to={link.href}
+            className="text-lg font-medium text-gray-800 hover:text-gray-600 transition-colors"
+          >
+            {t(link.key)}
+          </Link>
+        ))}
+      </nav>
+
+      {/* 右側のコントロール */}
+      <div className="flex items-center gap-4">
+        {/* 言語切り替え */}
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center gap-2 bg-none border-none p-0 cursor-pointer"
+        >
+          <img
+            src={languageIcon}
+            alt={t("language")}
+            className="w-[42px] h-[42px]"
+          />
+          <span className="font-bold">
+            {i18n.language === "ja" ? "JA" : "EN"}
+          </span>
+        </button>
+
+        {/* モバイルメニューボタン */}
+        <button
+          onClick={openMenu}
+          className="md:hidden bg-none border-none p-0 cursor-pointer w-8 h-[18.2px] flex items-center justify-center"
+        >
+          <img src={menuIcon} alt={t("menu")} className="w-8 h-[18.2px]" />
+        </button>
+      </div>
     </header>
   );
 };
 
-export default Header; 
+export default Header;

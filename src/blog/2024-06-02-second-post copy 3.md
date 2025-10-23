@@ -5,8 +5,6 @@ date: "2024-06-02"
 
 ## 2つ目の記事
 
-
-
 ## 解決方法
 
 ### 1. 強制インストール（`--legacy-peer-deps`）
@@ -53,4 +51,4 @@ npm install front-matter --legacy-peer-deps
 npm install front-matter --legacy-peer-deps
 ```
 
-エラーや警告が出た場合は、その内容を教えてください。 
+エラーや警告が出た場合は、その内容を教えてください。
