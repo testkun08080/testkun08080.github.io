@@ -1,11 +1,10 @@
 import { PageFrame } from "../../components/PageFrame";
 import { useLanguage } from "../../lib/LanguageContext";
 import styles from "./Contact.module.css";
-
-const iconEmailUrl = new URL("../../../src/assets/icon_email.svg", import.meta.url).href;
-const iconGithubUrl = new URL("../../../src/assets/icon_github.svg", import.meta.url).href;
-const iconLinkedinUrl = new URL("../../../src/assets/icon_linkedin.svg", import.meta.url).href;
-const iconTwitterUrl = new URL("../../../src/assets/icon_twitter.svg", import.meta.url).href;
+import iconEmailUrl from "../../../src/assets/icon_email.svg";
+import iconGithubUrl from "../../../src/assets/icon_github.svg";
+import iconLinkedinUrl from "../../../src/assets/icon_linkedin.svg";
+import iconTwitterUrl from "../../../src/assets/icon_twitter.svg";
 
 export default function Page() {
   const { t } = useLanguage();

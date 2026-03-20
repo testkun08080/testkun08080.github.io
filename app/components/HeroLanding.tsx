@@ -2,9 +2,8 @@ import { useRef } from "react";
 import { useLanguage } from "../lib/LanguageContext";
 import { useSmoothPointer } from "../hooks/useSmoothPointer";
 import styles from "./HeroLanding.module.css";
-
-const logoUrl = new URL("../../images/logo.svg", import.meta.url).href;
-const coverUrl = new URL("../../images/web表紙.png", import.meta.url).href;
+import logoUrl from "../../images/logo.svg";
+import coverUrl from "../../images/web表紙.png";
 
 export function HeroLanding() {
   const { t } = useLanguage();

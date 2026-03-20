@@ -1,37 +1,56 @@
 import { PageFrame } from "../../components/PageFrame";
 import { useLanguage } from "../../lib/LanguageContext";
 import styles from "./About.module.css";
-
-const selfyUrl = new URL("../../../src/assets/profile_selfy.png", import.meta.url).href;
-const iconEmailUrl = new URL("../../../src/assets/icon_email.svg", import.meta.url).href;
-const iconGithubUrl = new URL("../../../src/assets/icon_github.svg", import.meta.url).href;
-const iconLinkedinUrl = new URL("../../../src/assets/icon_linkedin.svg", import.meta.url).href;
-const iconTwitterUrl = new URL("../../../src/assets/icon_twitter.svg", import.meta.url).href;
+import selfyUrl from "../../../src/assets/profile_selfy.png";
+import iconEmailUrl from "../../../src/assets/icon_email.svg";
+import iconGithubUrl from "../../../src/assets/icon_github.svg";
+import iconLinkedinUrl from "../../../src/assets/icon_linkedin.svg";
+import iconTwitterUrl from "../../../src/assets/icon_twitter.svg";
+import toolUe4 from "../../../src/assets/tool_ue4.svg";
+import toolUnity from "../../../src/assets/tool_unity.svg";
+import toolMaya from "../../../src/assets/tool_maya.svg";
+import toolHoudini from "../../../src/assets/tool_houdini.svg";
+import toolZbrush from "../../../src/assets/tool_zbrush.svg";
+import toolBlender from "../../../src/assets/tool_blender.svg";
+import toolPainter from "../../../src/assets/tool_painter.svg";
+import toolDesigner from "../../../src/assets/tool_designer.svg";
+import toolDocker from "../../../src/assets/tool_docker.svg";
+import toolAi from "../../../src/assets/tool_ai.svg";
+import toolLightroom from "../../../src/assets/tool_lightroom.svg";
+import toolPs from "../../../src/assets/tool_ps.svg";
+import toolAe from "../../../src/assets/tool_ae.svg";
+import toolPr from "../../../src/assets/tool_pr.svg";
+import toolXd from "../../../src/assets/tool_xd.svg";
+import toolP4 from "../../../src/assets/tool_p4.svg";
+import toolGit from "../../../src/assets/tool_git.svg";
+import toolJenkins from "../../../src/assets/tool_jenkins.svg";
+import langOpengl from "../../../src/assets/lang_opengl.svg";
+import langHlsl from "../../../src/assets/lang_hlsl.svg";
+import langMaya from "../../../src/assets/lang_maya.svg";
+import langReact from "../../../src/assets/lang_react.svg";
 
 const toolIcons = [
-  "tool_ue4.svg",
-  "tool_unity.svg",
-  "tool_maya.svg",
-  "tool_houdini.svg",
-  "tool_zbrush.svg",
-  "tool_blender.svg",
-  "tool_painter.svg",
-  "tool_designer.svg",
-  "tool_docker.svg",
-  "tool_ai.svg",
-  "tool_lightroom.svg",
-  "tool_ps.svg",
-  "tool_ae.svg",
-  "tool_pr.svg",
-  "tool_xd.svg",
-  "tool_p4.svg",
-  "tool_git.svg",
-  "tool_jenkins.svg",
-].map((name) => new URL(`../../../src/assets/${name}`, import.meta.url).href);
+  toolUe4,
+  toolUnity,
+  toolMaya,
+  toolHoudini,
+  toolZbrush,
+  toolBlender,
+  toolPainter,
+  toolDesigner,
+  toolDocker,
+  toolAi,
+  toolLightroom,
+  toolPs,
+  toolAe,
+  toolPr,
+  toolXd,
+  toolP4,
+  toolGit,
+  toolJenkins,
+];
 
-const languageIcons = ["lang_opengl.svg", "lang_hlsl.svg", "lang_maya.svg", "lang_react.svg"].map(
-  (name) => new URL(`../../../src/assets/${name}`, import.meta.url).href,
-);
+const languageIcons = [langOpengl, langHlsl, langMaya, langReact];
 
 function AboutPanel({ title, body }: { title: string; body: string }) {
   return (

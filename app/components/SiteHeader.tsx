@@ -1,6 +1,9 @@
 import { usePageContext } from "vike-react/usePageContext";
 import { useLanguage } from "../lib/LanguageContext";
 import styles from "./SiteLayout.module.css";
+import homeIconUrl from "../../src/assets/header_homebutton.png";
+import languageIconUrl from "../../src/assets/header_languageicon.png";
+import menuIconUrl from "../../src/assets/header_menuicon.svg";
 
 const navItems = [
   { href: "/sunaba", key: "nav_sunaba" },
@@ -8,10 +11,6 @@ const navItems = [
   { href: "/reels", key: "nav_reels" },
   { href: "/contact", key: "nav_contact" },
 ] as const;
-
-const homeIconUrl = new URL("../../src/assets/header_homebutton.png", import.meta.url).href;
-const languageIconUrl = new URL("../../src/assets/header_languageicon.png", import.meta.url).href;
-const menuIconUrl = new URL("../../src/assets/header_menuicon.svg", import.meta.url).href;
 
 export function SiteHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
   const { urlPathname } = usePageContext();

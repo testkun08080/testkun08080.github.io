@@ -1,5 +1,5 @@
 // https://vike.dev/Head
-const logoUrl = new URL("../../images/logo.svg", import.meta.url).href;
+import logoUrl from "../../images/logo.svg";
 
 export function Head() {
   return (
