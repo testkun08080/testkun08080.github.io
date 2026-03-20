@@ -1,0 +1,174 @@
+.shell {
+  min-height: 100dvh;
+  background: #e0d4c5;
+  color: #111827;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, #e0d4c5 76%, transparent);
+  border-bottom: 1px solid rgba(17, 24, 39, 0.12);
+}
+
+.headerInner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logoLink {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoImage {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  animation: slowSpin 12s linear infinite;
+}
+
+.desktopNav {
+  display: none;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.desktopNav a {
+  color: #1f2937;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  transition: color 200ms ease;
+}
+
+.desktopNav a:hover,
+.desktopNav a[data-active="true"] {
+  color: #0f3f52;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.langButton,
+.menuButton {
+  border: 1px solid rgba(17, 24, 39, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.32);
+  color: #111827;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.langButton {
+  min-width: 3.2rem;
+  padding: 0.52rem 0.72rem;
+}
+
+.menuButton {
+  width: 2.3rem;
+  height: 2.3rem;
+  font-size: 1.15rem;
+}
+
+.content {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3.5rem;
+}
+
+.footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(17, 24, 39, 0.15);
+  text-align: center;
+  color: #374151;
+  font-size: 0.75rem;
+}
+
+.drawerBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+}
+
+.drawerBackdrop[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawerPanel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(82vw, 320px);
+  z-index: 60;
+  background: rgba(224, 212, 197, 0.96);
+  border-left: 1px solid rgba(17, 24, 39, 0.15);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transform: translateX(100%);
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drawerPanel[data-open="true"] {
+  transform: translateX(0);
+}
+
+.drawerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawerNav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.drawerNav a {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 768px) {
+  .desktopNav {
+    display: flex;
+  }
+
+  .menuButton {
+    display: none;
+  }
+}
+
+@keyframes slowSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

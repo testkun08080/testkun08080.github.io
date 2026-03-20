@@ -1,0 +1,140 @@
+.hero {
+  --pointer-x: 0;
+  --pointer-y: 0;
+  min-height: calc(100dvh - 10rem);
+  border-radius: 1.4rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  position: relative;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.16);
+  isolation: isolate;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.05) translate(calc(var(--pointer-x) * 12px), calc(var(--pointer-y) * 12px));
+  filter: saturate(0.95);
+  animation: bgDrift 16s ease-in-out infinite alternate;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(224, 212, 197, 0.22), transparent 52%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.1), rgba(15, 23, 42, 0.65));
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  min-height: calc(100dvh - 10rem);
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.center {
+  text-align: center;
+  color: #f9fafb;
+  max-width: 640px;
+  transform: translate(calc(var(--pointer-x) * 8px), calc(var(--pointer-y) * 8px));
+  transition: transform 120ms linear;
+}
+
+.logoWrap {
+  margin: 0 auto 1.25rem;
+  width: clamp(6rem, 20vw, 10rem);
+  height: clamp(6rem, 20vw, 10rem);
+  animation: floatLogo 3.8s ease-in-out infinite;
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.38));
+  animation: spinLogo 14s linear infinite;
+}
+
+.title {
+  margin: 0.3rem 0 0.8rem;
+  font-size: clamp(2.2rem, 6vw, 4.6rem);
+  letter-spacing: 0.1em;
+  line-height: 1.05;
+}
+
+.subtitle {
+  margin: 0 0 0.8rem;
+  font-size: clamp(1rem, 2.1vw, 1.35rem);
+}
+
+.description {
+  margin: 0 auto 1.6rem;
+  max-width: 44ch;
+  color: rgba(249, 250, 251, 0.92);
+  line-height: 1.75;
+}
+
+.ctaRow {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.ctaPrimary,
+.ctaSecondary {
+  border-radius: 999px;
+  padding: 0.72rem 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.ctaPrimary {
+  color: #111827;
+  background: rgba(254, 254, 254, 0.93);
+}
+
+.ctaSecondary {
+  color: #f9fafb;
+  border: 1px solid rgba(249, 250, 251, 0.6);
+  background: rgba(15, 23, 42, 0.28);
+}
+
+.ctaPrimary:hover,
+.ctaSecondary:hover {
+  transform: translateY(-1px);
+}
+
+@keyframes spinLogo {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes floatLogo {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bgDrift {
+  0% {
+    transform: scale(1.04) translate(-0.6%, -0.6%);
+  }
+  100% {
+    transform: scale(1.09) translate(0.6%, 0.6%);
+  }
+}
