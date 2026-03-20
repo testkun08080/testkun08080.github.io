@@ -1,8 +1,10 @@
 import { PageFrame } from "../../components/PageFrame";
 import { useLanguage } from "../../lib/LanguageContext";
+import styles from "./Reels.module.css";
 
 type Reel = {
   id: number;
+  period: string;
   title: string;
   description: string;
   youtubeId: string;
@@ -10,8 +12,8 @@ type Reel = {
 
 function ReelCard({ reel }: { reel: Reel }) {
   return (
-    <article className="overflow-hidden rounded-2xl border border-black/15 bg-white/80 shadow-xl">
-      <div className="aspect-video w-full bg-black">
+    <article className={styles.card}>
+      <div className={styles.player}>
         <iframe
           width="100%"
           height="100%"
@@ -22,9 +24,10 @@ function ReelCard({ reel }: { reel: Reel }) {
           allowFullScreen
         />
       </div>
-      <div className="p-5">
-        <h2 className="m-0 text-xl font-bold text-slate-900">{reel.title}</h2>
-        <p className="mt-2 text-slate-700">{reel.description}</p>
+      <div className={styles.body}>
+        <div className={styles.period}>{reel.period}</div>
+        <h2 className={styles.title}>{reel.title}</h2>
+        <p className={styles.description}>{reel.description}</p>
       </div>
     </article>
   );
@@ -35,12 +38,14 @@ export default function Page() {
   const reels: Reel[] = [
     {
       id: 1,
+      period: "2022-2024",
       title: String(t("reels_2022_2024")),
       description: String(t("reels_2022_2024_desc")),
       youtubeId: "pMOKLQ0rxhU",
     },
     {
       id: 2,
+      period: "2017-2022",
       title: String(t("reels_2017_2022")),
       description: String(t("reels_2017_2022_desc")),
       youtubeId: "L2ci7xq4EEk",
@@ -49,7 +54,7 @@ export default function Page() {
 
   return (
     <PageFrame titleKey="reels_title">
-      <div className="grid gap-6">
+      <div className={styles.grid}>
         {reels.map((reel) => (
           <ReelCard key={reel.id} reel={reel} />
         ))}

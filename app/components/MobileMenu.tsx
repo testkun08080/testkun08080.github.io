@@ -24,7 +24,7 @@ export function MobileMenu({
       />
       <aside className={styles.drawerPanel} data-open={open ? "true" : "false"}>
         <div className={styles.drawerHeader}>
-          <strong>{t("nav_home")}</strong>
+          <strong className={styles.drawerTitle}>{t("nav_home")}</strong>
           <button type="button" className={styles.menuButton} onClick={onClose} aria-label="Close menu">
             ×
           </button>

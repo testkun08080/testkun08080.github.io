@@ -11,6 +11,8 @@ body,
 
 body {
   font-family: "Inter", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  overscroll-behavior: none;
+  background: #e0d4c5;
 }
 
 a {
@@ -31,4 +33,86 @@ body.page-transition #page-content {
   opacity: 0;
   transform: translateY(6px);
   filter: blur(4px);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  left: var(--fx-x, 50vw);
+  top: var(--fx-y, 50vh);
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  background: rgba(69, 110, 223, 0.72);
+  mix-blend-mode: screen;
+  transition: transform 0.05s linear;
+  z-index: 9998;
+}
+
+.fx-ripple {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  background: rgba(69, 110, 223, 0.58);
+  border-radius: 999px;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  animation: rippleEffect 0.65s ease-out forwards;
+  z-index: 9997;
+}
+
+@keyframes rippleEffect {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+
+  70% {
+    transform: translate(-50%, -50%) scale(8);
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(10);
+    opacity: 0;
+  }
+}
+
+@keyframes matteShake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2px, 0);
+  }
+  50% {
+    transform: translate(2px, 0);
+  }
+  75% {
+    transform: translate(-2px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+body.fx-shake #root {
+  animation: matteShake 0.25s ease;
+}
+
+body.fx-shake header,
+body.fx-shake footer,
+body.fx-shake [style*="position: fixed"],
+body.fx-shake .fixed,
+body.fx-shake .absolute {
+  animation: none !important;
+  transform: none !important;
+}
+
+@media (pointer: coarse) {
+  body::before {
+    display: none;
+  }
 }
