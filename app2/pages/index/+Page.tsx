@@ -1,9 +1,9 @@
-import { TopicScroll } from "../../components/TopicScroll";
+import { PortfolioScrollExperience } from "../../components/portfolio/PortfolioScrollExperience";
 
 export default function Page() {
   return (
     <main>
-      <TopicScroll />
+      <PortfolioScrollExperience />
     </main>
   );
 }
