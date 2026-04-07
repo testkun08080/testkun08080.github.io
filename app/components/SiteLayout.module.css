@@ -129,6 +129,33 @@
   z-index: 10;
 }
 
+.contentIntro {
+  position: relative;
+  z-index: 10;
+}
+
+/* Collapse layout when hidden so intro page doesn’t get extra scroll under the fold */
+.chromeHidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  transition: opacity 260ms ease;
+}
+
+.chromeVisible {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  height: auto;
+  transition: opacity 260ms ease;
+}
+
 .footer {
   padding: 0.8rem 1rem 1.1rem;
   text-align: center;

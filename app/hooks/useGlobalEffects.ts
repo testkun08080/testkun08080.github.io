@@ -1,7 +1,10 @@
 import { useEffect } from "react";
+import Lenis from "lenis";
 
 export function useGlobalEffects() {
   useEffect(() => {
+    const lenis = new Lenis();
+
     let rafId = 0;
     let x = window.innerWidth * 0.5;
     let y = window.innerHeight * 0.5;
@@ -13,7 +16,9 @@ export function useGlobalEffects() {
       ty = event.clientY;
     };
 
-    const animate = () => {
+    const animate = (time: number) => {
+      lenis.raf(time);
+      
       x += (tx - x) * 0.14;
       y += (ty - y) * 0.14;
       document.body.style.setProperty("--fx-x", `${x}px`);
@@ -29,8 +34,8 @@ export function useGlobalEffects() {
       document.body.appendChild(ripple);
       window.setTimeout(() => ripple.remove(), 680);
 
-      document.body.classList.add("fx-shake");
-      window.setTimeout(() => document.body.classList.remove("fx-shake"), 260);
+      document.body.classList.add("fx-sandstorm");
+      window.setTimeout(() => document.body.classList.remove("fx-sandstorm"), 260);
     };
 
     document.addEventListener("mousemove", onMove);
@@ -41,6 +46,7 @@ export function useGlobalEffects() {
       window.cancelAnimationFrame(rafId);
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("click", onClick);
+      lenis.destroy();
     };
   }, []);
 }
