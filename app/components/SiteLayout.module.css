@@ -1,0 +1,296 @@
+.shell {
+  position: relative;
+  min-height: 100dvh;
+  background: #e0d4c5;
+  color: #0f172a;
+}
+
+.shell::after {
+  content: "";
+  position: fixed;
+  left: -50%;
+  top: -120%;
+  width: 300%;
+  height: 300%;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.12;
+  mix-blend-mode: multiply;
+  background-image:
+    radial-gradient(rgba(20, 20, 20, 0.2) 0.4px, transparent 0.9px),
+    radial-gradient(rgba(20, 20, 20, 0.13) 0.3px, transparent 0.8px);
+  background-size:
+    3px 3px,
+    4px 4px;
+  animation: grainMove 9s steps(10) infinite;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 90;
+  backdrop-filter: blur(8px);
+  background: color-mix(in srgb, #e0d4c5 78%, transparent);
+}
+
+.headerInner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
+}
+
+.homeLink {
+  width: 2.1rem;
+  height: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.homeIcon {
+  width: 100%;
+  height: 100%;
+}
+
+.desktopNav {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 1.4rem;
+  align-items: center;
+}
+
+.desktopNav a {
+  color: #111827;
+  font-weight: 550;
+  font-size: 1.02rem;
+  letter-spacing: 0.13em;
+  transition: color 200ms ease;
+}
+
+.desktopNav a:hover,
+.desktopNav a[data-active="true"] {
+  color: #093a49;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.langButton,
+.menuButton {
+  border: 0;
+  border-radius: 9999px;
+  background: transparent;
+  color: #111827;
+  cursor: pointer;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.langButton {
+  min-width: 3.4rem;
+  padding: 0.15rem 0.3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.languageIcon {
+  width: 2.05rem;
+  height: 2.05rem;
+}
+
+.menuButton {
+  width: 2.1rem;
+  height: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #f3f4f6;
+}
+
+.content {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 5.5rem 1rem 3.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.contentIntro {
+  position: relative;
+  z-index: 10;
+}
+
+/* Collapse layout when hidden so intro page doesn’t get extra scroll under the fold */
+.chromeHidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  height: 0;
+  min-height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  transition: opacity 260ms ease;
+}
+
+.chromeVisible {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  height: auto;
+  transition: opacity 260ms ease;
+}
+
+.footer {
+  padding: 0.8rem 1rem 1.1rem;
+  text-align: center;
+  color: #d1d5db;
+  font-size: 0.75rem;
+  position: relative;
+  z-index: 10;
+}
+
+.drawerBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 260ms ease;
+}
+
+.drawerBackdrop[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drawerPanel {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  z-index: 110;
+  background: transparent;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.98);
+  transition:
+    opacity 220ms ease,
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drawerPanel[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.drawerHeader {
+  position: absolute;
+  top: 1.2rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.drawerNav {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.drawerNav a {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #f8f5f5;
+  letter-spacing: 0.02em;
+  transition: color 180ms ease;
+}
+
+.drawerNav a:hover,
+.drawerNav a[data-active="true"] {
+  color: #f9d784;
+}
+
+.drawerTitle {
+  display: none;
+}
+
+.menuIcon {
+  width: 2rem;
+  height: 1.14rem;
+}
+
+@media (min-width: 768px) {
+  .menuButton {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .desktopNav {
+    display: none;
+  }
+
+  .langButton span {
+    font-size: 0.85rem;
+  }
+}
+
+@keyframes grainMove {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-5%, -10%);
+  }
+  20% {
+    transform: translate(-15%, 5%);
+  }
+  30% {
+    transform: translate(7%, -25%);
+  }
+  40% {
+    transform: translate(-5%, 25%);
+  }
+  50% {
+    transform: translate(-15%, 10%);
+  }
+  60% {
+    transform: translate(15%, 0);
+  }
+  70% {
+    transform: translate(0, 15%);
+  }
+  80% {
+    transform: translate(3%, 35%);
+  }
+  90% {
+    transform: translate(-10%, 10%);
+  }
+}

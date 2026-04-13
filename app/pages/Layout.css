@@ -69,6 +69,7 @@ body.page-transition #page-content {
   animation: app2-grain-pan 7s steps(12) infinite;
 }
 
+<<<<<<< HEAD
 @keyframes app2-grain-pan {
   0%,
   100% {
@@ -92,5 +93,111 @@ body.page-transition #page-content {
   .noise-tile-layer {
     animation: none;
     opacity: 0.08;
+=======
+.fx-ripple {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  background: rgba(69, 110, 223, 0.58);
+  border-radius: 999px;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  animation: rippleEffect 0.65s ease-out forwards;
+  z-index: 9997;
+}
+
+@keyframes rippleEffect {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+
+  70% {
+    transform: translate(-50%, -50%) scale(8);
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(10);
+    opacity: 0;
+  }
+}
+
+body.fx-sandstorm::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 10000;
+  pointer-events: none;
+  background-image: url(/noise.png);
+  background-size: 200px 200px;
+  opacity: 0.8;
+  mix-blend-mode: screen;
+  animation: rapidSandstorm 0.1s steps(2) infinite;
+}
+
+@keyframes rapidSandstorm {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-10%, 5%) scale(1.05); }
+  50% { transform: translate(5%, -10%) scale(1); }
+  75% { transform: translate(-5%, -5%) scale(1.05); }
+  100% { transform: translate(10%, 10%) scale(1); }
+}
+
+@media (pointer: coarse) {
+  body::before {
+    display: none;
+>>>>>>> dev
+  }
+}
+
+.noise-effect:after {
+  animation: grain 8s steps(10) infinite;
+  background-image: url(/noise.png);
+  content: "";
+  height: 300%;
+  left: -50%;
+  opacity: 0.12;
+  position: fixed;
+  top: -110%;
+  width: 300%;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+@keyframes grain {
+  0%,
+  100% {
+    transform: translate(0, 0)
+  }
+  10% {
+    transform: translate(-5%, -10%)
+  }
+  20% {
+    transform: translate(-15%, 5%)
+  }
+  30% {
+    transform: translate(7%, -25%)
+  }
+  40% {
+    transform: translate(-5%, 25%)
+  }
+  50% {
+    transform: translate(-15%, 10%)
+  }
+  60% {
+    transform: translate(15%, 0%)
+  }
+  70% {
+    transform: translate(0%, 15%)
+  }
+  80% {
+    transform: translate(3%, 35%)
+  }
+  90% {
+    transform: translate(-10%, 10%)
   }
 }
