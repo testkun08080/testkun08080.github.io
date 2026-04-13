@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Barcode+39&display=swap");
+
+.pathBarcodeText {
+  font-family: "Libre Barcode 39", ui-monospace, monospace;
+  font-size: 28px;
+  letter-spacing: 0.06em;
+  fill: #0f172a;
+}
+
+.pathBarcodeTextWave {
+  font-family: "Libre Barcode 39", ui-monospace, monospace;
+  font-size: 24px;
+  letter-spacing: 0.08em;
+  fill: #9a3412;
+}
+
+.textTrack {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.loopText {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  padding-left: 20px;
+  font-size: clamp(2rem, 8vw, 5rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffa07a;
+  will-change: transform;
+}
+
+.imageTrack {
+  display: flex;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #e2e8f0;
+}
+
+.loopImage {
+  width: auto;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  flex: 0 0 auto;
+  will-change: transform;
+}
