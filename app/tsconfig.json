@@ -11,8 +11,7 @@
     ],
     "types": [
       "vite/client",
-      "vike-react",
-      "./worker-configuration.d.ts"
+      "vike-react"
     ],
     "noEmit": true,
     "skipLibCheck": true,
@@ -20,6 +19,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts"],
   "exclude": [
     "dist"
   ]

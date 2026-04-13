@@ -1,5 +1,9 @@
-import { HeroLanding } from "../../components/HeroLanding";
+import { PortfolioScrollExperience } from "../../components/portfolio/PortfolioScrollExperience";
 
 export default function Page() {
-  return <HeroLanding />;
+  return (
+    <main>
+      <PortfolioScrollExperience />
+    </main>
+  );
 }
