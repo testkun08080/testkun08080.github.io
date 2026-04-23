@@ -13,20 +13,11 @@ const TEXT = {
   even: ["0%", "-200%"] as const,
 } as const;
 
-const IMG = {
-  durationMs: 80_000,
-  seekOddMs: 40_000,
-  odd: ["100%", "-100%"] as const,
-  even: ["0%", "-200%"] as const,
-} as const;
-
-/**
- * 二重テキスト + startOffset を 0%→50% のみ動かすとループ境界で見た目がつながる
- */
-const PATH_TEXT_ANIM = {
+const PATH = {
   durationMs: 8000,
-  ease: "linear" as const,
-  offsetPct: { from: 0, to: 100 },
+  seekOddMs: 4000,
+  odd: [-100, 0] as const,
+  even: [100, 200] as const,
 } as const;
 
 const RECT_PATH_D = "M 80 80 L 320 80 L 320 320 L 80 320 Z";
@@ -38,48 +29,56 @@ const RECT_PATH_TEXT_LOOP = `${RECT_PATH_TEXT_UNIT.repeat(14)}${RECT_PATH_TEXT_U
 const WAVE_PATH_TEXT_UNIT = "*WAVE*0123456789*PATH*TEXT*";
 const WAVE_PATH_TEXT_LOOP = `${WAVE_PATH_TEXT_UNIT.repeat(10)}${WAVE_PATH_TEXT_UNIT.repeat(10)}`;
 
-function useStartOffsetLoop(textPathRef: RefObject<SVGTextPathElement | null>) {
-  const reduceMotion = useReducedMotion() ?? false;
-
+function useStartOffsetLoop<T extends SVGTextPathElement>(
+  ref: RefObject<T | null>,
+  offsetPct: readonly [number, number],
+  durationMs: number,
+  play: boolean,
+  seekToMs?: number,
+) {
   useLayoutEffect(() => {
-    const tp = textPathRef.current;
-    if (!tp || reduceMotion) return;
+    const tp = ref.current;
+    if (!tp || !play) return;
 
-    const state = { offsetPct: PATH_TEXT_ANIM.offsetPct.from };
+    const state = { offsetPct: offsetPct[0] };
     let anim: ReturnType<typeof animate> | null = null;
+    tp.setAttribute("startOffset", `${offsetPct[0]}%`);
 
-    const run = () => {
-      anim?.revert();
-      anim = null;
-      state.offsetPct = PATH_TEXT_ANIM.offsetPct.from;
-      tp.setAttribute("startOffset", `${PATH_TEXT_ANIM.offsetPct.from}%`);
+    anim = animate(state, {
+      offsetPct: [offsetPct[0], offsetPct[1]],
+      duration: durationMs,
+      ease: "linear",
+      loop: true,
+      onUpdate: () => {
+        tp.setAttribute("startOffset", `${state.offsetPct}%`);
+      },
+    });
 
-      anim = animate(state, {
-        offsetPct: [PATH_TEXT_ANIM.offsetPct.from, PATH_TEXT_ANIM.offsetPct.to],
-        duration: PATH_TEXT_ANIM.durationMs,
-        ease: PATH_TEXT_ANIM.ease,
-        loop: true,
-        onUpdate: () => {
-          tp.setAttribute("startOffset", `${state.offsetPct}%`);
-        },
-      });
-    };
-
-    void document.fonts.ready.then(() => requestAnimationFrame(run));
+    if (seekToMs !== undefined && seekToMs > 0) {
+      anim.seek(seekToMs);
+    }
 
     return () => {
       anim?.revert();
       anim = null;
-      tp.setAttribute("startOffset", `${PATH_TEXT_ANIM.offsetPct.from}%`);
+      tp.setAttribute("startOffset", `${offsetPct[0]}%`);
     };
-  }, [reduceMotion]);
+  }, [ref, offsetPct, durationMs, play, seekToMs]);
 }
 
-function PathTextOnRect() {
+function PathTextOnRect({ play }: { play: boolean }) {
   const rawId = useId();
   const pathId = `anime-loop-rect-${rawId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
-  const textPathRef = useRef<SVGTextPathElement>(null);
-  useStartOffsetLoop(textPathRef);
+  const oddTextPathRef = useRef<SVGTextPathElement>(null);
+  const evenTextPathRef = useRef<SVGTextPathElement>(null);
+  useStartOffsetLoop(
+    oddTextPathRef,
+    PATH.odd,
+    PATH.durationMs,
+    play,
+    PATH.seekOddMs,
+  );
+  useStartOffsetLoop(evenTextPathRef, PATH.even, PATH.durationMs, play);
 
   return (
     <svg
@@ -99,7 +98,12 @@ function PathTextOnRect() {
         strokeLinejoin="round"
       />
       <text className={styles.pathBarcodeText}>
-        <textPath ref={textPathRef} href={`#${pathId}`} startOffset="0%">
+        <textPath ref={oddTextPathRef} href={`#${pathId}`} startOffset="100%">
+          {RECT_PATH_TEXT_LOOP}
+        </textPath>
+      </text>
+      <text className={styles.pathBarcodeText}>
+        <textPath ref={evenTextPathRef} href={`#${pathId}`} startOffset="0%">
           {RECT_PATH_TEXT_LOOP}
         </textPath>
       </text>
@@ -107,11 +111,19 @@ function PathTextOnRect() {
   );
 }
 
-function PathTextOnWave() {
+function PathTextOnWave({ play }: { play: boolean }) {
   const rawId = useId();
   const pathId = `anime-loop-wave-${rawId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
-  const textPathRef = useRef<SVGTextPathElement>(null);
-  useStartOffsetLoop(textPathRef);
+  const oddTextPathRef = useRef<SVGTextPathElement>(null);
+  const evenTextPathRef = useRef<SVGTextPathElement>(null);
+  useStartOffsetLoop(
+    oddTextPathRef,
+    PATH.odd,
+    PATH.durationMs,
+    play,
+    PATH.seekOddMs,
+  );
+  useStartOffsetLoop(evenTextPathRef, PATH.even, PATH.durationMs, play);
 
   return (
     <svg
@@ -131,7 +143,12 @@ function PathTextOnWave() {
         strokeLinecap="round"
       />
       <text className={styles.pathBarcodeTextWave}>
-        <textPath ref={textPathRef} href={`#${pathId}`} startOffset="0%">
+        <textPath ref={oddTextPathRef} href={`#${pathId}`} startOffset="100%">
+          {WAVE_PATH_TEXT_LOOP}
+        </textPath>
+      </text>
+      <text className={styles.pathBarcodeTextWave}>
+        <textPath ref={evenTextPathRef} href={`#${pathId}`} startOffset="0%">
           {WAVE_PATH_TEXT_LOOP}
         </textPath>
       </text>
@@ -173,8 +190,6 @@ export default function Page() {
 
   const textOddRef = useRef<HTMLParagraphElement>(null);
   const textEvenRef = useRef<HTMLParagraphElement>(null);
-  const imgOddRef = useRef<HTMLImageElement>(null);
-  const imgEvenRef = useRef<HTMLImageElement>(null);
 
   useTranslateXLoop(
     textOddRef,
@@ -184,8 +199,6 @@ export default function Page() {
     TEXT.seekOddMs,
   );
   useTranslateXLoop(textEvenRef, TEXT.even, TEXT.durationMs, play);
-  useTranslateXLoop(imgOddRef, IMG.odd, IMG.durationMs, play, IMG.seekOddMs);
-  useTranslateXLoop(imgEvenRef, IMG.even, IMG.durationMs, play);
 
   return (
     <main className="flex min-h-dvh flex-col items-center gap-10 bg-slate-50 px-4 py-10 text-slate-900">
@@ -258,36 +271,12 @@ export default function Page() {
         <div className="flex flex-col items-center gap-10">
           <div className="flex w-full flex-col items-center gap-2">
             <span className="text-xs font-medium text-slate-500">矩形パス</span>
-            <PathTextOnRect />
+            <PathTextOnRect play={play} />
           </div>
           <div className="flex w-full flex-col items-center gap-2">
             <span className="text-xs font-medium text-slate-500">波線パス</span>
-            <PathTextOnWave />
+            <PathTextOnWave play={play} />
           </div>
-        </div>
-      </section>
-
-      <section className="w-full max-w-4xl space-y-3">
-        <h2 className="text-sm font-semibold text-slate-700">画像</h2>
-        <div className={styles.imageTrack}>
-          <img
-            ref={imgOddRef}
-            className={styles.loopImage}
-            src="/vite.svg"
-            alt=""
-            width={400}
-            height={200}
-            draggable={false}
-          />
-          <img
-            ref={imgEvenRef}
-            className={styles.loopImage}
-            src="/vite.svg"
-            alt=""
-            width={400}
-            height={200}
-            draggable={false}
-          />
         </div>
       </section>
 
