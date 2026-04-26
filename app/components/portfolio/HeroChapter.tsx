@@ -4,129 +4,26 @@ import {
   useTransform,
   useReducedMotion,
 } from "motion/react";
-import { animate } from "animejs";
-import { useId, useLayoutEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { PathBarcodeTemplate3D } from "./PathBarcodeTemplate3D";
 
 /**
  * ヒーロー周辺バーコード（SVG textPath + anime.js）の調整はここだけ見ればよい
  */
 const HERO_BARCODE = {
-  /** startOffset のループ 1 周の長さ（ms）。小さいほど速い */
-  durationMs: 22000,
-  /** イージング（マルquee は linear 推奨） */
-  ease: "linear" as const,
-  /** startOffset を何 % から何 % まで動かすか（二重テキストとセット） */
-  offsetPct: { from: 0, to: 50 },
   /** バーコード文字のサイズ（SVG <text> の font-size） */
   fontSize: {
     min: "0.5rem",
-    preferred: "0.5vw",
+    preferred: "1.5vw",
     max: "1.23rem",
   },
   letterSpacing: "0.02em",
   fill: "#7f1d1d",
-  /** BARCODE_UNIT を何回繰り返すかの下限（実際は path 長に応じて増やす） */
-  unitRepeatPerBlock: 36,
-  /**
-   * path.getTotalLength() / この値 ≒ 1 ブロックあたりの unit 繰り返し回数の目安。
-   * 小さくすると周長を埋める文字が増え、空白が出にくい（処理は重くなる）
-   */
-  pathLenDivisor: 2,
 } as const;
-
-const BARCODE_UNIT = "*0123456789ABCDEF*";
-
-/** 周長に対して十分長い 1 ブロック + シーム用に同一ブロックを 2 連結 */
-function buildBarcodePathText(pathLen: number): string {
-  const bar = `${BARCODE_UNIT} `;
-  if (pathLen <= 0) {
-    const fallback = bar.repeat(HERO_BARCODE.unitRepeatPerBlock);
-    return `${fallback}${fallback}`;
-  }
-  /** フォント幅のばらつきで欠けるのを防ぐため、周長より少し多めに取る */
-  const paddedLen = pathLen * 1.25;
-  const repeats = Math.max(
-    HERO_BARCODE.unitRepeatPerBlock,
-    Math.ceil(paddedLen / HERO_BARCODE.pathLenDivisor),
-  );
-  const line = bar.repeat(repeats);
-  return `${line}${line}`;
-}
 
 type Props = {
   className?: string;
 };
-
-const BORDER_PATH_D = "M 2 2 L 98 2 L 98 98 L 2 98 Z";
-
-function HeroBarcodePathRing({ paused }: { paused: boolean }) {
-  const rawId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-  const pathId = `hero-barcode-border-${rawId}`;
-  const pathRef = useRef<SVGPathElement>(null);
-  const textPathRef = useRef<SVGTextPathElement>(null);
-  const [pathText, setPathText] = useState(() => buildBarcodePathText(400));
-
-  /** マウント後＋フォント確定後に path 周長に合わせて文字量を決める */
-  useLayoutEffect(() => {
-    const path = pathRef.current;
-    if (!path) return;
-    const apply = () => setPathText(buildBarcodePathText(path.getTotalLength()));
-    apply();
-    void document.fonts.ready.then(apply);
-  }, []);
-
-  useLayoutEffect(() => {
-    const tp = textPathRef.current;
-    if (!tp || paused) return;
-
-    const state = { offsetPct: HERO_BARCODE.offsetPct.from };
-
-    let anim: ReturnType<typeof animate> | null = null;
-
-    const run = () => {
-      anim?.revert();
-      anim = null;
-      state.offsetPct = HERO_BARCODE.offsetPct.from;
-      tp.setAttribute("startOffset", `${HERO_BARCODE.offsetPct.from}%`);
-
-      anim = animate(state, {
-        offsetPct: [HERO_BARCODE.offsetPct.from, HERO_BARCODE.offsetPct.to],
-        duration: HERO_BARCODE.durationMs,
-        ease: HERO_BARCODE.ease,
-        loop: true,
-        onUpdate: () => {
-          tp.setAttribute("startOffset", `${state.offsetPct}%`);
-        },
-      });
-    };
-
-    void document.fonts.ready.then(() => requestAnimationFrame(run));
-
-    return () => {
-      anim?.revert();
-      anim = null;
-      tp.setAttribute("startOffset", `${HERO_BARCODE.offsetPct.from}%`);
-    };
-  }, [paused, pathText]);
-
-  return (
-    <svg
-      className="absolute inset-0 h-full w-full"
-      viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-      aria-hidden
-    >
-      <defs>
-        <path ref={pathRef} id={pathId} d={BORDER_PATH_D} fill="none" />
-      </defs>
-      <text className="hero-barcode-svg-text" dominantBaseline="middle">
-        <textPath ref={textPathRef} href={`#${pathId}`} startOffset="0%">
-          {pathText}
-        </textPath>
-      </text>
-    </svg>
-  );
-}
 
 export function HeroChapter({ className }: Props) {
   const reduce = useReducedMotion() ?? false;
@@ -167,7 +64,7 @@ export function HeroChapter({ className }: Props) {
       aria-label="Hero"
     >
       <div className="sticky top-0 flex h-dvh min-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4">
-        {/* 周囲バーコード — textPath のループは anime.js（HERO_BARCODE）。見た目はスクロール連動 */}
+        {/* 周囲バーコード — 3D barcode のループは anime.js。見た目はスクロール連動 */}
         <motion.div
           className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
           style={{
@@ -177,7 +74,25 @@ export function HeroChapter({ className }: Props) {
           }}
         >
           <div className="hero-barcode-frame">
-            <HeroBarcodePathRing paused={reduce} />
+            <PathBarcodeTemplate3D
+              paused={reduce}
+              className="hero-barcode-svg-text hero-barcode-template3d-theme"
+              flowDurationMs={33000}
+              textUnit="*0123456789ABCDEF* "
+              textRepeat={11}
+              pathD="
+              M 8 2
+              H 92
+              Q 98 2 98 8
+              V 92
+              Q 98 98 92 98
+              H 8
+              Q 2 98 2 92
+              V 8
+              Q 2 2 8 2
+              Z
+            "
+            />
           </div>
         </motion.div>
 
@@ -225,6 +140,73 @@ export function HeroChapter({ className }: Props) {
           display: flex;
           align-items: center;
           justify-content: center;
+        }
+
+        .hero-barcode-template3d {
+          position: absolute;
+          inset: 0;
+        }
+
+        .hero-barcode-template3d-svg {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .hero-barcode-template3d-path {
+          stroke: #7f1d1d;
+          stroke-width: 0.3;
+          stroke-linejoin: round;
+          opacity: 0;
+        }
+
+        .hero-barcode-template3d-items {
+          position: absolute;
+          inset: 0;
+          perspective: 640px;
+        }
+
+        .hero-barcode-template3d-item {
+          position: absolute;
+          left: 0;
+          top: 0;
+          transform-origin: 0 0;
+        }
+
+        .hero-barcode-template3d-char {
+          position: relative;
+          display: inline-block;
+          line-height: 1;
+          transform-style: preserve-3d;
+          transform-origin: 50% 50% 0.5rem;
+          color: ${HERO_BARCODE.fill};
+        }
+
+        .hero-barcode-template3d-face {
+          position: absolute;
+          left: 0;
+          display: inline-block;
+          font-style: normal;
+        }
+
+        .hero-barcode-template3d-face-front {
+          position: relative;
+          opacity: 1;
+        }
+
+        .hero-barcode-template3d-face-bottom {
+          top: 100%;
+          transform-origin: 50% 0%;
+          transform: rotateX(90deg);
+          opacity: 0.5;
+        }
+
+        .hero-barcode-template3d-face-top {
+          bottom: 100%;
+          transform-origin: 50% 100%;
+          transform: rotateX(-90deg);
+          opacity: 0.5;
         }
       `}</style>
     </section>

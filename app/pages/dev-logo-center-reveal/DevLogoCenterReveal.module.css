@@ -1,0 +1,105 @@
+.page {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 50% 6%, rgba(255, 255, 255, 0.95) 0%, rgba(221, 231, 245, 0.84) 42%, rgba(186, 201, 222, 0.88) 100%),
+    #dbe6f5;
+  color: #0f172a;
+}
+
+.intro {
+  margin: 0 auto;
+  max-width: 56rem;
+  padding: 4.5rem 1.5rem 2rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.copy {
+  margin: 0.8rem 0 0;
+  max-width: 46rem;
+  line-height: 1.65;
+  color: #334155;
+}
+
+.stage {
+  position: relative;
+  height: 280vh;
+}
+
+.stickyFrame {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.logoWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+.logoImage {
+  width: min(34vmin, 250px);
+  aspect-ratio: 1595 / 2155;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 42px rgba(15, 23, 42, 0.3));
+}
+
+.revealViewport {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0) 46%),
+    radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.3) 0%, rgba(167, 139, 250, 0) 48%),
+    linear-gradient(145deg, #020617 0%, #111827 56%, #1f2937 100%);
+  will-change: clip-path, opacity;
+}
+
+.revealContent {
+  width: min(86vw, 56rem);
+  border-radius: 1.4rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  padding: clamp(1.2rem, 4vw, 2.8rem);
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  box-shadow: 0 24px 64px rgba(2, 6, 23, 0.35);
+  color: #e2e8f0;
+}
+
+.revealKicker {
+  margin: 0;
+  font-size: 0.73rem;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  color: #93c5fd;
+}
+
+.revealTitle {
+  margin: 0.65rem 0 0;
+  font-size: clamp(1.5rem, 4vw, 2.7rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #f8fafc;
+}
+
+.revealCopy {
+  margin: 0.95rem 0 0;
+  max-width: 54ch;
+  line-height: 1.75;
+  color: #cbd5e1;
+}

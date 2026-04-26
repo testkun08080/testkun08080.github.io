@@ -1,0 +1,79 @@
+.page {
+  min-height: 100dvh;
+  background: #ddd4c8;
+  color: #0b0b0b;
+}
+
+.intro {
+  min-height: 85dvh;
+  display: grid;
+  place-content: center;
+  gap: 0.8rem;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.introTitle {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+}
+
+.introText {
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.stage {
+  min-height: 100dvh;
+  padding: 2rem 0 4rem;
+  overflow: hidden;
+}
+
+.stackTop {
+  display: grid;
+  gap: 0.18rem;
+  margin: 0 auto 1.4rem;
+  width: min(96vw, 1100px);
+}
+
+.noiseLine {
+  margin: 0;
+  font-size: clamp(0.92rem, 1.7vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-decoration: underline;
+  opacity: 0;
+}
+
+.largeHeading {
+  margin: 1.1rem auto 2.8rem;
+  text-align: center;
+  font-size: clamp(1.8rem, 5vw, 4.8rem);
+  font-weight: 900;
+  min-height: 1.2em;
+}
+
+.centerRow {
+  width: min(96vw, 1240px);
+  margin: 0 auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: clamp(0.7rem, 1vw, 1.2rem);
+  flex-wrap: wrap;
+}
+
+.sideLine {
+  margin: 0;
+  opacity: 0;
+  font-weight: 800;
+  font-size: clamp(1.2rem, 3vw, 3.3rem);
+}
+
+.centerWord {
+  margin: 0;
+  min-height: 1.2em;
+  font-size: clamp(4.4rem, 13vw, 8.9rem);
+  font-weight: 900;
+  line-height: 0.9;
+}

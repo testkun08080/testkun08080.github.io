@@ -1,0 +1,125 @@
+.page {
+  min-height: 100dvh;
+  color: #0f172a;
+  background: #020617;
+}
+
+.stage {
+  position: relative;
+  height: 220vh;
+}
+
+.stickyFrame {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.introLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-content: center;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.14) 40%, rgba(15, 23, 42, 0.58) 100%),
+    linear-gradient(160deg, rgba(15, 23, 42, 0.74) 0%, rgba(30, 41, 59, 0.8) 100%);
+  color: #e2e8f0;
+}
+
+.panelKicker {
+  margin: 0;
+  font-size: 0.73rem;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  color: #93c5fd;
+}
+
+.panelTitle {
+  margin: 0.65rem 0 0;
+  font-size: clamp(1.5rem, 4vw, 2.7rem);
+  color: #f8fafc;
+}
+
+.panelCopy {
+  margin: 0.9rem auto 0;
+  max-width: 52ch;
+  line-height: 1.75;
+}
+
+.nextLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.windowSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.nextContent {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-content: center;
+  padding: clamp(2rem, 8vw, 7rem);
+  text-align: center;
+  background:
+    radial-gradient(circle at 26% 24%, rgba(56, 189, 248, 0.26) 0%, rgba(56, 189, 248, 0) 42%),
+    radial-gradient(circle at 74% 76%, rgba(167, 139, 250, 0.36) 0%, rgba(167, 139, 250, 0) 50%),
+    linear-gradient(145deg, #020617 0%, #111827 54%, #1f2937 100%);
+  color: #e2e8f0;
+}
+
+.nextKicker {
+  margin: 0;
+  font-size: 0.73rem;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  color: #93c5fd;
+}
+
+.nextTitle {
+  margin: 0.72rem 0 0;
+  font-size: clamp(1.5rem, 4vw, 2.8rem);
+  color: #f8fafc;
+}
+
+.nextCopy {
+  margin: 0.95rem auto 0;
+  max-width: 52ch;
+  line-height: 1.75;
+  color: #cbd5e1;
+}
+
+.endSection {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at 20% 28%, rgba(56, 189, 248, 0.22) 0%, rgba(56, 189, 248, 0) 40%),
+    radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.28) 0%, rgba(167, 139, 250, 0) 50%),
+    linear-gradient(145deg, #020617 0%, #111827 54%, #1f2937 100%);
+  color: #e2e8f0;
+}
+
+.endTitle {
+  margin: 0;
+  font-size: clamp(1.7rem, 4vw, 3.1rem);
+  color: #f8fafc;
+}
+
+.endCopy {
+  margin: 0.9rem auto 0;
+  max-width: 48ch;
+  line-height: 1.75;
+  color: #cbd5e1;
+}

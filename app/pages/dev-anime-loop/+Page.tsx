@@ -1,4 +1,4 @@
-import { animate } from "animejs";
+import { animate, createTimeline, stagger } from "animejs";
 import { useReducedMotion } from "motion/react";
 import { useId, useLayoutEffect, useRef, type RefObject } from "react";
 import styles from "./DevAnimeLoop.module.css";
@@ -28,6 +28,11 @@ const RECT_PATH_TEXT_LOOP = `${RECT_PATH_TEXT_UNIT.repeat(14)}${RECT_PATH_TEXT_U
 
 const WAVE_PATH_TEXT_UNIT = "*WAVE*0123456789*PATH*TEXT*";
 const WAVE_PATH_TEXT_LOOP = `${WAVE_PATH_TEXT_UNIT.repeat(10)}${WAVE_PATH_TEXT_UNIT.repeat(10)}`;
+const TEMPLATE_COPY = "Custom HTML template.";
+const TEMPLATE_BARCODE_UNIT = "*0123456789*HTML*TEMPLATE*";
+const TEMPLATE_BARCODE_LOOP = `${TEMPLATE_BARCODE_UNIT.repeat(20)}${TEMPLATE_BARCODE_UNIT.repeat(20)}`;
+const BARCODE_3D_UNIT = "*0123456789ABCDEF*";
+const BARCODE_3D_TEXT = BARCODE_3D_UNIT.repeat(6);
 
 function useStartOffsetLoop<T extends SVGTextPathElement>(
   ref: RefObject<T | null>,
@@ -90,13 +95,6 @@ function PathTextOnRect({ play }: { play: boolean }) {
       <defs>
         <path id={pathId} d={RECT_PATH_D} />
       </defs>
-      <use
-        href={`#${pathId}`}
-        fill="none"
-        stroke="#64748b"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
       <text className={styles.pathBarcodeText}>
         <textPath ref={oddTextPathRef} href={`#${pathId}`} startOffset="100%">
           {RECT_PATH_TEXT_LOOP}
@@ -182,6 +180,237 @@ function useTranslateXLoop<T extends HTMLElement>(
       anim.revert();
     };
   }, [ref, translateX, durationMs, play, seekToMs]);
+}
+
+function SplitTemplateWithPathBarcode({ play }: { play: boolean }) {
+  const rawId = useId();
+  const pathId = `anime-loop-template-${rawId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  const oddTextPathRef = useRef<SVGTextPathElement>(null);
+  const evenTextPathRef = useRef<SVGTextPathElement>(null);
+  const tokenRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const tokens = TEMPLATE_COPY.split(" ");
+
+  useStartOffsetLoop(
+    oddTextPathRef,
+    PATH.odd,
+    PATH.durationMs * 1.5,
+    play,
+    PATH.seekOddMs,
+  );
+  useStartOffsetLoop(evenTextPathRef, PATH.even, PATH.durationMs * 1.5, play);
+
+  useLayoutEffect(() => {
+    if (!play) return;
+    const els = tokenRefs.current.filter(
+      (el): el is HTMLSpanElement => el !== null,
+    );
+    if (els.length === 0) return;
+
+    const anim = animate(els, {
+      translateY: ["0%", "-100%"],
+      duration: 820,
+      delay: (_, i) => i * 130,
+      ease: "inOut(2)",
+      loop: true,
+      loopDelay: 280,
+    });
+
+    return () => {
+      anim.revert();
+    };
+  }, [play]);
+
+  return (
+    <div className={styles.templateComposite}>
+      <svg
+        viewBox="0 0 400 140"
+        className={styles.templateCompositeSvg}
+        role="img"
+        aria-label="Custom HTML template with barcode textPath"
+      >
+        <defs>
+          <path id={pathId} d="M 18 70 L 382 70" />
+        </defs>
+        <text className={styles.templateBarcodeText}>
+          <textPath ref={oddTextPathRef} href={`#${pathId}`} startOffset="100%">
+            {TEMPLATE_BARCODE_LOOP}
+          </textPath>
+        </text>
+        <text className={styles.templateBarcodeText}>
+          <textPath ref={evenTextPathRef} href={`#${pathId}`} startOffset="0%">
+            {TEMPLATE_BARCODE_LOOP}
+          </textPath>
+        </text>
+      </svg>
+      <p className={styles.splitTarget} aria-label={TEMPLATE_COPY}>
+        {tokens.map((token, i) => (
+          <span
+            key={`${token}-${i}`}
+            ref={(el) => {
+              tokenRefs.current[i] = el;
+            }}
+            className={styles.splitToken}
+          >
+            <span className={styles.splitTokenTop}>{token}</span>
+            <span className={styles.splitTokenBottom}>{token}</span>
+          </span>
+        ))}
+      </p>
+    </div>
+  );
+}
+
+function PathBarcodeTemplate3D({ play }: { play: boolean }) {
+  const rawId = useId();
+  const pathId = `anime-loop-3d-barcode-${rawId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
+  const svgRef = useRef<SVGSVGElement>(null);
+  const pathRef = useRef<SVGPathElement>(null);
+  const itemsLayerRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const charRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const topRefs = useRef<Array<HTMLElement | null>>([]);
+  const frontRefs = useRef<Array<HTMLElement | null>>([]);
+  const bottomRefs = useRef<Array<HTMLElement | null>>([]);
+  const chars = Array.from(BARCODE_3D_TEXT);
+
+  useLayoutEffect(() => {
+    if (!play) return;
+    const svg = svgRef.current;
+    const path = pathRef.current;
+    const itemsLayer = itemsLayerRef.current;
+    if (!svg || !path || !itemsLayer) return;
+
+    const items = itemRefs.current.filter(
+      (el): el is HTMLSpanElement => el !== null,
+    );
+    if (items.length === 0) return;
+
+    const pathLen = path.getTotalLength();
+    const spacing = pathLen / items.length;
+    const state = { offset: 0 };
+    const viewBox = svg.viewBox.baseVal;
+    const viewBoxWidth = viewBox.width || 1;
+    const viewBoxHeight = viewBox.height || 1;
+
+    const flowAnim = animate(state, {
+      offset: [0, -pathLen],
+      duration: 9000,
+      ease: "linear",
+      loop: true,
+      onUpdate: () => {
+        const bounds = itemsLayer.getBoundingClientRect();
+        const scaleX = bounds.width / viewBoxWidth;
+        const scaleY = bounds.height / viewBoxHeight;
+        for (let i = 0; i < items.length; i += 1) {
+          const d = (i * spacing + state.offset + pathLen) % pathLen;
+          const p = path.getPointAtLength(d);
+          const n = path.getPointAtLength((d + 1) % pathLen);
+          const angle =
+            (Math.atan2(n.y - p.y, n.x - p.x) * 180) / Math.PI;
+          const x = (p.x - viewBox.x) * scaleX;
+          const y = (p.y - viewBox.y) * scaleY;
+          items[i].style.transform = `translate(${x}px, ${y}px) rotate(${angle}deg)`;
+        }
+      },
+    });
+
+    const charEls = charRefs.current.filter(
+      (el): el is HTMLSpanElement => el !== null,
+    );
+    const topEls = topRefs.current.filter((el): el is HTMLElement => el !== null);
+    const frontEls = frontRefs.current.filter(
+      (el): el is HTMLElement => el !== null,
+    );
+    const bottomEls = bottomRefs.current.filter(
+      (el): el is HTMLElement => el !== null,
+    );
+
+    const charsStagger = stagger(60, { start: 0 });
+    const tl = createTimeline({
+      defaults: {
+        ease: "linear",
+        loop: true,
+        duration: 680,
+      },
+    });
+    tl.add(charEls, { rotateX: -90 }, charsStagger)
+      .add(topEls, { opacity: [0.5, 0] }, charsStagger)
+      .add(frontEls, { opacity: [1, 0.5] }, charsStagger)
+      .add(bottomEls, { opacity: [0.5, 1] }, charsStagger);
+
+    return () => {
+      flowAnim.revert();
+      tl.revert();
+    };
+  }, [play]);
+
+  return (
+    <div className={styles.pathTemplate3dComposite}>
+      <svg
+        ref={svgRef}
+        viewBox="0 0 400 400"
+        className={styles.pathTemplate3dSvg}
+        aria-hidden
+      >
+        <path
+          ref={pathRef}
+          id={pathId}
+          d={RECT_PATH_D}
+          fill="none"
+          stroke="#94a3b8"
+          strokeWidth="1.5"
+          strokeLinejoin="round"
+        />
+      </svg>
+      <div
+        ref={itemsLayerRef}
+        className={styles.pathTemplate3dItems}
+        aria-label="3D barcode on path"
+      >
+        {chars.map((char, i) => (
+          <span
+            key={`barcode3d-${i}`}
+            ref={(el) => {
+              itemRefs.current[i] = el;
+            }}
+            className={styles.pathTemplate3dItem}
+          >
+            <span
+              ref={(el) => {
+                charRefs.current[i] = el;
+              }}
+              className={styles.char3d}
+            >
+              <em
+                ref={(el) => {
+                  topRefs.current[i] = el;
+                }}
+                className={`${styles.face} ${styles.faceTop}`}
+              >
+                {char}
+              </em>
+              <em
+                ref={(el) => {
+                  frontRefs.current[i] = el;
+                }}
+                className={`${styles.face} ${styles.faceFront}`}
+              >
+                {char}
+              </em>
+              <em
+                ref={(el) => {
+                  bottomRefs.current[i] = el;
+                }}
+                className={`${styles.face} ${styles.faceBottom}`}
+              >
+                {char}
+              </em>
+            </span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default function Page() {
@@ -273,11 +502,27 @@ export default function Page() {
             <span className="text-xs font-medium text-slate-500">矩形パス</span>
             <PathTextOnRect play={play} />
           </div>
-          <div className="flex w-full flex-col items-center gap-2">
-            <span className="text-xs font-medium text-slate-500">波線パス</span>
-            <PathTextOnWave play={play} />
-          </div>
         </div>
+      </section>
+
+      <section className="w-full max-w-4xl space-y-3">
+        <h2 className="text-sm font-semibold text-slate-700">
+          split htmlTemplate + textPath
+        </h2>
+        <p className="text-xs text-slate-500">
+          clone 風の上下2段トークンを前面に置き、背面で textPath バーコードをループ。
+        </p>
+        <SplitTemplateWithPathBarcode play={play} />
+      </section>
+
+      <section className="w-full max-w-4xl space-y-3">
+        <h2 className="text-sm font-semibold text-slate-700">
+          textPath上のバーコード + htmlTemplate 3D
+        </h2>
+        <p className="text-xs text-slate-500">
+          バーコード文字そのものがパス上を循環し、各文字は 3D rotateX で切替。
+        </p>
+        <PathBarcodeTemplate3D play={play} />
       </section>
 
       <nav className="flex flex-wrap justify-center gap-4 text-sm">

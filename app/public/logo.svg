@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 682 2155" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <g transform="matrix(1,0,0,1,-741.958208,53.305868)">
-        <g transform="matrix(9.638403,0,0.005578,9.640876,-7778.453648,-4825.958625)">
-            <g id="logo1" transform="matrix(0.515494,0,-0,0.515494,3121.447962,-4639.325477)">
-                <g transform="matrix(1,0,0,1,842.15598,-631.416404)">
-                    <g transform="matrix(0.201266,-0,-0.000116,0.201215,-5183.095079,10591.51189)">
-                        <use xlink:href="#_Image1" x="13" y="82" width="636px" height="1298px"/>
-                    </g>
-                </g>
-                <g transform="matrix(-1,-0,0,-1,-9387.156237,20985.147155)">
-                    <g transform="matrix(-0.201266,0,0.000116,-0.201215,-5046.217137,11025.051669)">
-                        <use xlink:href="#_Image2" x="32" y="774.559" width="636px" height="1297px"/>
+<svg width="100%" height="100%" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(0.228583,0,0,0.228583,256,256)">
+        <g transform="matrix(1,0,0,1,-341,-1077.5)">
+            <g transform="matrix(1,0,0,1,-741.958208,53.305868)">
+                <g transform="matrix(9.638403,0,0.005578,9.640876,-7778.453648,-4825.958625)">
+                    <g id="logo1" transform="matrix(0.515494,0,0,0.515494,3121.447962,-4639.325477)">
+                        <g transform="matrix(1,0,0,1,842.15598,-631.416404)">
+                            <g id="_Image1_" serif:id="_Image1" transform="matrix(0.201266,0,-0.000116,0.201215,-5180.488133,10608.01152)">
+                                <use xlink:href="#_Image1" x="0" y="0" width="636px" height="1298px"/>
+                            </g>
+                        </g>
+                        <g transform="matrix(-1,0,0,-1,-9387.156237,20985.147155)">
+                            <g id="_Image2_" serif:id="_Image2" transform="matrix(-0.201266,0,0.000116,-0.201215,-5052.5678,10869.19878)">
+                                <use xlink:href="#_Image2" x="0" y="0" width="636px" height="1297px"/>
+                            </g>
+                        </g>
                     </g>
                 </g>
             </g>

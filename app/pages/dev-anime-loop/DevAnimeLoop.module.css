@@ -14,6 +14,135 @@
   fill: #9a3412;
 }
 
+.templateComposite {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  padding: 2.5rem 1rem;
+}
+
+.templateCompositeSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.templateBarcodeText {
+  font-family: "Libre Barcode 39", ui-monospace, monospace;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  fill: #64748b;
+}
+
+.splitTarget {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4em;
+  margin: 0;
+  font-size: clamp(1.4rem, 4.5vw, 2.1rem);
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.splitToken {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  height: 1.1em;
+  line-height: 1.1;
+  will-change: transform;
+}
+
+.splitTokenTop {
+  display: inline-block;
+}
+
+.splitTokenBottom {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  white-space: nowrap;
+  display: inline-block;
+  color: #475569;
+}
+
+.pathTemplate3dComposite {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+.pathTemplate3dSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pathTemplate3dItems {
+  position: absolute;
+  inset: 0;
+  perspective: 640px;
+}
+
+.pathTemplate3dItem {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+
+.char3d {
+  position: relative;
+  display: inline-block;
+  font-family: "Libre Barcode 39", ui-monospace, monospace;
+  font-size: 22px;
+  line-height: 1;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50% 0.7rem;
+  color: #0f172a;
+}
+
+.face {
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  font-style: normal;
+}
+
+.faceFront {
+  position: relative;
+  opacity: 1;
+}
+
+.faceBottom {
+  top: 100%;
+  transform-origin: 50% 0%;
+  transform: rotateX(90deg);
+  opacity: 0.5;
+}
+
+.faceTop {
+  bottom: 100%;
+  transform-origin: 50% 100%;
+  transform: rotateX(-90deg);
+  opacity: 0.5;
+}
+
 .textTrack {
   display: flex;
   width: 100%;

@@ -1,0 +1,75 @@
+.page {
+  min-height: 100dvh;
+  padding: clamp(1.2rem, 2vw, 2rem);
+  background: radial-gradient(circle at top, #fff6db 0%, #ffefd0 52%, #f5e2c4 100%);
+  color: #1f1f1f;
+}
+
+.header {
+  width: min(860px, 100%);
+  margin: 0 auto 1.2rem;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.3vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.copy {
+  margin: 0.6rem 0 0;
+  opacity: 0.8;
+  font-size: clamp(0.92rem, 1.5vw, 1.02rem);
+}
+
+.grid {
+  width: min(860px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(0.8rem, 1.6vw, 1rem);
+}
+
+.card {
+  border-radius: 18px;
+  padding: 1rem 1rem 1.1rem;
+  background: rgb(255 255 255 / 0.76);
+  border: 1px solid rgb(255 255 255 / 0.9);
+  box-shadow:
+    0 8px 24px rgb(145 112 73 / 0.18),
+    inset 0 1px 0 rgb(255 255 255 / 0.8);
+  backdrop-filter: blur(4px);
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+  transition: transform 260ms cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.icon {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.name {
+  margin: 0.6rem 0 0;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.face {
+  margin: 0.42rem 0 0;
+  font-size: 1.05rem;
+  color: #56350c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}
