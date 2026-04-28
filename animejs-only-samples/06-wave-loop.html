@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>06 Wave Loop</title>
+  <style>* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, system-ui, -apple-system, sans-serif; background: #f8fafc; color: #0f172a; }
+main { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.card { width: min(760px, 100%); background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 28px; box-shadow: 0 8px 24px rgba(15,23,42,.06); }
+h1 { margin: 0 0 8px; font-size: 24px; }
+p { margin: 0; color: #475569; }
+.sample-text { margin-top: 20px; font-size: 36px; font-weight: 800; }
+.sample-sub { margin-top: 12px; font-size: 14px; }
+.track { margin-top: 16px; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
+.bar { height: 100%; width: 100%; transform-origin: left center; transform: scaleX(0); background: linear-gradient(90deg, #2563eb, #7c3aed); }
+.space { height: 180vh; }
+</style>
+</head>
+<body>
+  <main><section class="card"><h1>06 Wave Loop</h1><p>animejs only sample</p><div class="sample-text target">Wave Loop</div></section></main>
+  <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.min.js"></script>
+  <script>anime({targets: '.target', translateX:[0,10,0,-10,0], loop:true, duration:1800, easing:'easeInOutSine'});</script>
+</body>
+</html>

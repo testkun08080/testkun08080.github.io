@@ -13,6 +13,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "animejs": "^4.3.6",
     "daisyui": "^5.0.40",
     "gh-pages": "^6.3.0",
     "react": "^19.1.0",
