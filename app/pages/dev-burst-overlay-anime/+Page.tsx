@@ -1,4 +1,4 @@
-import { animate, onScroll } from "animejs";
+import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef, useState } from "react";
 import styles from "./DevBurstOverlayAnime.module.css";
 
@@ -24,12 +24,16 @@ function usePrefersReducedMotion() {
 
 export default function Page() {
   const reduceMotion = usePrefersReducedMotion();
+  const rootRef = useRef<HTMLElement>(null);
+  const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const triggerRef = useRef<HTMLElement>(null);
   const bgRowsRef = useRef<(HTMLParagraphElement | null)[]>([]);
   const wordRef = useRef<HTMLHeadingElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!rootRef.current) return;
+
     const triggerEl = triggerRef.current;
     const wordEl = wordRef.current;
     const lineEl = lineRef.current;
@@ -46,66 +50,71 @@ export default function Page() {
       return;
     }
 
-    const rowsAnims = rows.map((row, i) => {
-      const direction = i % 2 === 0 ? -1 : 1;
-      return animate(row, {
-        translateX: [window.innerWidth * 0.24 * direction, 0],
-        opacity: [0.08, 0.9],
-        delay: i * 15,
-        duration: 440,
+    scopeRef.current = createScope({ root: rootRef.current }).add(() => {
+      rows.forEach((row, i) => {
+        const direction = i % 2 === 0 ? -1 : 1;
+        animate(row, {
+          translateX: [window.innerWidth * 0.24 * direction, 0],
+          opacity: [0.08, 0.9],
+          delay: i * 15,
+          duration: 440,
+          ease: "linear",
+          autoplay: onScroll({
+            target: triggerEl,
+            enter: "top 85%",
+            leave: "bottom 15%",
+            sync: false,
+            repeat: false,
+            debug: true,
+          }),
+        });
+      });
+
+      animate(lineEl, {
+        scaleX: [0, 1],
+        duration: 340,
+        delay: 260,
         ease: "linear",
         autoplay: onScroll({
           target: triggerEl,
-          enter: "top 90%",
-          leave: "bottom 10%",
-          sync: true,
+          enter: "top 85%",
+          leave: "bottom 15%",
+          sync: false,
+          repeat: false,
+          debug: true,
         }),
+      });
+
+      const typingState = { chars: 0 };
+      animate(typingState, {
+        chars: [0, FRONT_WORD.length],
+        duration: 500,
+        delay: 340,
+        ease: "linear",
+        autoplay: onScroll({
+          target: triggerEl,
+          enter: "top 85%",
+          leave: "bottom 15%",
+          sync: false,
+          repeat: false,
+          debug: true,
+        }),
+        onUpdate: () => {
+          const visibleChars = Math.round(typingState.chars);
+          wordEl.textContent = FRONT_WORD.slice(0, visibleChars);
+        },
       });
     });
 
-    const lineAnim = animate(lineEl, {
-      scaleX: [0, 1],
-      duration: 340,
-      delay: 260,
-      ease: "linear",
-      autoplay: onScroll({
-        target: triggerEl,
-        enter: "top 90%",
-        leave: "bottom 10%",
-        sync: true,
-        debug: true,
-      }),
-    });
-
-    const typingState = { chars: 0 };
-    const textAnim = animate(typingState, {
-      chars: [0, FRONT_WORD.length],
-      duration: 500,
-      delay: 340,
-      ease: "linear",
-      autoplay: onScroll({
-        target: triggerEl,
-        enter: "top 90%",
-        leave: "bottom 10%",
-        sync: true,
-        debug: true,
-      }),
-      onUpdate: () => {
-        const visibleChars = Math.round(typingState.chars);
-        wordEl.textContent = FRONT_WORD.slice(0, visibleChars);
-      },
-    });
-
     return () => {
-      rowsAnims.forEach((anim) => anim.revert());
-      lineAnim.revert();
-      textAnim.revert();
+      scopeRef.current?.revert();
+      scopeRef.current = null;
       wordEl.textContent = "";
     };
   }, [reduceMotion]);
 
   return (
-    <main className={styles.page}>
+    <main ref={rootRef} className={styles.page}>
       <section className={styles.intro}>
         <h1 className={styles.title}>dev-burst-overlay-anime</h1>
         <p className={styles.copy}>

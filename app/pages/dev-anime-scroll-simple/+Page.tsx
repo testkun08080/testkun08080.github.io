@@ -24,50 +24,51 @@ export default function Page() {
     const cardGrid = cardGridRef.current;
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
-      // 1) ワンショット fade + slide-in
-      // target に対象要素を渡し、その要素の位置を基準に enter 判定する
+      // 1) ワンショット: 初期状態を autoplay: false で停止しておき、
       animate(`.${styles.fadeItem}`, {
         opacity: [0, 1],
         y: [40, 0],
         duration: 800,
-        // ease: "outQuad",
-        // delay: stagger(80),
+        ease: "outQuad",
+        delay: stagger(80),
         autoplay: onScroll({
-          // target: fadeRow,
+          target: fadeRow,
           enter: "bottom-=80 top",
           leave: "top bottom",
-          // sync: true,
-          // repeat: false,
+          sync: true,
+          repeat: false,
+          debug: true,
         }),
       });
 
-      // 2) スクロール量に同期した回転 + 横移動 (戻すと逆再生)
+      // 2) スクロール量に同期 (sync: true)
       animate(syncBox, {
         rotate: "1turn",
         x: ["-40%", "40%"],
         ease: "linear",
         autoplay: onScroll({
-          target: syncBox,
+          // target: syncBox,
           enter: "bottom top",
           leave: "top bottom",
           sync: true,
           repeat: false,
+          debug: true,
         }),
       });
 
-      // 3) stagger reveal (ワンショット)
-      animate(`.${styles.card}`, {
+      // 3) stagger reveal (ワンショット、同じく onEnter で発火)
+      const cardAnim = animate(`.${styles.card}`, {
         opacity: [0, 1],
         y: [60, 0],
         delay: stagger(120),
         duration: 700,
         ease: "outCubic",
         autoplay: onScroll({
-          // target: cardGrid,
+          target: cardGrid,
           enter: "bottom-=80 top",
           leave: "top bottom",
-          // sync: true,
           repeat: false,
+          debug: true,
         }),
       });
     });
@@ -90,7 +91,7 @@ export default function Page() {
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>
-          1. fade + slide-in (sync: false, ワンショット)
+          1. fade + slide-in (onEnter で1回再生)
         </h2>
         <p className={styles.sectionDesc}>
           要素が画面に入った瞬間に1回だけ再生されます。
@@ -114,7 +115,7 @@ export default function Page() {
 
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>
-          3. stagger reveal (ワンショット)
+          3. stagger reveal (onEnter で1回再生)
         </h2>
         <p className={styles.sectionDesc}>
           複数要素を <code>stagger</code> で順番にフェードイン。
