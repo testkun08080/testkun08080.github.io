@@ -2,24 +2,24 @@
   box-sizing: border-box;
 }
 
-.page {
+.container {
   width: min(1080px, 92vw);
   margin: 0 auto;
   padding: 32px 0 48px;
 }
 
-.header h1 {
+h1 {
   margin: 0;
   color: #0f172a;
   font-size: clamp(1.45rem, 3vw, 2rem);
 }
 
-.header p {
+.sub {
   margin: 10px 0 0;
   color: #475569;
 }
 
-.debug {
+.debug-panel {
   position: sticky;
   top: 12px;
   z-index: 20;
@@ -29,50 +29,26 @@
   border-radius: 12px;
   background: #eff6ff;
   padding: 12px 14px;
-}
-
-.debug h2 {
-  margin: 0 0 8px;
-  font-size: 0.95rem;
-  color: #1e3a8a;
-}
-
-.debug-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(120px, 1fr));
-  gap: 8px;
+  gap: 6px;
 }
 
-.debug-grid p {
-  margin: 0;
-  font-size: 0.85rem;
+.debug-panel strong,
+.debug-panel span {
   color: #1e3a8a;
 }
 
-.progress-track {
-  margin-top: 10px;
-  width: 100%;
-  height: 10px;
-  border-radius: 999px;
-  overflow: hidden;
-  background: #dbeafe;
+.debug-panel span {
+  font-size: 0.85rem;
 }
 
-.progress-bar {
-  width: 100%;
-  height: 100%;
-  transform-origin: left center;
-  transform: scaleX(0);
-  background: linear-gradient(90deg, #2563eb, #7c3aed);
-}
-
-.samples {
+.grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 14px;
 }
 
-.sample-card {
+.card {
   min-height: 128px;
   border-radius: 12px;
   border: 1px solid #cbd5e1;
@@ -80,13 +56,13 @@
   padding: 14px;
 }
 
-.sample-card h3 {
+.card h2 {
   margin: 0;
   font-size: 0.95rem;
   color: #334155;
 }
 
-.motion-target {
+.sample {
   margin-top: 10px;
   font-size: 1.25rem;
   font-weight: 700;
@@ -95,11 +71,7 @@
   white-space: nowrap;
 }
 
-.letters span {
-  display: inline-block;
-}
-
-.indicator {
+.anim-10-track {
   margin-top: 10px;
   height: 8px;
   border-radius: 999px;
@@ -107,20 +79,20 @@
   overflow: hidden;
 }
 
-.indicator-fill {
-  height: 100%;
+.anim-10-bar {
   width: 100%;
+  height: 100%;
   transform-origin: left center;
   transform: scaleX(0);
   background: #2563eb;
 }
 
-.guide {
-  margin-top: 10px;
+.scroll-note {
+  margin: 10px 0 0;
   font-size: 0.78rem;
   color: #64748b;
 }
 
-.scroll-space {
+.spacer {
   height: 180vh;
 }
