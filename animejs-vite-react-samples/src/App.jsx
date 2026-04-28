@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { animate, stagger, set } from 'animejs'
+import { useEffect, useState } from 'react'
+import { set } from 'animejs'
 import './App.css'
 
 const animationItems = [
@@ -16,96 +16,78 @@ const animationItems = [
 ]
 
 function App() {
-  useEffect(() => {
-    animate('.anim-01', { opacity: [0, 1], duration: 800, ease: 'outQuad' })
-    animate('.anim-02', {
-      y: [30, 0],
-      opacity: [0, 1],
-      duration: 900,
-      ease: 'outExpo',
-    })
-    animate('.anim-03', {
-      scale: [0.75, 1],
-      opacity: [0, 1],
-      duration: 900,
-      ease: 'outBack',
-    })
-    animate('.anim-04 span', {
-      opacity: [0, 1],
-      y: [20, 0],
-      delay: stagger(50),
-      ease: 'outSine',
-      duration: 700,
-    })
-    animate('.anim-05', {
-      rotate: [-10, 0],
-      opacity: [0, 1],
-      duration: 900,
-      ease: 'outCubic',
-    })
-    animate('.anim-06', {
-      x: [0, 8, 0, -8, 0],
-      loop: true,
-      duration: 1800,
-      ease: 'inOutSine',
-    })
-    animate('.anim-07', {
-      scale: [1, 1.05, 1],
-      loop: true,
-      duration: 1400,
-      ease: 'inOutQuad',
-    })
-    animate('.anim-08', {
-      color: ['#0f172a', '#2563eb', '#0f172a'],
-      loop: true,
-      duration: 2200,
-      ease: 'linear',
-    })
-    animate('.anim-09', {
-      letterSpacing: ['0em', '0.25em', '0.05em'],
-      opacity: [0, 1],
-      duration: 1300,
-      ease: 'outQuart',
-    })
+  const [debug, setDebug] = useState({
+    scrollY: 0,
+    maxScroll: 0,
+    progress: 0,
+    activeDemo: 1,
+  })
 
+  useEffect(() => {
     const handleScroll = () => {
       const max = document.body.scrollHeight - window.innerHeight
       const progress = max > 0 ? window.scrollY / max : 0
       const clamped = Math.min(Math.max(progress, 0), 1)
+
+      set('.anim-01 .sample', { opacity: clamped, y: (1 - clamped) * 28 })
+      set('.anim-02 .sample', { y: 36 - clamped * 36, opacity: clamped })
+      set('.anim-03 .sample', { scale: 0.72 + clamped * 0.28, opacity: clamped })
+      set('.anim-04 .sample', { x: (clamped - 0.5) * 120, letterSpacing: `${clamped * 0.2}em` })
+      set('.anim-05 .sample', { rotate: -12 + clamped * 12, opacity: clamped })
+      set('.anim-06 .sample', { x: Math.sin(clamped * Math.PI * 10) * 18 })
+      set('.anim-07 .sample', { scale: 1 + Math.sin(clamped * Math.PI * 12) * 0.08 })
+      set('.anim-08 .sample', { color: clamped < 0.5 ? '#2563eb' : '#7c3aed' })
+      set('.anim-09 .sample', { letterSpacing: `${0.02 + clamped * 0.22}em`, opacity: clamped })
       set('.anim-10-bar', { scaleX: clamped })
-      set('.anim-10', { x: clamped * 120 })
+      set('.anim-10 .sample', { x: clamped * 120 })
+
+      const activeDemo = Math.min(10, Math.max(1, Math.ceil(clamped * 10)))
+      setDebug({
+        scrollY: Math.round(window.scrollY),
+        maxScroll: Math.max(0, Math.round(max)),
+        progress: clamped,
+        activeDemo,
+      })
     }
 
     handleScroll()
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const previousOnScroll = window.onscroll
+    window.onscroll = handleScroll
+    return () => {
+      window.onscroll = previousOnScroll
+    }
   }, [])
 
   return (
     <main className="container">
       <h1>Vite + React + animejs (Simple 10 Samples)</h1>
       <p className="sub">
-        9つのテキストアニメーション + 1つのスクロール連動アニメーション
+        1ページで10個のアニメーションを確認できます。すべてスクロール連動です。
       </p>
+      <aside className="debug-panel">
+        <strong>Debug (onscroll)</strong>
+        <span>scrollY: {debug.scrollY}px</span>
+        <span>maxScroll: {debug.maxScroll}px</span>
+        <span>progress: {debug.progress.toFixed(3)}</span>
+        <span>activeDemo: {debug.activeDemo}/10</span>
+      </aside>
       <div className="grid">
         {animationItems.map((item) => (
           <section key={item.id} className={`card ${item.id}`}>
-            {item.id === 'anim-04' ? (
-              <h2 className="anim-04">
-                {'Letter Stagger'.split('').map((ch, index) => (
-                  <span key={`${ch}-${index}`}>{ch === ' ' ? '\u00A0' : ch}</span>
-                ))}
-              </h2>
-            ) : item.id === 'anim-10' ? (
+            {item.id === 'anim-10' ? (
               <>
                 <h2>{item.label}</h2>
+                <p className="sample">Scroll Linked</p>
                 <div className="anim-10-track">
                   <div className="anim-10-bar" />
                 </div>
                 <p className="scroll-note">スクロールでバーとテキストが進みます。</p>
               </>
             ) : (
-              <h2>{item.label}</h2>
+              <>
+                <h2>{item.label}</h2>
+                <p className="sample">{item.label.replace(/^\d+\s/, '')}</p>
+              </>
             )}
           </section>
         ))}
