@@ -1,0 +1,105 @@
+.page {
+  min-height: 100dvh;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.hero {
+  min-height: 80dvh;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+}
+
+.copy {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.section {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 700;
+}
+
+.sectionDesc {
+  margin: 0;
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+.fadeRow {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.fadeItem {
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 24px rgb(15 23 42 / 6%);
+  font-weight: 600;
+  opacity: 0;
+}
+
+.syncStage {
+  margin-top: 2rem;
+  height: clamp(140px, 20vw, 200px);
+  display: grid;
+  place-items: center;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.syncBox {
+  width: clamp(72px, 10vw, 110px);
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 20px 40px rgb(37 99 235 / 30%);
+}
+
+.cardGrid {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  padding: 2rem 1rem;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #78350f;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 10px 24px rgb(120 53 15 / 10%);
+  opacity: 0;
+}
+
+.tail {
+  min-height: 40dvh;
+}
