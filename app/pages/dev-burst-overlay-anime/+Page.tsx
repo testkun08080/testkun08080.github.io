@@ -37,6 +37,7 @@ export default function Page() {
     const triggerEl = triggerRef.current;
     const wordEl = wordRef.current;
     const lineEl = lineRef.current;
+
     const rows = bgRowsRef.current.filter(Boolean) as HTMLParagraphElement[];
     if (!triggerEl || !wordEl || !lineEl || rows.length === 0) return;
 
@@ -54,50 +55,44 @@ export default function Page() {
       rows.forEach((row, i) => {
         const direction = i % 2 === 0 ? -1 : 1;
         animate(row, {
-          translateX: [window.innerWidth * 0.24 * direction, 0],
-          opacity: [0.08, 0.9],
-          delay: i * 15,
-          duration: 440,
+          translateX: [window.innerWidth * 0.45 * direction, 0],
+          opacity: [0.15, 0.82],
+          duration: 1000,
           ease: "linear",
           autoplay: onScroll({
-            target: triggerEl,
-            enter: "top 85%",
-            leave: "bottom 15%",
-            sync: false,
-            repeat: false,
-            debug: true,
+          enter: "bottom top",
+          leave: "top bottom",
+          sync: true,
+          repeat: false,
+          debug: true,
           }),
         });
       });
 
       animate(lineEl, {
         scaleX: [0, 1],
-        duration: 340,
-        delay: 260,
+        duration: 1000,
         ease: "linear",
         autoplay: onScroll({
-          target: triggerEl,
-          enter: "top 85%",
-          leave: "bottom 15%",
-          sync: false,
-          repeat: false,
-          debug: true,
+        enter: "bottom top",
+        leave: "top bottom",
+        sync: true,
+        repeat: false,
+        debug: true,
         }),
       });
 
       const typingState = { chars: 0 };
       animate(typingState, {
         chars: [0, FRONT_WORD.length],
-        duration: 500,
-        delay: 340,
+        duration: 1000,
         ease: "linear",
         autoplay: onScroll({
-          target: triggerEl,
-          enter: "top 85%",
-          leave: "bottom 15%",
-          sync: false,
-          repeat: false,
-          debug: true,
+        enter: "bottom top",
+        leave: "top bottom",
+        sync: true,
+        repeat: false,
+        debug: true,
         }),
         onUpdate: () => {
           const visibleChars = Math.round(typingState.chars);
