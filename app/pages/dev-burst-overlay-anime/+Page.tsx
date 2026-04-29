@@ -30,6 +30,7 @@ export default function Page() {
   const bgRowsRef = useRef<(HTMLParagraphElement | null)[]>([]);
   const wordRef = useRef<HTMLHeadingElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
+  const typedCountRef = useRef(-1);
 
   useEffect(() => {
     if (!rootRef.current) return;
@@ -71,33 +72,33 @@ export default function Page() {
 
       animate(lineEl, {
         scaleX: [0, 1],
-        duration: 1,
-        ease: "linear",
         autoplay: onScroll({
           enter: "bottom top",
-          leave: "top bottom",
+          leave: "center top-=100",
           sync: true,
-          repeat: true,
-          debug: true,
+          // repeat: true,
+          // debug: true,
         }),
       });
 
-      const typingState = { chars: 0 };
-      animate(typingState, {
-        chars: [0, FRONT_WORD.length],
-        // duration: 1000,
-        // ease: "linear",
+      animate(wordEl, {
+        opacity: [1, 1],
         autoplay: onScroll({
-          enter: "center top",
+          enter: "bottom top",
           leave: "center bottom",
           sync: true,
-          repeat: true,
+          // repeat: true,
           // debug: true,
+          onUpdate: (self) => {
+            const observer = self as { progress?: number };
+            if (typeof observer.progress !== "number") return;
+            const clamped = Math.min(Math.max(observer.progress, 0), 1);
+            const nextCount = Math.floor(clamped * FRONT_WORD.length);
+            if (nextCount === typedCountRef.current) return;
+            typedCountRef.current = nextCount;
+            wordEl.textContent = FRONT_WORD.slice(0, nextCount);
+          },
         }),
-        onUpdate: () => {
-          const visibleChars = Math.round(typingState.chars);
-          wordEl.textContent = FRONT_WORD.slice(0, visibleChars);
-        },
       });
     });
 
@@ -105,6 +106,7 @@ export default function Page() {
       scopeRef.current?.revert();
       scopeRef.current = null;
       wordEl.textContent = "";
+      typedCountRef.current = -1;
     };
   }, [reduceMotion]);
 

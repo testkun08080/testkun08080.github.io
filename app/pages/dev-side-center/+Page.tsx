@@ -1,7 +1,5 @@
-import { useReducedMotion } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createTimeline, splitText, stagger } from "animejs";
-import heroImage from "../../images/hero.png";
 import styles from "./DevSideCenter.module.css";
 
 const WORDS = [
@@ -20,8 +18,29 @@ function clamp01(v: number) {
   return Math.max(0, Math.min(1, v));
 }
 
+function usePrefersReducedMotion() {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = (event: MediaQueryListEvent) => {
+      setPrefersReducedMotion(event.matches);
+    };
+
+    setPrefersReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener("change", onChange);
+    return () => mediaQuery.removeEventListener("change", onChange);
+  }, []);
+
+  return prefersReducedMotion;
+}
+
 export default function Page() {
-  const reduceMotion = useReducedMotion() ?? false;
+  const reduceMotion = usePrefersReducedMotion();
   const triggerRef = useRef<HTMLElement>(null);
   const leftBlockRef = useRef<HTMLDivElement>(null);
   const rightBlockRef = useRef<HTMLDivElement>(null);

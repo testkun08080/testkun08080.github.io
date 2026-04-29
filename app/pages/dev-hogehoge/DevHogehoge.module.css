@@ -1,7 +1,7 @@
 /* ── Hero ── */
 .page {
-  background: #050710;
-  color: #e2e8f0;
+  background: #6d7184;
+  color: #252525;
   font-family: "Inter", system-ui, sans-serif;
   overflow-x: hidden;
 }
@@ -106,32 +106,29 @@
   top: 0;
   height: 100dvh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: 6rem 2rem;
 }
 
-.reel1BgLayer {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1.2rem;
-  pointer-events: none;
-  z-index: 0;
+.reel1Grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 3rem;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
 }
 
-.reel1BgRow {
-  font-size: clamp(1.2rem, 3vw, 2.4rem);
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: rgba(148, 163, 184, 0.08);
+.reel1Left {
   will-change: transform, opacity;
-  text-align: center;
+  z-index: 1;
+}
+
+.reel1Right {
+  will-change: transform, opacity;
+  z-index: 1;
 }
 
 .reel1Label {
@@ -144,10 +141,11 @@
 }
 
 .reel1Title {
-  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-size: clamp(1.4rem, 3.5vw, 2.4rem);
   font-weight: 700;
-  letter-spacing: 0.08em;
-  margin-bottom: 1.5rem;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  margin-bottom: 1rem;
   z-index: 1;
   will-change: letter-spacing, opacity;
 }
@@ -169,17 +167,15 @@
   border: none;
 }
 
-.reel1Glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  pointer-events: none;
-  will-change: transform, opacity;
-  z-index: 0;
+/* ── Reel 02 (Sticky) ── */
+.reel2Track {
+  position: relative;
+  height: 240dvh;
 }
 
-/* ── Reel 02 (Slide-in) ── */
-.reel2Section {
+.reel2Sticky {
+  position: sticky;
+  top: 0;
   min-height: 100dvh;
   display: flex;
   align-items: center;
@@ -197,15 +193,9 @@
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  .reel2Grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-}
-
 .reel2Left {
   will-change: transform, opacity;
+  z-index: 1;
 }
 
 .reel2Label {
@@ -232,13 +222,17 @@
 
 .reel2Right {
   will-change: transform, opacity;
+  z-index: 1;
 }
 
 .videoFrame2 {
+  position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 12px;
   overflow: hidden;
+  background: #020617;
+  will-change: transform, opacity;
   box-shadow: 0 0 60px rgba(239, 68, 68, 0.06), 0 4px 40px rgba(0, 0, 0, 0.5);
 }
 
@@ -246,6 +240,42 @@
   width: 100%;
   height: 100%;
   border: none;
+}
+
+@media (max-width: 768px) {
+  .reel1Track {
+    height: 220dvh;
+  }
+
+  .reel1Sticky {
+    padding: 4rem 1.25rem;
+  }
+
+  .reel1Grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .reel1Title {
+    font-size: clamp(1.2rem, 7vw, 1.8rem);
+  }
+
+  .reel2Track {
+    height: 220dvh;
+  }
+
+  .reel2Sticky {
+    padding: 4rem 1.25rem;
+  }
+
+  .reel2Grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .reel2Title {
+    font-size: clamp(1.2rem, 7vw, 1.8rem);
+  }
 }
 
 /* ── Outro ── */
