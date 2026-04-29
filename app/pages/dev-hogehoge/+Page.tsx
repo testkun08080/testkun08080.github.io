@@ -7,6 +7,7 @@ const REEL_VIDEOS = [
     label: "Reel 01",
     title: "reel 2022–2024",
     embedUrl: "https://www.youtube.com/embed/pMOKLQ0rxhU?rel=0&playsinline=1",
+    desc: "リール。",
   },
   {
     label: "Reel 02",
@@ -56,13 +57,13 @@ export default function Page() {
 
       // ── Floating orbs ──
       animate(`.${styles.heroOrb}`, {
-        translateY: ["-20px", "20px"],
-        translateX: ["-10px", "10px"],
-        scale: [0.94, 1.06],
-        duration: 4000,
+        translateY: ["-12px", "12px"],
+        translateX: ["-6px", "6px"],
+        scale: [0.97, 1.03],
+        duration: 5200,
         loop: true,
         alternate: true,
-        delay: stagger(400),
+        delay: stagger(520),
         ease: "inOut(2)",
       });
 
@@ -103,12 +104,12 @@ export default function Page() {
       // ── Reel 01: sticky scroll ──
       animate(`.${styles.reel1Left}`, {
         translateX: ["-10vw", "0"],
-        opacity: [0.15, 1],
+        opacity: [0.4, 1],
         ease: "linear",
         autoplay: onScroll({
           target: reel1TrackRef.current!,
-          enter: "top center",
-          leave: "center center",
+          enter: "top bottom",
+          leave: "bottom top",
           sync: true,
         }),
       });
@@ -116,36 +117,36 @@ export default function Page() {
       animate(`.${styles.reel1Right}`, {
         translateX: ["10vw", "0"],
         translateY: ["20px", "0px"],
-        opacity: [0.1, 1],
+        opacity: [0.35, 1],
         ease: "linear",
         autoplay: onScroll({
           target: reel1TrackRef.current!,
-          enter: "top center",
-          leave: "center center",
+          enter: "top bottom",
+          leave: "bottom top",
           sync: true,
         }),
       });
 
       animate(`.${styles.videoFrame}`, {
-        scale: [0.78, 1],
-        opacity: [0, 1],
+        scale: [0.9, 1],
+        opacity: [0.5, 1],
         ease: "linear",
         autoplay: onScroll({
           target: reel1TrackRef.current!,
-          enter: "top center",
-          leave: "center center",
+          enter: "top bottom",
+          leave: "bottom top",
           sync: true,
         }),
       });
 
       animate(`.${styles.reel1Title}`, {
-        letterSpacing: ["0em", "0.18em"],
-        opacity: [0.3, 1],
+        letterSpacing: ["0.02em", "0.1em"],
+        opacity: [0.65, 1],
         ease: "linear",
         autoplay: onScroll({
           target: reel1TrackRef.current!,
-          enter: "top center",
-          leave: "center center",
+          enter: "top bottom",
+          leave: "bottom top",
           sync: true,
         }),
       });
