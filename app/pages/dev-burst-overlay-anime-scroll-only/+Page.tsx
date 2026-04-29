@@ -1,4 +1,4 @@
-import { animate, createScope, onScroll, splitText, stagger } from "animejs";
+import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef } from "react";
 import styles from "./DevBurstOverlayAnimeScrollOnly.module.css";
 
@@ -9,6 +9,7 @@ export default function Page() {
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const wordRef = useRef<HTMLHeadingElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
+  const typedCountRef = useRef(-1);
 
   useEffect(() => {
     if (!rootRef.current) return;
@@ -16,6 +17,7 @@ export default function Page() {
     const wordEl = wordRef.current;
     const lineEl = lineRef.current;
     if (!wordEl || !lineEl) return;
+    wordEl.textContent = "";
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
       animate(lineEl, {
@@ -31,20 +33,22 @@ export default function Page() {
         }),
       });
 
-      const { chars } = splitText(wordEl, {
-        chars: { wrap: "clip" },
-      });
-
-      animate(chars, {
-        y: [{ to: ["100%", "0%"] }, { to: "0%", delay: 750 }],
-        // duration: 500,
-        delay: stagger(50),
+      animate(wordEl, {
+        opacity: [1, 1],
         autoplay: onScroll({
           enter: "bottom top",
           leave: "center bottom",
           sync: true,
-          // repeat: true,
           debug: true,
+          onUpdate: (self) => {
+            const observer = self as { progress?: number };
+            if (typeof observer.progress !== "number") return;
+            const clamped = Math.min(Math.max(observer.progress, 0), 1);
+            const nextCount = Math.floor(clamped * FRONT_WORD.length);
+            if (nextCount === typedCountRef.current) return;
+            typedCountRef.current = nextCount;
+            wordEl.textContent = FRONT_WORD.slice(0, nextCount);
+          },
         }),
       });
     });
@@ -52,7 +56,8 @@ export default function Page() {
     return () => {
       scopeRef.current?.revert();
       scopeRef.current = null;
-      wordEl.textContent = "";
+      wordEl.textContent = FRONT_WORD;
+      typedCountRef.current = -1;
     };
   }, []);
 
