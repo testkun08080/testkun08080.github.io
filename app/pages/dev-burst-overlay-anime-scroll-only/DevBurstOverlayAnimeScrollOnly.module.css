@@ -1,0 +1,58 @@
+.page {
+  min-height: 100dvh;
+  background: #7d7a72;
+  color: #0f172a;
+}
+
+.intro {
+  min-height: 80dvh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 0.7rem;
+  padding: 1.2rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+}
+
+.copy {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.stage {
+  position: relative;
+  min-height: 170dvh;
+  overflow: hidden;
+}
+
+.frontLayer {
+  position: sticky;
+  top: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  gap: 0.55rem;
+}
+
+.word {
+  margin: 0;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(3.2rem, 11vw, 8.6rem);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.underline {
+  justify-self: center;
+  width: clamp(220px, 50vw, 640px);
+  height: 7px;
+  background: #0b0b0b;
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}

@@ -60,39 +60,39 @@ export default function Page() {
           duration: 1000,
           ease: "linear",
           autoplay: onScroll({
-          enter: "bottom top",
-          leave: "top bottom",
-          sync: true,
-          repeat: false,
-          debug: true,
+            enter: "bottom top",
+            leave: "top bottom",
+            sync: true,
+            repeat: true,
+            // debug: true,
           }),
         });
       });
 
       animate(lineEl, {
         scaleX: [0, 1],
-        duration: 1000,
+        duration: 1,
         ease: "linear",
         autoplay: onScroll({
-        enter: "bottom top",
-        leave: "top bottom",
-        sync: true,
-        repeat: false,
-        debug: true,
+          enter: "bottom top",
+          leave: "top bottom",
+          sync: true,
+          repeat: true,
+          debug: true,
         }),
       });
 
       const typingState = { chars: 0 };
       animate(typingState, {
         chars: [0, FRONT_WORD.length],
-        duration: 1000,
-        ease: "linear",
+        // duration: 1000,
+        // ease: "linear",
         autoplay: onScroll({
-        enter: "bottom top",
-        leave: "top bottom",
-        sync: true,
-        repeat: false,
-        debug: true,
+          enter: "center top",
+          leave: "center bottom",
+          sync: true,
+          repeat: true,
+          // debug: true,
         }),
         onUpdate: () => {
           const visibleChars = Math.round(typingState.chars);
