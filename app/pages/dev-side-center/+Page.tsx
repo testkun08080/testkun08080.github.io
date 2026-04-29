@@ -122,12 +122,19 @@ export default function Page() {
       <section ref={triggerRef} className={styles.stage}>
         <div className={styles.stickyFrame}>
           <div ref={centerRef} className={styles.centerContent}>
-            <h2 className={styles.centerHeading}>konchiwa</h2>
-            <div className={styles.centerLine} />
-            <img src={heroImage} alt="cat hero" className={styles.centerImage} />
+            {/* <h2 className={styles.centerHeading}>konchiwa</h2> */}
+            {/* <div className={styles.centerLine} /> */}
+            {/* <img
+              src={heroImage}
+              alt="cat hero"
+              className={styles.centerImage}
+            /> */}
           </div>
 
-          <div ref={leftBlockRef} className={`${styles.wordBlock} ${styles.leftBlock}`}>
+          <div
+            ref={leftBlockRef}
+            className={`${styles.wordBlock} ${styles.leftBlock}`}
+          >
             {Array.from({ length: LINE_COUNT }).map((_, i) => (
               <p key={`l-${i}`} className={styles.sideText}>
                 <span
@@ -140,7 +147,10 @@ export default function Page() {
             ))}
           </div>
 
-          <div ref={rightBlockRef} className={`${styles.wordBlock} ${styles.rightBlock}`}>
+          <div
+            ref={rightBlockRef}
+            className={`${styles.wordBlock} ${styles.rightBlock}`}
+          >
             {Array.from({ length: LINE_COUNT }).map((_, i) => (
               <p key={`r-${i}`} className={styles.sideText}>
                 <span
@@ -164,7 +174,9 @@ export default function Page() {
       </section>
 
       <section className={styles.splitDemoSection}>
-        <h3 className={styles.splitDemoTitle}>anime.js splitText HTML template</h3>
+        <h3 className={styles.splitDemoTitle}>
+          anime.js splitText HTML template
+        </h3>
         <p ref={splitDemoRef} className={styles.splitTarget}>
           Custom HTML template.
         </p>
