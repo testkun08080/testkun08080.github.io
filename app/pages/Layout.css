@@ -22,8 +22,8 @@
   --color-anime-front-word: #0f172a;
   --color-anime-underline: #0b0b0b;
   --color-anime-barcode: #7f1d1d;
-  --color-anime-side-text: #ffffff;
-  --color-anime-side-caret: rgb(255 255 255 / 0.9);
+  --color-anime-side-text: #ffa3a3;
+  --color-anime-side-caret: rgba(255, 225, 225, 0.9);
   --color-anime-about-text: #111827;
 }
 

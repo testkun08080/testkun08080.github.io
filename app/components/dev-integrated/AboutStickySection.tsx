@@ -177,9 +177,10 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
       ref={rootRef}
       className={styles.page}
       style={{
-        paddingLeft: "43px",
+        paddingInline: "43px",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "flex-start",
         gap: "56px",
       }}
     >

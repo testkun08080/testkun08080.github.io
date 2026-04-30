@@ -1,0 +1,136 @@
+.page {
+  min-height: 100dvh;
+  color: var(--color-anime-front-word);
+}
+
+.intro {
+  min-height: 50dvh;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.5vw, 2.4rem);
+}
+
+.copy {
+  margin: 0;
+  opacity: 0.82;
+}
+
+.track {
+  min-height: 240dvh;
+}
+
+.stickyFrame {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.centerArea {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.centerText {
+  margin: 0;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(2rem, 8vw, 5.8rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  color: #97cbff;
+  text-shadow: 0 0 22px rgb(148 163 184 / 0.25);
+}
+
+.centerLine {
+  width: min(72vw, 760px);
+  height: 6px;
+  background: linear-gradient(90deg, #38bdf8 0%, #e2e8f0 45%, #38bdf8 100%);
+}
+
+.sideBlock {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  grid-template-rows: repeat(36, min-content);
+  gap: 0.28rem;
+  opacity: 0.9;
+  user-select: none;
+  will-change: transform;
+  z-index: 2;
+}
+
+.leftBlock {
+  left: 0;
+  transform: translate3d(10vw, 0, 0) scaleX(-1);
+}
+
+.rightBlock {
+  right: 0;
+  transform: translate3d(-10vw, 0, 0) scaleX(-1);
+}
+
+.sideText {
+  margin: 0;
+  color: var(--color-anime-side-text);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(0.92rem, 1.43vw, 1.28rem);
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  white-space: nowrap;
+  text-shadow: 0 0 8px rgb(255 255 255 / 0.18);
+  opacity: 0.88;
+}
+
+.sideTyping {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 2px solid var(--color-anime-side-caret);
+  white-space: nowrap;
+  width: 0ch;
+}
+
+.outro {
+  min-height: 40dvh;
+  display: grid;
+  place-content: center;
+  color: rgba(66, 142, 243, 0.7);
+}
+
+.thirdStage {
+  min-height: 78dvh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.thirdText {
+  margin: 0;
+  min-height: 1.1em;
+  font-size: clamp(1.8rem, 6.8vw, 4.8rem);
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  color: rgb(0, 110, 255);
+}
