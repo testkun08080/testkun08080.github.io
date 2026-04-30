@@ -4,8 +4,10 @@ import vike from "vike/plugin";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, ".", "");
+  const repoBase = "/testkun08080.github.io/";
 
   return {
+    base: repoBase,
     plugins: [tailwindcss(), vike()],
     server: {
       // Keep dev server private (localhost only)

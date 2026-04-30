@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+    "build:pages": "vite build && vike prerender",
     "preview": "vite preview"
   },
   "dependencies": {
