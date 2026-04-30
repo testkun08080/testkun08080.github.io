@@ -21,36 +21,92 @@ const ROOT_VAR_MAP = {
   animeAboutText: "--color-anime-about-text",
 } as const;
 
+const STORAGE_KEY = "dev-integrated-theme-controls-v1";
+
+type ThemeControls = {
+  heading: string;
+  subtitle: string;
+  body: string;
+  muted: string;
+  inverse: string;
+  borderSubtle: string;
+  borderStrong: string;
+  surfaceCard: string;
+  surfaceCardStrong: string;
+  collapseBlurPx: number;
+  animeBgRow: string;
+  animeFrontWord: string;
+  animeUnderline: string;
+  animeBarcode: string;
+  animeSideText: string;
+  animeSideCaret: string;
+  animeAboutText: string;
+};
+
+const DEFAULT_CONTROLS: ThemeControls = {
+  heading: "#0f172a",
+  subtitle: "#64748b",
+  body: "#334155",
+  muted: "#475569",
+  inverse: "#f8fafc",
+  borderSubtle: "rgb(148 163 184 / 0.32)",
+  borderStrong: "rgb(148 163 184 / 0.46)",
+  surfaceCard: "rgb(255 255 255 / 0.7)",
+  surfaceCardStrong: "rgb(255 255 255 / 0.84)",
+  collapseBlurPx: 7,
+  animeBgRow: "rgb(248 250 252 / 70%)",
+  animeFrontWord: "#0f172a",
+  animeUnderline: "#0b0b0b",
+  animeBarcode: "#7f1d1d",
+  animeSideText: "#ffffff",
+  animeSideCaret: "rgb(255 255 255 / 0.9)",
+  animeAboutText: "#111827",
+};
+
+function readSavedControls(): Partial<ThemeControls> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return {};
+    return parsed as Partial<ThemeControls>;
+  } catch {
+    return {};
+  }
+}
+
 export function FloatingThemeControls() {
   const [mounted, setMounted] = useState(false);
+  const initialControls = { ...DEFAULT_CONTROLS, ...readSavedControls() };
 
   useEffect(() => setMounted(true), []);
 
   const controls = useControls("Design Tokens", {
     Text: folder({
-      heading: { value: "#0f172a" },
-      subtitle: { value: "#64748b" },
-      body: { value: "#334155" },
-      muted: { value: "#475569" },
-      inverse: { value: "#f8fafc" },
+      heading: { value: initialControls.heading },
+      subtitle: { value: initialControls.subtitle },
+      body: { value: initialControls.body },
+      muted: { value: initialControls.muted },
+      inverse: { value: initialControls.inverse },
     }),
     Surface: folder({
-      borderSubtle: { value: "rgb(148 163 184 / 0.32)" },
-      borderStrong: { value: "rgb(148 163 184 / 0.46)" },
-      surfaceCard: { value: "rgb(255 255 255 / 0.7)" },
-      surfaceCardStrong: { value: "rgb(255 255 255 / 0.84)" },
+      borderSubtle: { value: initialControls.borderSubtle },
+      borderStrong: { value: initialControls.borderStrong },
+      surfaceCard: { value: initialControls.surfaceCard },
+      surfaceCardStrong: { value: initialControls.surfaceCardStrong },
     }),
     Effects: folder({
-      collapseBlurPx: { value: 7, min: 0, max: 20, step: 1 },
+      collapseBlurPx: { value: initialControls.collapseBlurPx, min: 0, max: 20, step: 1 },
     }),
     AnimeText: folder({
-      animeBgRow: { value: "rgb(248 250 252 / 70%)" },
-      animeFrontWord: { value: "#0f172a" },
-      animeUnderline: { value: "#0b0b0b" },
-      animeBarcode: { value: "#7f1d1d" },
-      animeSideText: { value: "#ffffff" },
-      animeSideCaret: { value: "rgb(255 255 255 / 0.9)" },
-      animeAboutText: { value: "#111827" },
+      animeBgRow: { value: initialControls.animeBgRow },
+      animeFrontWord: { value: initialControls.animeFrontWord },
+      animeUnderline: { value: initialControls.animeUnderline },
+      animeBarcode: { value: initialControls.animeBarcode },
+      animeSideText: { value: initialControls.animeSideText },
+      animeSideCaret: { value: initialControls.animeSideCaret },
+      animeAboutText: { value: initialControls.animeAboutText },
     }),
   });
 
@@ -74,6 +130,9 @@ export function FloatingThemeControls() {
     root.style.setProperty(ROOT_VAR_MAP.animeSideText, controls.animeSideText);
     root.style.setProperty(ROOT_VAR_MAP.animeSideCaret, controls.animeSideCaret);
     root.style.setProperty(ROOT_VAR_MAP.animeAboutText, controls.animeAboutText);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(controls));
+    }
   }, [controls]);
 
   if (!mounted) return null;

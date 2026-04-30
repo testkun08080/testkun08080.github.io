@@ -71,13 +71,14 @@
   font-size: clamp(3.2rem, 11vw, 8.6rem);
   font-weight: 900;
   letter-spacing: 0.01em;
+  color: var(--color-anime-front-word);
 }
 
 .underline {
   justify-self: center;
   width: clamp(220px, 50vw, 640px);
   height: 7px;
-  background: var(--color-anime-underline);
+  background: var(--color-anime-center-heading);
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }
