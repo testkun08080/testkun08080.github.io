@@ -70,9 +70,10 @@
   top: 0;
   bottom: 0;
   width: 50vw;
-  display: grid;
-  align-content: center;
-  justify-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
   grid-template-rows: repeat(36, min-content);
   gap: 0.28rem;
   user-select: none;
@@ -82,12 +83,12 @@
 
 .leftBlock {
   left: 0;
-  transform: translate3d(26vw, 0, 0);
+  transform: translate3d(26vw, 0, 0) scaleX(-1);
 }
 
 .rightBlock {
   right: 0;
-  transform: translate3d(-26vw, 0, 0);
+  transform: translate3d(-26vw, 0, 0) scaleX(-1);
 }
 
 .sideText {

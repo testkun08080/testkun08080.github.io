@@ -74,6 +74,7 @@ export default function Page() {
 
       animate(right, {
         translateX: [`-${START_OFFSET_VW}vw`, "0vw"],
+        scaleX: [-1, -1],
         ease: "linear",
         autoplay: onScroll({
           target: track,
