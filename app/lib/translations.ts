@@ -19,7 +19,7 @@ export const messages = {
     sunaba_message: "実験と表現のためのサンドボックス",
     about_title: "アバウト",
     about_greeting:
-      "はじめまして！\n長谷川翔一と申します。日本生まれです (๑•᎑•๑)\nテクノロジーを活用して素晴らしいアートやコンテンツを支援・創造することに情熱を持っています。特にLookDevやシェーダー開発が得意分野です。\nエンジニアリングとアートの両方のバックグラウンドを持ち、技術的な問題解決力とクリエイティブなビジョンを兼ね備えています。",
+      "はじめまして！\n長谷川翔一と申します(๑•᎑•๑)\nテクノロジーを活用して素晴らしいアートやコンテンツを支援・創造することに情熱を持っています。特にLookDevやシェーダー開発が得意分野です。\nエンジニアリングとアートの両方のバックグラウンドを持ち、技術的な問題解決力とクリエイティブなビジョンを兼ね備えています。",
     about_resume: "履歴書",
     about_section_title2: "スキル・自己紹介",
     about_profile_name: "長谷川 翔一",
@@ -34,7 +34,13 @@ export const messages = {
     about_programming_title: "プログラミング",
     about_programming_list: "Python, OpenGL, HLSL, C#, C++, React, TypeScript",
     about_hobbies_title: "趣味",
-    about_hobbies_list: ["カメラ", "温泉・サウナ", "料理", "映画鑑賞", "街歩き"],
+    about_hobbies_list: [
+      "カメラ",
+      "温泉・サウナ",
+      "料理",
+      "映画鑑賞",
+      "街歩き",
+    ],
     reels_title: "リール",
     reels_2022_2024: "Reel 2022-2024",
     reels_2022_2024_desc: "2022年から2024年のリール作品集",
@@ -80,8 +86,7 @@ export const messages = {
     about_tools_list:
       "UE, Unity, Maya, Houdini, Blender, Substance, Docker, Git",
     about_programming_title: "Programming",
-    about_programming_list:
-      "Python, OpenGL, HLSL, C#, C++, React, TypeScript",
+    about_programming_list: "Python, OpenGL, HLSL, C#, C++, React, TypeScript",
     about_hobbies_title: "Hobbies",
     about_hobbies_list: [
       "Photography",

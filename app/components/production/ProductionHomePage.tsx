@@ -29,6 +29,10 @@ const PAGE_COPY: Record<
     reelsFallbackLink: string;
     skillsShowMore: string;
     skillsClose: string;
+    resumeHeading: string;
+    resumeJaLabel: string;
+    resumeEnLabel: string;
+    resumeDownloadLabel: string;
     footerLanguageAriaLabel: string;
   }
 > = {
@@ -54,18 +58,20 @@ const PAGE_COPY: Record<
     menuButton: "メニュー",
     menuLanguageLabel: "言語",
     menuItems: [
-      { href: "#hero", label: "ヒーロー" },
-      { href: "#greeting", label: "挨拶" },
+      { href: "#hero", label: "TOP" },
       { href: "#sticky-side", label: "自己紹介" },
       { href: "#work", label: "作品" },
       { href: "#skills", label: "スキル" },
       { href: "#contact", label: "連絡先" },
-      { href: "#footer", label: "フッター" },
     ],
     reelsFallbackPrefix: "埋め込みが表示されない場合は",
     reelsFallbackLink: "YouTubeで開く",
     skillsShowMore: "もっと見る",
     skillsClose: "閉じる",
+    resumeHeading: "レジュメをダウンロード",
+    resumeJaLabel: "日本語",
+    resumeEnLabel: "英語",
+    resumeDownloadLabel: "ダウンロード",
     footerLanguageAriaLabel: "日本語と英語を切り替える",
   },
   en: {
@@ -90,18 +96,20 @@ With both engineering and art backgrounds, I bridge technical problem-solving an
     menuButton: "Menu",
     menuLanguageLabel: "Language",
     menuItems: [
-      { href: "#hero", label: "hero" },
-      { href: "#greeting", label: "greeting" },
+      { href: "#hero", label: "TOP" },
       { href: "#sticky-side", label: "about" },
       { href: "#work", label: "work" },
       { href: "#skills", label: "skills" },
       { href: "#contact", label: "contact" },
-      { href: "#footer", label: "footer" },
     ],
     reelsFallbackPrefix: "If the embed is unavailable,",
     reelsFallbackLink: "open on YouTube",
     skillsShowMore: "Show more",
     skillsClose: "Close",
+    resumeHeading: "Download Resume",
+    resumeJaLabel: "Japanese",
+    resumeEnLabel: "English",
+    resumeDownloadLabel: "Download",
     footerLanguageAriaLabel: "Switch language between Japanese and English",
   },
 };
@@ -192,6 +200,25 @@ export function ProductionHomePage() {
           />
         </header>
         <ContactCardSection />
+        <div className={styles.resumeDownloadWrap}>
+          <p className={styles.resumeDownloadHeading}>{copy.resumeHeading}</p>
+          <div className={styles.resumeDownloadButtons}>
+            <a
+              href="/resume_ja.pdf"
+              className={styles.resumeDownloadButton}
+              download
+            >
+              {copy.resumeJaLabel} ({copy.resumeDownloadLabel})
+            </a>
+            <a
+              href="/resume_en.pdf"
+              className={styles.resumeDownloadButton}
+              download
+            >
+              {copy.resumeEnLabel} ({copy.resumeDownloadLabel})
+            </a>
+          </div>
+        </div>
       </section>
 
       <footer id="footer" className={styles.footer}>
