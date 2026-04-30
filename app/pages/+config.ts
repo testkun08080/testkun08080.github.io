@@ -3,8 +3,9 @@ import vikePhoton from "vike-photon/config";
 import vikeReact from "vike-react/config";
 
 export default {
-  title: "Portfolio",
-  description: "Portfolio (Vike + React + vike-photon)",
+  title: "Testkun | Portfolio",
+  description:
+    "Testkun's portfolio site. Showcasing shader development, LookDev, and creative web projects bridging technology and art.",
   prerender: {
     parallel: 1,
   },
