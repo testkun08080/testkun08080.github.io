@@ -1,7 +1,7 @@
 import { animate, stagger } from "animejs";
 import { useEffect, useRef, useState } from "react";
-import styles from "../../pages/dev-software-tools/DevSoftwareTools.module.css";
-import { TOOL_CATEGORIES } from "../../pages/dev-software-tools/toolCategories";
+import styles from "../shared-dev-assets/DevSoftwareTools.module.css";
+import { TOOL_CATEGORIES } from "../shared-dev-assets/toolCategories";
 
 export function SkillsToolsSection() {
   const COLLAPSED_GRID_MAX_HEIGHT = 296;

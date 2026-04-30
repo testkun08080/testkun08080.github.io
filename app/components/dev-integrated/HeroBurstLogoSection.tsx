@@ -4,7 +4,7 @@ import {
   HeroLogoInkWebGL,
 } from "../../components/portfolio/HeroLogoInkWebGL";
 import { PathBarcodeTemplate3D } from "../../components/portfolio/PathBarcodeTemplate3D";
-import styles from "../../pages/dev-burst-overlay-anime-logo/DevBurstOverlayAnimeLogo.module.css";
+import styles from "../shared-dev-assets/DevBurstOverlayAnimeLogo.module.css";
 
 const HERO_BARCODE = {
   fontSize: {

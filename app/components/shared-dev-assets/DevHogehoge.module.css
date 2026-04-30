@@ -1,0 +1,111 @@
+.page {
+  color: var(--color-text-heading);
+  font-family: "Inter", system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+.hero {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.heroLabel {
+  font-size: clamp(0.72rem, 1.2vw, 0.88rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-subtitle);
+  margin-bottom: 0.9rem;
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 6.5vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  color: var(--color-text-heading);
+}
+
+.heroSub {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: 1rem;
+}
+
+.reelSection {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.reelCard {
+  width: min(760px, 100%);
+  text-align: center;
+  padding: clamp(0.9rem, 2vw, 1.25rem);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 16px;
+  background: var(--surface-card-strong);
+  box-shadow: 0 12px 28px -24px rgb(15 23 42 / 0.55);
+  will-change: transform, opacity;
+}
+
+.reelLabel {
+  font-size: clamp(0.6rem, 0.9vw, 0.72rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-body);
+  margin-bottom: 1rem;
+}
+
+.reelPeriod {
+  font-size: clamp(0.98rem, 3.2vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  color: var(--color-text-heading);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.35);
+}
+
+.videoFrame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--surface-card);
+}
+
+.videoFrame iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.embedFallback {
+  margin: 0.7rem 0 0;
+  font-size: 0.88rem;
+  color: var(--color-text-body);
+}
+
+.embedFallback a {
+  color: var(--color-text-heading);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 75dvh;
+  }
+}

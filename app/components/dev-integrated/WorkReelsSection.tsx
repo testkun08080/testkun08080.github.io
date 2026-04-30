@@ -1,6 +1,6 @@
 import { animate, stagger } from "animejs";
 import { useEffect, useRef } from "react";
-import styles from "../../pages/dev-reels/DevHogehoge.module.css";
+import styles from "../shared-dev-assets/DevHogehoge.module.css";
 
 const REELS = [
   {

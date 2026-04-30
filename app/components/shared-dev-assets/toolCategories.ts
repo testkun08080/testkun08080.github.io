@@ -63,7 +63,10 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
         name: "Cloudflare",
         iconPath: "/platform-web/infrastructure/cloudflare-color.svg",
       },
-      { name: "Vercel", iconPath: "/platform-web/hosting/vercel-logotype-light.png" },
+      {
+        name: "Vercel",
+        iconPath: "/platform-web/hosting/vercel-logotype-light.png",
+      },
     ],
   },
   {
@@ -82,13 +85,19 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     title: "Languages",
     role: "実装、マークアップ、スタイリング、クエリ、シェーダー記述",
     tools: [
-      { name: "TypeScript", iconPath: "/software-tools/language/ts-logo-128.svg" },
+      {
+        name: "TypeScript",
+        iconPath: "/software-tools/language/ts-logo-128.svg",
+      },
       { name: "HTML", iconPath: "/plang-icons/lang_html.svg" },
       { name: "CSS", iconPath: "/plang-icons/lang_css.svg" },
-      { name: "SQL", iconPath: "/software-tools/database/sql-database-with-logo.png" },
+      {
+        name: "SQL",
+        iconPath: "/software-tools/database/sql-database-with-logo.png",
+      },
       { name: "C", iconPath: "/plang-icons/lang_c.svg" },
       { name: "C++", iconPath: "/plang-icons/lang_c++.svg" },
-      { name: "C#", iconPath: "/plang-icons/lang_c#.svg" },
+      { name: "C#", iconPath: "/plang-icons/lang_csya.svg" },
       { name: "Python", iconPath: "/plang-icons/python.svg" },
       { name: "HLSL", iconPath: "/plang-icons/lang_hlsl.svg" },
     ],

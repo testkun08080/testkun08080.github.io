@@ -1,7 +1,7 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef, useState } from "react";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
-import styles from "../../pages/dev-burst-overlay-anime/DevBurstOverlayAnime.module.css";
+import styles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
 
 const FRONT_WORD = "konchiwa";
 const BG_ROW_COUNT = 20;

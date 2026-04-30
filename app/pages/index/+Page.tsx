@@ -1,9 +1,5 @@
-import { PortfolioScrollExperience } from "../../components/portfolio/PortfolioScrollExperience";
+import { ProductionHomePage } from "../../components/production/ProductionHomePage";
 
 export default function Page() {
-  return (
-    <main>
-      <PortfolioScrollExperience />
-    </main>
-  );
+  return <ProductionHomePage />;
 }

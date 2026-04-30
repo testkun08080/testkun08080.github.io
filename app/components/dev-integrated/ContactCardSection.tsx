@@ -1,4 +1,4 @@
-import styles from "../../pages/dev-contact/DevContact.module.css";
+import styles from "../shared-dev-assets/DevContact.module.css";
 
 type ContactItem = {
   label: string;
@@ -9,8 +9,8 @@ type ContactItem = {
 const CONTACT_ITEMS = [
   {
     label: "Email",
-    value: "hello@example.com",
-    href: "mailto:hello@example.com",
+    value: "testkun.08080@gmial.com",
+    href: "mailto:testkun.08080@gmial.com",
   },
   {
     label: "X",

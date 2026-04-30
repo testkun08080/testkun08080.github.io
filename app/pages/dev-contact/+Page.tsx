@@ -1,7 +1,7 @@
 import styles from "./DevContact.module.css";
 
 const CONTACT_ITEMS = [
-  { label: "メアド", value: "hello@example.com" },
+  { label: "メアド", value: "testkun.08080@gmial.com" },
   { label: "X", value: "@testkun08080" },
   { label: "名前", value: "testkun08080" },
 ] as const;
