@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   CanvasTexture,
   Color,
@@ -17,6 +17,7 @@ export type FlowMode = "radial" | "directional";
 
 export type HeroLogoInkWebGLProps = {
   className?: string;
+  style?: CSSProperties;
   paused?: boolean;
 
   // logo placement
@@ -289,6 +290,7 @@ function setVec3(target: number[], src: [number, number, number]) {
 
 export function HeroLogoInkWebGL({
   className,
+  style,
   paused = false,
   logoUrl = "/logo-trans.svg",
   logoSize = 0.32,
@@ -661,5 +663,5 @@ export function HeroLogoInkWebGL({
 
   if (unavailable) return null;
 
-  return <canvas ref={canvasRef} className={className} aria-hidden />;
+  return <canvas ref={canvasRef} className={className} style={style} aria-hidden />;
 }
