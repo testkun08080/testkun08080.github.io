@@ -231,9 +231,9 @@ export default function Page() {
               >
                 <span
                   className={styles.sideTyping}
-                  style={{ animationDelay: `${(i % 8) * 0.12}s` }}
+                  style={{ animationDelay: `${(i % 8) * 0.1}s` }}
                 >
-                  {SIDE_WORDS[(i + 2) % SIDE_WORDS.length]}
+                  {SIDE_WORDS[i % SIDE_WORDS.length]}
                 </span>
               </p>
             ))}

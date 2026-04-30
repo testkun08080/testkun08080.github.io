@@ -36,6 +36,7 @@ export default function Page() {
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
+  const sideTypingSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
 
   useEffect(() => {
@@ -51,6 +52,11 @@ export default function Page() {
       right.style.transform = "translate3d(0, 0, 0)";
       center.style.opacity = "1";
       center.style.transform = "translateY(0)";
+      sideTypingSpansRef.current.forEach((span) => {
+        if (!span) return;
+        span.style.width = "100%";
+        span.style.borderRightWidth = "0";
+      });
       return;
     }
 
@@ -88,6 +94,22 @@ export default function Page() {
           sync: true,
         }),
       });
+
+      sideTypingSpansRef.current.forEach((span, i) => {
+        if (!span) return;
+        const chars = (span.textContent?.length ?? 12) + 1;
+        const baseDelay =
+          i < LINE_COUNT ? (i % 8) * 100 : ((i - LINE_COUNT) % 8) * 120;
+        animate(span, {
+          width: [`0ch`, `${chars}ch`],
+          ease: "steps(14)",
+          duration: 1100,
+          delay: baseDelay,
+          loop: true,
+          alternate: true,
+          loopDelay: 750,
+        });
+      });
     });
 
     return () => {
@@ -101,7 +123,8 @@ export default function Page() {
       <section className={styles.intro}>
         <h1 className={styles.title}>dev-side-center-anime</h1>
         <p className={styles.copy}>
-          白文字を左右から中央へ寄せる構成を animejs のスクロール同期だけで再現。
+          白文字を左右から中央へ寄せる構成を animejs
+          のスクロール同期だけで再現。
         </p>
       </section>
 
@@ -112,12 +135,17 @@ export default function Page() {
             <div className={styles.centerLine} />
           </div>
 
-          <div ref={leftRef} className={`${styles.wordBlock} ${styles.leftBlock}`}>
+          <div
+            ref={leftRef}
+            className={`${styles.wordBlock} ${styles.leftBlock}`}
+          >
             {Array.from({ length: LINE_COUNT }).map((_, i) => (
               <p key={`l-${i}`} className={styles.sideText}>
                 <span
                   className={styles.sideTyping}
-                  style={{ animationDelay: `${(i % 8) * 0.1}s` }}
+                  ref={(el) => {
+                    sideTypingSpansRef.current[i] = el;
+                  }}
                 >
                   {WORDS[i % WORDS.length]}
                 </span>
@@ -125,14 +153,19 @@ export default function Page() {
             ))}
           </div>
 
-          <div ref={rightRef} className={`${styles.wordBlock} ${styles.rightBlock}`}>
+          <div
+            ref={rightRef}
+            className={`${styles.wordBlock} ${styles.rightBlock}`}
+          >
             {Array.from({ length: LINE_COUNT }).map((_, i) => (
               <p key={`r-${i}`} className={styles.sideText}>
                 <span
                   className={styles.sideTyping}
-                  style={{ animationDelay: `${(i % 8) * 0.12}s` }}
+                  ref={(el) => {
+                    sideTypingSpansRef.current[LINE_COUNT + i] = el;
+                  }}
                 >
-                  {WORDS[(i + 2) % WORDS.length]}
+                  {WORDS[i % WORDS.length]}
                 </span>
               </p>
             ))}
