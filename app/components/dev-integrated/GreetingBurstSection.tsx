@@ -63,7 +63,6 @@ export function GreetingBurstSection() {
           }),
         });
       });
-
     });
 
     return () => {
@@ -93,8 +92,6 @@ export function GreetingBurstSection() {
           <ScrollTypingHeading
             text={FRONT_WORD}
             targetRef={triggerRef}
-            enter="bottom top"
-            leave="center top-=100"
             headingClassName={styles.word}
             underlineClassName={styles.underline}
           />

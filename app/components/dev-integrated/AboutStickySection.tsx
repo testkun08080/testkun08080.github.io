@@ -142,9 +142,16 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
 
             sideTypingSpansRef.current.forEach((span, i) => {
               if (!span) return;
-              const phaseOffset = i < LINE_COUNT ? (i % 8) * 0.04 : ((i - LINE_COUNT) % 8) * 0.04;
-              const phaseProgress = Math.min(Math.max((clamped - phaseOffset) / 0.65, 0), 1);
-              const width = Math.max(Math.floor(phaseProgress * sideChars[i]), 1);
+              const phaseOffset =
+                i < LINE_COUNT ? (i % 8) * 0.04 : ((i - LINE_COUNT) % 8) * 0.04;
+              const phaseProgress = Math.min(
+                Math.max((clamped - phaseOffset) / 0.65, 0),
+                1,
+              );
+              const width = Math.max(
+                Math.floor(phaseProgress * sideChars[i]),
+                1,
+              );
               span.style.width = `${width}ch`;
               span.style.borderRightWidth = phaseProgress >= 1 ? "0" : "2px";
             });
@@ -169,8 +176,6 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
             <ScrollTypingHeading
               text="About"
               targetRef={trackRef}
-              enter="top+=20% top"
-              leave="top+=72% top"
               headingClassName={styles.centerHeading}
               underlineClassName={styles.centerLine}
             />
@@ -188,7 +193,10 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
             />
           </div>
 
-          <div ref={leftRef} className={`${styles.wordBlock} ${styles.leftBlock}`}>
+          <div
+            ref={leftRef}
+            className={`${styles.wordBlock} ${styles.leftBlock}`}
+          >
             {Array.from({ length: LINE_COUNT }).map((_, i) => (
               <p key={`l-${i}`} className={styles.sideText}>
                 <span
@@ -203,7 +211,10 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
             ))}
           </div>
 
-          <div ref={rightRef} className={`${styles.wordBlock} ${styles.rightBlock}`}>
+          <div
+            ref={rightRef}
+            className={`${styles.wordBlock} ${styles.rightBlock}`}
+          >
             {Array.from({ length: LINE_COUNT }).map((_, i) => (
               <p key={`r-${i}`} className={styles.sideText}>
                 <span

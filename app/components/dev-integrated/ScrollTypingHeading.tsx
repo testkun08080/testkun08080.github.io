@@ -1,10 +1,10 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./ScrollTypingHeading.module.css";
 
 type ScrollTypingHeadingProps = {
   text: string;
-  targetRef: RefObject<HTMLElement | null>;
+  targetRef: React.RefObject<HTMLElement | null>;
   enter?: string;
   leave?: string;
   headingClassName?: string;
@@ -56,9 +56,6 @@ export function ScrollTypingHeading({
 
     word.textContent = "";
     typedCountRef.current = -1;
-    let updatedByScroll = false;
-    let fallbackRafId = 0;
-    let fallbackAttached = false;
 
     scopeRef.current = createScope({ root }).add(() => {
       animate(line, {
@@ -72,14 +69,13 @@ export function ScrollTypingHeading({
       });
 
       animate(word, {
-        opacity: [1, 1],
+        opacity: [0.45, 1],
         autoplay: onScroll({
           target,
           enter,
           leave,
           sync: true,
           onUpdate: (self) => {
-            updatedByScroll = true;
             const observer = self as { progress?: number };
             if (typeof observer.progress !== "number") return;
             const clamped = Math.min(Math.max(observer.progress, 0), 1);
@@ -87,46 +83,12 @@ export function ScrollTypingHeading({
             if (nextCount === typedCountRef.current) return;
             typedCountRef.current = nextCount;
             word.textContent = text.slice(0, nextCount);
-            line.style.transform = `scaleX(${clamped})`;
           },
         }),
       });
     });
 
-    // Fallback for environments where onScroll observer is not initialized.
-    const updateFromRect = () => {
-      const rect = target.getBoundingClientRect();
-      const vh = window.innerHeight || 1;
-      const raw = (vh - rect.top) / Math.max(rect.height + vh * 0.2, 1);
-      const progress = Math.min(Math.max(raw, 0), 1);
-      const nextCount = Math.floor(progress * text.length);
-      if (nextCount !== typedCountRef.current) {
-        typedCountRef.current = nextCount;
-        word.textContent = text.slice(0, nextCount);
-      }
-      line.style.transform = `scaleX(${progress})`;
-    };
-
-    const onFallbackScroll = () => {
-      cancelAnimationFrame(fallbackRafId);
-      fallbackRafId = window.requestAnimationFrame(updateFromRect);
-    };
-
-    const fallbackTimer = window.setTimeout(() => {
-      if (updatedByScroll) return;
-      fallbackAttached = true;
-      updateFromRect();
-      window.addEventListener("scroll", onFallbackScroll, { passive: true });
-      window.addEventListener("resize", onFallbackScroll);
-    }, 420);
-
     return () => {
-      window.clearTimeout(fallbackTimer);
-      cancelAnimationFrame(fallbackRafId);
-      if (fallbackAttached) {
-        window.removeEventListener("scroll", onFallbackScroll);
-        window.removeEventListener("resize", onFallbackScroll);
-      }
       scopeRef.current?.revert();
       scopeRef.current = null;
       word.textContent = text;
