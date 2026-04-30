@@ -13,14 +13,14 @@ export function ContactCardSection() {
         className={styles.card}
         style={{
           background: "transparent",
-          borderColor: "rgb(148 163 184 / 0.42)",
-          color: "#1e293b",
+          borderColor: "var(--color-border-strong)",
+          color: "var(--color-text-body)",
         }}
       >
-        <p className={styles.eyebrow} style={{ color: "#64748b" }}>
+        <p className={styles.eyebrow} style={{ color: "var(--color-text-subtitle)" }}>
           CONTACT
         </p>
-        <h2 className={styles.title} style={{ color: "#0f172a" }}>
+        <h2 className={styles.title} style={{ color: "var(--color-text-heading)" }}>
           Get in touch
         </h2>
         <ul className={styles.list}>
@@ -30,13 +30,13 @@ export function ContactCardSection() {
               className={styles.item}
               style={{
                 background: "transparent",
-                border: "1px solid rgb(148 163 184 / 0.3)",
+                border: "1px solid var(--color-border-subtle)",
               }}
             >
-              <span className={styles.label} style={{ color: "#334155" }}>
+              <span className={styles.label} style={{ color: "var(--color-text-body)" }}>
                 {item.label}
               </span>
-              <span className={styles.value} style={{ color: "#0f172a" }}>
+              <span className={styles.value} style={{ color: "var(--color-text-heading)" }}>
                 {item.value}
               </span>
             </li>
