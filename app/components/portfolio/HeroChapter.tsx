@@ -211,7 +211,7 @@ export function HeroChapter({ className }: Props) {
 
         @media (max-width: 640px) {
           .hero-barcode-svg-text {
-            font-size: clamp(0.72rem, 4.8vw, 1.02rem);
+            font-size: clamp(0.78rem, 5.2vw, 1.1rem);
           }
         }
       `}</style>
