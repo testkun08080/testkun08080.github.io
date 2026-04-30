@@ -13,6 +13,8 @@ type StickyQuickMenuProps = {
   upwardThreshold?: number;
   language?: "ja" | "en";
   onToggleLanguage?: () => void;
+  menuLabel?: string;
+  languageLabel?: string;
 };
 
 export function StickyQuickMenu({
@@ -21,6 +23,8 @@ export function StickyQuickMenu({
   upwardThreshold = 10,
   language,
   onToggleLanguage,
+  menuLabel = "Menu",
+  languageLabel = "Language",
 }: StickyQuickMenuProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -140,7 +144,7 @@ export function StickyQuickMenu({
         aria-expanded={menuOpen}
         aria-controls={menuId}
       >
-        Menu
+        {menuLabel}
       </button>
       <div
         id={menuId}
@@ -163,7 +167,7 @@ export function StickyQuickMenu({
             }}
             aria-label="Switch language between Japanese and English"
           >
-            Language: {language === "en" ? "English" : "日本語"}
+            {languageLabel}: {language === "en" ? "English" : "日本語"}
           </button>
         ) : null}
       </div>

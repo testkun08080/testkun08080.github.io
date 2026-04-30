@@ -82,3 +82,18 @@
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }
+
+@media (max-width: 640px) {
+  .stage {
+    min-height: 160dvh;
+  }
+
+  .word {
+    font-size: clamp(2.2rem, 14vw, 3.6rem);
+  }
+
+  .underline {
+    width: clamp(140px, 56vw, 280px);
+    height: 5px;
+  }
+}

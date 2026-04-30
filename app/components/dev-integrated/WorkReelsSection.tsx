@@ -17,7 +17,15 @@ const REELS = [
   },
 ] as const;
 
-export function WorkReelsSection() {
+type WorkReelsSectionProps = {
+  fallbackPrefix?: string;
+  fallbackLinkLabel?: string;
+};
+
+export function WorkReelsSection({
+  fallbackPrefix = "埋め込みが表示されない場合は",
+  fallbackLinkLabel = "YouTubeで開く",
+}: WorkReelsSectionProps) {
   const rootRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -68,9 +76,9 @@ export function WorkReelsSection() {
               />
             </div>
             <p className={styles.embedFallback}>
-              埋め込みが表示されない場合は{" "}
+              {fallbackPrefix}{" "}
               <a href={reel.watchUrl} target="_blank" rel="noreferrer">
-                YouTubeで開く
+                {fallbackLinkLabel}
               </a>
             </p>
           </div>

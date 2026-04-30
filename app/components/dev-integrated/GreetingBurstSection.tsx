@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
 
-const FRONT_WORD = "konchiwa";
 const BG_ROW_COUNT = 22;
-const BG_ROW_TEXT = Array.from({ length: 15 })
-  .map(() => "hi there hello oi")
-  .join(" ");
+
+type GreetingBurstSectionProps = {
+  frontWord?: string;
+  bgRowText?: string;
+};
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -24,7 +25,10 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
-export function GreetingBurstSection() {
+export function GreetingBurstSection({
+  frontWord = "konchiwa",
+  bgRowText = "hi there hello oi",
+}: GreetingBurstSectionProps) {
   const reduceMotion = usePrefersReducedMotion();
   const rootRef = useRef<HTMLElement>(null);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
@@ -83,14 +87,16 @@ export function GreetingBurstSection() {
               }}
               className={styles.bgRow}
             >
-              {BG_ROW_TEXT}
+              {Array.from({ length: 15 })
+                .map(() => bgRowText)
+                .join(" ")}
             </p>
           ))}
         </div>
 
         <div className={styles.frontLayer}>
           <ScrollTypingHeading
-            text={FRONT_WORD}
+            text={frontWord}
             headingClassName={styles.word}
             underlineClassName={styles.underline}
           />

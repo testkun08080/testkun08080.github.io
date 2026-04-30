@@ -23,3 +23,14 @@
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }
+
+@media (max-width: 640px) {
+  .word {
+    font-size: clamp(2rem, 13vw, 3.4rem);
+  }
+
+  .underline {
+    width: clamp(140px, 56vw, 280px);
+    height: 5px;
+  }
+}

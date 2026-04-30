@@ -26,8 +26,28 @@
 }
 
 @media (max-width: 768px) {
+  .reelSection {
+    padding: 3rem 1rem;
+  }
+
   .reelCard {
     transform: translate3d(-4px, 3px, 0) rotate(-0.45deg);
+  }
+}
+
+@media (max-width: 420px) {
+  .reelSection {
+    padding: 2.4rem 0.75rem;
+  }
+
+  .reelCard {
+    padding: 0.82rem;
+    border-radius: 12px;
+    transform: none;
+  }
+
+  .reelPeriod {
+    margin-bottom: 1.1rem;
   }
 }
 

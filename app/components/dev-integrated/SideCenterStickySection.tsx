@@ -3,15 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "./SideCenterStickySection.module.css";
 
-const WORDS = [
-  "lookdev pipeline",
-  "shader support",
-  "creative coding",
-  "scroll linked",
-  "animejs motion",
-  "visual crafting",
-] as const;
-
 const LINE_COUNT = 33;
 const START_OFFSET_VW = 22;
 
@@ -31,11 +22,22 @@ function usePrefersReducedMotion() {
 }
 
 type SideCenterStickySectionProps = {
+  aboutHeading?: string;
   aboutText: string;
+  sideWords?: readonly string[];
 };
 
 export function SideCenterStickySection({
+  aboutHeading = "About",
   aboutText,
+  sideWords = [
+    "lookdev pipeline",
+    "shader support",
+    "creative coding",
+    "scroll linked",
+    "animejs motion",
+    "visual crafting",
+  ],
 }: SideCenterStickySectionProps) {
   const reduceMotion = usePrefersReducedMotion();
   const rootRef = useRef<HTMLElement>(null);
@@ -160,7 +162,7 @@ export function SideCenterStickySection({
         <div className={styles.stickyFrame}>
           <div className={styles.centerArea}>
             <ScrollTypingHeading
-              text="About"
+              text={aboutHeading}
               headingClassName={styles.centerHeading}
               underlineClassName={styles.centerLine}
             />
@@ -179,7 +181,7 @@ export function SideCenterStickySection({
                     sideTypingSpansRef.current[i] = el;
                   }}
                 >
-                  {WORDS[i % WORDS.length]}
+                  {sideWords[i % sideWords.length]}
                 </span>
               </p>
             ))}
@@ -197,7 +199,7 @@ export function SideCenterStickySection({
                     sideTypingSpansRef.current[LINE_COUNT + i] = el;
                   }}
                 >
-                  {WORDS[i % WORDS.length]}
+                  {sideWords[i % sideWords.length]}
                 </span>
               </p>
             ))}

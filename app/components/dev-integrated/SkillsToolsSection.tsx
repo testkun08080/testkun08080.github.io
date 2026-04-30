@@ -3,7 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import styles from "../shared-dev-assets/DevSoftwareTools.module.css";
 import { TOOL_CATEGORIES } from "../shared-dev-assets/toolCategories";
 
-export function SkillsToolsSection() {
+type SkillsToolsSectionProps = {
+  showMoreLabel?: string;
+  closeLabel?: string;
+};
+
+export function SkillsToolsSection({
+  showMoreLabel = "Show more",
+  closeLabel = "Close",
+}: SkillsToolsSectionProps) {
   const COLLAPSED_GRID_MAX_HEIGHT = 296;
   const pageRef = useRef<HTMLElement>(null);
   const gridRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -146,7 +154,7 @@ export function SkillsToolsSection() {
                 aria-expanded={Boolean(expandedMap[category.id])}
                 aria-controls={`tools-grid-${category.id}`}
               >
-                {expandedMap[category.id] ? "Close" : "Show more"}
+                {expandedMap[category.id] ? closeLabel : showMoreLabel}
               </button>
             </div>
           ) : null}
