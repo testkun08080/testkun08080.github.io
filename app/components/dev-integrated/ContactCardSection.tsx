@@ -3,7 +3,6 @@ import styles from "../../pages/dev-contact/DevContact.module.css";
 type ContactItem = {
   label: string;
   value: string;
-  note: string;
   href?: string;
 };
 
@@ -12,15 +11,17 @@ const CONTACT_ITEMS = [
     label: "Email",
     value: "hello@example.com",
     href: "mailto:hello@example.com",
-    note: "返信は通常24時間以内",
   },
   {
     label: "X",
     value: "@testkun08080",
     href: "https://x.com/testkun08080",
-    note: "制作ログや技術メモを更新",
   },
-  { label: "Name", value: "testkun08080", note: "Shoichi Hasegawa" },
+  {
+    label: "GitHub",
+    value: "github.com/testkun08080",
+    href: "https://github.com/testkun08080",
+  },
 ] satisfies ContactItem[];
 
 export function ContactCardSection() {
@@ -36,7 +37,6 @@ export function ContactCardSection() {
           <li key={item.label} className={styles.item}>
             <div className={styles.itemMeta}>
               <span className={styles.label}>{item.label}</span>
-              <span className={styles.note}>{item.note}</span>
             </div>
             {item.href ? (
               <a

@@ -25,6 +25,14 @@
   --color-anime-side-text: #ffa3a3;
   --color-anime-side-caret: rgba(255, 225, 225, 0.9);
   --color-anime-about-text: #111827;
+  --color-accent-main: #2563eb;
+  --color-card-surface: #fff3f3;
+  --color-surface-soft: #e2e8f0;
+  --color-footer-bg: #020617;
+  --color-anime-center-heading: #97cbff;
+  --color-anime-center-heading-glow: rgb(148 163 184 / 0.25);
+  --color-anime-about-glow: rgb(255 255 255 / 0.24);
+  --color-anime-side-glow: rgb(255 255 255 / 0.16);
 }
 
 * {

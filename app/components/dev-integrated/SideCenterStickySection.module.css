@@ -32,8 +32,8 @@
   font-size: clamp(2rem, 6.2vw, 4.3rem);
   font-weight: 900;
   letter-spacing: 0.01em;
-  color: #97cbff;
-  text-shadow: 0 0 22px rgb(148 163 184 / 0.25);
+  color: var(--color-anime-center-heading);
+  text-shadow: 0 0 22px var(--color-anime-center-heading-glow);
 }
 
 .centerLine {
@@ -53,7 +53,7 @@
   line-height: 1.8;
   font-size: clamp(0.98rem, 1.55vw, 1.14rem);
   color: var(--color-anime-about-text);
-  text-shadow: 0 0 10px rgb(255 255 255 / 0.24);
+  text-shadow: 0 0 10px var(--color-anime-about-glow);
 }
 
 .sideBlock {
@@ -93,7 +93,7 @@
   text-decoration: underline;
   text-underline-offset: 0.16em;
   white-space: nowrap;
-  text-shadow: 0 0 8px rgb(255 255 255 / 0.16);
+  text-shadow: 0 0 8px var(--color-anime-side-glow);
   opacity: 0.88;
 }
 

@@ -120,7 +120,7 @@
 }
 
 .expandButton:focus-visible {
-  outline: 2px solid #2563eb;
+  outline: 2px solid var(--color-accent-main);
   outline-offset: 2px;
 }
 
@@ -150,7 +150,7 @@
 }
 
 .iconCard:focus-visible {
-  outline: 2px solid #2563eb;
+  outline: 2px solid var(--color-accent-main);
   outline-offset: 2px;
 }
 
@@ -175,7 +175,7 @@
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: #e2e8f0;
+  background: var(--color-surface-soft);
   color: var(--color-text-body);
   font-size: 0.65rem;
   font-weight: 800;
