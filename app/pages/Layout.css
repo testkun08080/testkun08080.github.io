@@ -18,14 +18,14 @@
   --surface-card: rgba(255, 230, 230, 0.7);
   --surface-card-strong: rgba(253, 225, 225, 0.84);
   --fx-collapse-blur: 7px;
-  --color-anime-bg-row: rgba(206, 231, 255, 0.7);
+  --color-anime-bg-row: #ffc5c5;
   --color-anime-front-word: #0f172a;
-  --color-anime-underline: #0b0b0b;
+  --color-anime-underline: #f67777;
   --color-anime-greeting-word: #0f172a;
   --color-anime-greeting-underline: #0b0b0b;
   --color-anime-barcode: #7f1d1d;
-  --color-anime-side-text: #ffa3a3;
-  --color-anime-side-caret: rgba(255, 225, 225, 0.9);
+  --color-anime-side-text: #ffc5c5;
+  --color-anime-side-caret: rgba(0, 110, 255, 0.58);
   --color-anime-about-text: #111827;
   --color-accent-main: #2563eb;
   --color-card-surface: #fff3f3;

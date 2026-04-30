@@ -27,10 +27,10 @@ export type HeroLogoInkWebGLProps = {
   centerY?: number;
 
   // multi-instance placement
-  instanceCount?: number;     // 1..MAX_INSTANCES
-  instanceRadius?: number;    // ring radius around (centerX, centerY)
+  instanceCount?: number; // 1..MAX_INSTANCES
+  instanceRadius?: number; // ring radius around (centerX, centerY)
   instanceAngleOffset?: number; // ring start angle, degrees
-  instanceRotation?: number;  // per-step rotation in degrees, applied as i * value
+  instanceRotation?: number; // per-step rotation in degrees, applied as i * value
 
   // ink shown INSIDE the logo mask
   inkScale?: number;
@@ -293,7 +293,7 @@ export function HeroLogoInkWebGL({
   style,
   paused = false,
   logoUrl = "/logo-trans.svg",
-  logoSize = 0.32,
+  logoSize = 0.2,
   centerX = 0.0,
   centerY = 0.0,
   instanceCount = 1,
@@ -444,7 +444,9 @@ export function HeroLogoInkWebGL({
       u_logoSize: { value: logoSize },
       u_logoAspect: { value: 1 },
       u_center: { value: new Vector2(centerX, centerY) },
-      u_instanceCount: { value: Math.max(1, Math.min(12, Math.round(instanceCount))) },
+      u_instanceCount: {
+        value: Math.max(1, Math.min(12, Math.round(instanceCount))),
+      },
       u_instanceRadius: { value: instanceRadius },
       u_instanceAngleOffset: { value: (instanceAngleOffset * Math.PI) / 180 },
       u_instanceRotation: { value: (instanceRotation * Math.PI) / 180 },
@@ -545,8 +547,8 @@ export function HeroLogoInkWebGL({
       const w = rect.width;
       const h = rect.height;
       if (w <= 0 || h <= 0) return;
-      const px = (clientX - rect.left) / w;       // 0..1
-      const py = (clientY - rect.top) / h;        // 0..1
+      const px = (clientX - rect.left) / w; // 0..1
+      const py = (clientY - rect.top) / h; // 0..1
       const aspect = w / h;
       const ux = (px * 2.0 - 1.0) * aspect;
       const uy = -(py * 2.0 - 1.0);
@@ -573,16 +575,26 @@ export function HeroLogoInkWebGL({
       uniforms.u_paused.value = p.paused ? 1 : 0;
       uniforms.u_logoSize.value = p.logoSize;
       uniforms.u_center.value.set(p.centerX, p.centerY);
-      uniforms.u_instanceCount.value = Math.max(1, Math.min(12, Math.round(p.instanceCount)));
+      uniforms.u_instanceCount.value = Math.max(
+        1,
+        Math.min(12, Math.round(p.instanceCount)),
+      );
       uniforms.u_instanceRadius.value = p.instanceRadius;
-      uniforms.u_instanceAngleOffset.value = (p.instanceAngleOffset * Math.PI) / 180;
+      uniforms.u_instanceAngleOffset.value =
+        (p.instanceAngleOffset * Math.PI) / 180;
       uniforms.u_instanceRotation.value = (p.instanceRotation * Math.PI) / 180;
       uniforms.u_inkScale.value = p.inkScale;
       uniforms.u_warpScale.value = p.warpScale;
       uniforms.u_warpAmount.value = p.warpAmount;
       uniforms.u_warpSpeed.value = p.warpSpeed;
-      setVec3(uniforms.u_inkLight.value as unknown as number[], hexToVec3(p.inkLight));
-      setVec3(uniforms.u_inkDark.value as unknown as number[], hexToVec3(p.inkDark));
+      setVec3(
+        uniforms.u_inkLight.value as unknown as number[],
+        hexToVec3(p.inkLight),
+      );
+      setVec3(
+        uniforms.u_inkDark.value as unknown as number[],
+        hexToVec3(p.inkDark),
+      );
       uniforms.u_inkContrast.value = p.inkContrast;
       uniforms.u_inkOpacity.value = p.inkOpacity;
       uniforms.u_uvDistortScale.value = p.uvDistortScale;
@@ -593,7 +605,9 @@ export function HeroLogoInkWebGL({
       uniforms.u_flowMode.value = p.flowMode === "radial" ? 1 : 0;
       const a = (p.flowAngle * Math.PI) / 180;
       uniforms.u_flowDir.value.set(Math.cos(a), Math.sin(a));
-      uniforms.u_flowStrength.value = p.flowInvert ? -p.flowStrength : p.flowStrength;
+      uniforms.u_flowStrength.value = p.flowInvert
+        ? -p.flowStrength
+        : p.flowStrength;
       uniforms.u_flowRadius.value = p.flowRadius;
       uniforms.u_flowFalloff.value = p.flowFalloff;
 
@@ -612,7 +626,10 @@ export function HeroLogoInkWebGL({
       uniforms.u_blurRadius.value = p.blurRadius;
       uniforms.u_edgeWidth.value = p.edgeWidth;
       uniforms.u_edgeStrength.value = p.edgeStrength;
-      setVec3(uniforms.u_edgeColor.value as unknown as number[], hexToVec3(p.edgeColor));
+      setVec3(
+        uniforms.u_edgeColor.value as unknown as number[],
+        hexToVec3(p.edgeColor),
+      );
       uniforms.u_edgeInkMix.value = p.edgeInkMix;
     };
 
@@ -663,5 +680,7 @@ export function HeroLogoInkWebGL({
 
   if (unavailable) return null;
 
-  return <canvas ref={canvasRef} className={className} style={style} aria-hidden />;
+  return (
+    <canvas ref={canvasRef} className={className} style={style} aria-hidden />
+  );
 }

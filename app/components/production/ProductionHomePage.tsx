@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { ContactCardSection } from "../dev-integrated/ContactCardSection";
-import { FloatingThemeControls } from "../dev-integrated/FloatingThemeControls";
 import { GreetingBurstSection } from "../dev-integrated/GreetingBurstSection";
 import { HeroBurstLogoSection } from "../dev-integrated/HeroBurstLogoSection";
 import { ScrollTypingHeading } from "../dev-integrated/ScrollTypingHeading";
@@ -37,7 +36,7 @@ export function ProductionHomePage() {
 
   return (
     <main className={styles.page}>
-      <FloatingThemeControls />
+      {/* <FloatingThemeControls /> */}
       <section id="hero" className={styles.section}>
         <HeroBurstLogoSection />
       </section>

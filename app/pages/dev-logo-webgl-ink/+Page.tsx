@@ -1,7 +1,10 @@
 import { useReducedMotion } from "motion/react";
 import { Leva, folder, useControls } from "leva";
 import { useEffect, useState } from "react";
-import { HeroLogoInkWebGL, FlowMode } from "../../components/portfolio/HeroLogoInkWebGL";
+import {
+  HeroLogoInkWebGL,
+  FlowMode,
+} from "../../components/portfolio/HeroLogoInkWebGL";
 import styles from "./DevLogoWebglInk.module.css";
 
 export default function Page() {
@@ -18,7 +21,7 @@ export default function Page() {
         value: "/logo-trans.svg",
         options: ["/logo-trans.svg", "/logo.svg"],
       },
-      logoSize: { value: 0.32, min: 0.05, max: 1.0, step: 0.005 },
+      logoSize: { value: 0.2, min: 0.05, max: 1.0, step: 0.005 },
       centerX: { value: 0.0, min: -1.5, max: 1.5, step: 0.01 },
       centerY: { value: 0.0, min: -1.5, max: 1.5, step: 0.01 },
     }),
