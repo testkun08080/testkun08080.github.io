@@ -34,7 +34,7 @@ jobs:
         working-directory: app
 
       - name: Ensure Linux native binaries are present
-        run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu lightningcss-linux-x64-gnu
+        run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu @rolldown/binding-linux-x64-gnu lightningcss-linux-x64-gnu
         working-directory: app
 
       - name: Typecheck
