@@ -1,0 +1,169 @@
+.page {
+  color: var(--color-text-heading);
+  scroll-behavior: smooth;
+}
+
+.section {
+  position: relative;
+}
+
+.sectionHead {
+  width: min(100%, 1100px);
+  margin: 0 auto;
+  padding: 2rem 1rem 0.6rem;
+}
+
+.sectionHeadingWord {
+  margin: 0;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(2.2rem, 6.2vw, 4.2rem);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  color: var(--color-anime-about-text);
+}
+
+.sectionHeadingLine {
+  width: min(72vw, 520px);
+  height: 6px;
+  background: var(--color-anime-about-text);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}
+
+.resumeDownloadWrap {
+  display: grid;
+  justify-items: center;
+  gap: 0.9rem;
+  margin: 1rem auto 0;
+  padding: 0 1rem;
+  z-index: 7;
+}
+
+.resumeDownloadHeading {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-text-body);
+}
+
+.resumeDownloadButtons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.resumeDownloadButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 12.5rem;
+  padding: 0.62rem 1rem;
+  border: 1px solid var(--color-text-body);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-text-body);
+  background: color-mix(in srgb, var(--color-bg, #fff) 84%, transparent);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.resumeDownloadButton:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--color-bg, #fff) 72%, transparent);
+}
+
+.resumeDownloadButton:focus-visible {
+  outline: 2px solid var(--color-text-body);
+  outline-offset: 2px;
+}
+
+.workSection {
+  z-index: 8;
+  padding-top: 4rem;
+}
+
+.skillsSection {
+  z-index: 9;
+  padding-top: 4rem;
+}
+
+.contactSection {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3.5rem;
+  margin-top: 6rem;
+  margin-bottom: 6rem;
+}
+
+.footer {
+  min-height: 12dvh;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  text-align: center;
+  padding: 3rem 1rem;
+  background: transparent;
+  color: var(--color-text-body);
+}
+
+.languageToggle {
+  border: 0;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: clamp(1rem, 2.3vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.languageActiveRed {
+  color: var(--color-text-body);
+}
+
+.languageActiveBlue {
+  color: var(--color-text-body);
+}
+
+.languageInactive,
+.languageSeparator {
+  color: var(--color-text-body);
+}
+
+.copyright {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  color: var(--color-text-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    scroll-behavior: auto;
+  }
+
+  .resumeDownloadButton {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .resumeDownloadWrap {
+    margin-top: 0.6rem;
+  }
+
+  .resumeDownloadButton {
+    min-width: min(92vw, 18rem);
+  }
+}

@@ -1,0 +1,150 @@
+.page {
+  min-height: 100dvh;
+  /* background: #f7efe4; */
+  color: var(--color-anime-front-word);
+}
+
+.stage {
+  position: relative;
+  min-height: 220dvh;
+  overflow: visible;
+}
+
+.stickyViewport {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+}
+
+.logoLayer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.barcodeFrame {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.barcodeTheme {}
+
+.nextItemCard {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.5rem, 4vw, 3rem);
+  z-index: 3;
+  width: min(42rem, calc(100% - 2rem));
+  padding: 1rem 1.2rem;
+  border: 1px solid rgb(255 255 255 / 0.45);
+  border-radius: 0.75rem;
+  background: rgb(15 23 42 / 0.72);
+  color: #f8fafc;
+  backdrop-filter: blur(8px);
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  transition:
+    opacity 360ms ease,
+    transform 360ms ease;
+  pointer-events: none;
+}
+
+.nextItemCardVisible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.nextItemEyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+}
+
+.nextItemTitle {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.nextItemBody {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+  line-height: 1.5;
+  color: #e2e8f0;
+}
+
+:global(.hero-barcode-template3d) {
+  position: absolute;
+  inset: 0;
+}
+
+:global(.hero-barcode-template3d-svg) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+:global(.hero-barcode-template3d-path) {
+  stroke: var(--color-anime-barcode);
+  stroke-width: 0.3;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+
+:global(.hero-barcode-template3d-items) {
+  position: absolute;
+  inset: 0;
+  perspective: 640px;
+}
+
+:global(.hero-barcode-template3d-item) {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+
+:global(.hero-barcode-template3d-char) {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50% 0.5rem;
+  color: var(--color-anime-barcode);
+}
+
+:global(.hero-barcode-template3d-face) {
+  position: absolute;
+  left: 0;
+  display: inline-block;
+  font-style: normal;
+}
+
+:global(.hero-barcode-template3d-face-front) {
+  position: relative;
+  opacity: 1;
+}
+
+:global(.hero-barcode-template3d-face-bottom) {
+  top: 100%;
+  transform-origin: 50% 0%;
+  transform: rotateX(90deg);
+  opacity: 0.5;
+}
+
+:global(.hero-barcode-template3d-face-top) {
+  bottom: 100%;
+  transform-origin: 50% 100%;
+  transform: rotateX(-90deg);
+  opacity: 0.5;
+}

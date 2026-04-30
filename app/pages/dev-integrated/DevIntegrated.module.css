@@ -1,0 +1,98 @@
+.page {
+  color: var(--color-text-heading);
+  scroll-behavior: smooth;
+}
+
+.section {
+  position: relative;
+}
+
+.sectionHead {
+  width: min(100%, 1100px);
+  margin: 0 auto;
+  padding: 2rem 1rem 0.6rem;
+}
+
+.sectionHeadingWord {
+  margin: 0;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(2.2rem, 6.2vw, 4.2rem);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  color: var(--color-anime-about-text);
+}
+
+.sectionHeadingLine {
+  width: min(72vw, 520px);
+  height: 6px;
+  background: var(--color-anime-about-text);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}
+
+.workSection {
+  z-index: 8;
+}
+
+.skillsSection {
+  z-index: 9;
+}
+
+.contactSection {
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 57px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.footer {
+  min-height: 24dvh;
+  display: grid;
+  place-content: center;
+  gap: 0.45rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  background: transparent;
+}
+
+.languageToggle {
+  border: 0;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: clamp(1rem, 2.3vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.languageActiveRed {
+  color: var(--color-anime-side-text);
+}
+
+.languageActiveBlue {
+  color: var(--color-anime-center-heading);
+}
+
+.languageInactive,
+.languageSeparator {
+  color: color-mix(in srgb, var(--color-anime-side-text) 55%, var(--color-anime-center-heading) 45%);
+}
+
+.copyright {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  color: color-mix(in srgb, var(--color-anime-center-heading) 58%, var(--color-anime-side-text) 42%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    scroll-behavior: auto;
+  }
+}

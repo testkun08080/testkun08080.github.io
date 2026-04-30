@@ -1,0 +1,158 @@
+.stage {
+  position: relative;
+  z-index: 6;
+}
+
+.track {
+  min-height: 215dvh;
+}
+
+.stickyFrame {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.centerArea {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1rem;
+  pointer-events: none;
+  padding: 0 1rem;
+}
+
+.centerHeading {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(2rem, 6.2vw, 4.3rem);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  color: var(--color-anime-about-text);
+  text-shadow: 0 0 22px var(--color-anime-center-heading-glow);
+}
+
+.centerLine {
+  width: min(72vw, 520px);
+  height: 6px;
+  background: var(--color-anime-about-text);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}
+
+.aboutText {
+  margin: 0;
+  min-height: 6.4em;
+  width: min(86vw, 920px);
+  white-space: pre-line;
+  text-align: center;
+  line-height: 1.8;
+  font-size: clamp(0.98rem, 1.55vw, 1.14rem);
+  color: var(--color-anime-about-text);
+  text-shadow: 0 0 10px var(--color-anime-about-glow);
+}
+
+.sideBlock {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.28rem;
+  opacity: 0.9;
+  user-select: none;
+  will-change: transform;
+  z-index: 2;
+}
+
+.leftBlock {
+  left: 0;
+  transform: translate3d(0vw, 0, 0) scaleX(-1);
+}
+
+.rightBlock {
+  right: 0;
+  transform: translate3d(0vw, 0, 0) scaleX(-1);
+}
+
+.sideText {
+  margin: 0;
+  color: var(--color-anime-side-text);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(0.88rem, 1.36vw, 1.2rem);
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  white-space: nowrap;
+  text-shadow: 0 0 8px var(--color-anime-side-glow);
+  opacity: 0.88;
+}
+
+.sideTyping {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 2px solid var(--color-anime-side-caret);
+  white-space: nowrap;
+  width: 0ch;
+}
+
+@media (max-width: 900px) {
+  .track {
+    min-height: 170dvh;
+  }
+
+  .sideBlock {
+    width: 40vw;
+    opacity: 0.6;
+  }
+
+  .aboutText {
+    width: min(92vw, 700px);
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 640px) {
+  .track {
+    min-height: 150dvh;
+  }
+
+  .centerArea {
+    padding: 0 0.85rem;
+    gap: 0.8rem;
+  }
+
+  .aboutText {
+    width: min(94vw, 640px);
+    min-height: 7em;
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    line-height: 1.62;
+  }
+
+  .sideBlock {
+    display: flex;
+    width: 28vw;
+    opacity: 0.42;
+    gap: 0.2rem;
+  }
+
+  .sideText {
+    font-size: clamp(0.66rem, 2.4vw, 0.82rem);
+    line-height: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    min-height: 100dvh;
+  }
+}

@@ -1,0 +1,305 @@
+import { useEffect, useRef, useState } from "react";
+import { Leva, folder, useControls } from "leva";
+import {
+  FlowMode,
+  HeroLogoInkWebGL,
+} from "../../components/portfolio/HeroLogoInkWebGL";
+import { PathBarcodeTemplate3D } from "../../components/portfolio/PathBarcodeTemplate3D";
+import styles from "./DevBurstOverlayAnimeLogo.module.css";
+
+const HERO_BARCODE = {
+  fontSize: {
+    min: "0.5rem",
+    preferred: "1.7vw",
+    max: "1.23rem",
+  },
+  letterSpacing: "0.02em",
+  fill: "#7f1d1d",
+} as const;
+
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
+
+function debugLog(
+  runId: string,
+  hypothesisId: string,
+  location: string,
+  message: string,
+  data: Record<string, unknown>,
+) {
+  // #region agent log
+  fetch("http://127.0.0.1:7935/ingest/62717cfa-0848-4f80-be4f-ac448c9e6877", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Debug-Session-Id": "a51b4c",
+    },
+    body: JSON.stringify({
+      sessionId: "a51b4c",
+      runId,
+      hypothesisId,
+      location,
+      message,
+      data,
+      timestamp: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
+}
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("matchMedia" in window)) return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return reduced;
+}
+
+export default function Page() {
+  const reduceMotion = usePrefersReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const lastLoggedProgressRef = useRef(-1);
+  const stageRef = useRef<HTMLElement>(null);
+  const barcodeFrameRef = useRef<HTMLDivElement>(null);
+  useEffect(() => setMounted(true), []);
+  const fs = HERO_BARCODE.fontSize;
+  const controls = useControls("Logo Ink", {
+    Background: folder({
+      bgColor: { value: "#fff" },
+    }),
+    Logo: folder({
+      logoUrl: {
+        value: "/logo-trans.svg",
+        options: ["/logo-trans.svg", "/logo.svg"],
+      },
+      logoSize: { value: 0.33, min: 0.05, max: 1.0, step: 0.005 },
+      centerX: { value: 0.0, min: -1.5, max: 1.5, step: 0.01 },
+      centerY: { value: 0.0, min: -1.5, max: 1.5, step: 0.01 },
+    }),
+    Instances: folder({
+      instanceCount: { value: 1, min: 1, max: 12, step: 1 },
+      instanceRadius: { value: 0.5, min: 0, max: 2, step: 0.01 },
+      instanceAngleOffset: { value: 0, min: 0, max: 360, step: 1 },
+      instanceRotation: { value: 0, min: -360, max: 360, step: 1 },
+    }),
+    InkInside: folder({
+      inkScale: { value: 4.0, min: 0.5, max: 12, step: 0.05 },
+      warpScale: { value: 2.0, min: 0.2, max: 6, step: 0.05 },
+      warpAmount: { value: 0.6, min: 0, max: 2, step: 0.01 },
+      warpSpeed: { value: 0.05, min: 0, max: 0.5, step: 0.005 },
+      inkLight: { value: "#cbbfa8" },
+      inkDark: { value: "#1a1714" },
+      inkContrast: { value: 1.4, min: 0.2, max: 4, step: 0.01 },
+      inkOpacity: { value: 0.9, min: 0, max: 1, step: 0.01 },
+    }),
+    UVDistort: folder({
+      uvDistortScale: { value: 2.5, min: 0.2, max: 10, step: 0.05 },
+      uvDistortAmount: { value: 0.035, min: 0, max: 0.5, step: 0.005 },
+      uvDistortSpeed: { value: 0.05, min: 0, max: 0.5, step: 0.005 },
+    }),
+    Flow: folder({
+      flowMode: {
+        value: "radial" as FlowMode,
+        options: { directional: "directional", radial: "radial" },
+      },
+      flowAngle: { value: 90, min: 0, max: 360, step: 1 },
+      flowStrength: { value: 1.1, min: 0, max: 5, step: 0.01 },
+      flowRadius: { value: 1.2, min: 0.1, max: 3.0, step: 0.01 },
+      flowFalloff: { value: 1.0, min: 0.2, max: 4.0, step: 0.01 },
+      flowInvert: { value: false },
+    }),
+    Mouse: folder({
+      mouseEnabled: { value: !reduceMotion },
+      mouseStrength: { value: 0.045, min: 0, max: 0.3, step: 0.001 },
+      mouseRadius: { value: 0.45, min: 0.05, max: 2.0, step: 0.01 },
+    }),
+    EdgeBand: folder({
+      blurRadius: { value: 0.028, min: 0, max: 0.2, step: 0.001 },
+      edgeWidth: { value: 0.6, min: 0.01, max: 1.5, step: 0.01 },
+      edgeStrength: { value: 1.3, min: 0, max: 4, step: 0.01 },
+      edgeColor: { value: "#1a1714" },
+      edgeInkMix: { value: 0.7, min: 0, max: 1, step: 0.01 },
+    }),
+  });
+
+  useEffect(() => {
+    if (!stageRef.current || !barcodeFrameRef.current) return;
+
+    const stage = stageRef.current;
+    const barcodeFrame = barcodeFrameRef.current;
+
+    if (reduceMotion) {
+      barcodeFrame.style.opacity = "1";
+      barcodeFrame.style.transform = "scale(1)";
+      setScrollLogoBoost(0);
+      setScrollProgress(0);
+      debugLog(
+        "initial",
+        "H3",
+        "dev-burst-overlay/+Page.tsx:reduceMotion",
+        "Reduced motion branch active",
+        {
+          reduceMotion: true,
+        },
+      );
+      return;
+    }
+
+    let rafId = 0;
+    const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
+    const updateByScroll = () => {
+      const rect = stage.getBoundingClientRect();
+      const scrollable = Math.max(rect.height - window.innerHeight, 1);
+      const progressed = clamp01(-rect.top / scrollable);
+      const scale = 1 + progressed * 0.9;
+      const opacity = 1 - progressed;
+      barcodeFrame.style.transform = `scale(${scale})`;
+      barcodeFrame.style.opacity = String(opacity);
+      setScrollLogoBoost(progressed * 0.16);
+      setScrollProgress(progressed);
+      const shouldLogProgress =
+        lastLoggedProgressRef.current < 0 ||
+        Math.abs(progressed - lastLoggedProgressRef.current) >= 0.15;
+      if (shouldLogProgress) {
+        lastLoggedProgressRef.current = progressed;
+        debugLog(
+          "initial",
+          "H1",
+          "dev-burst-overlay/+Page.tsx:updateByScroll",
+          "Scroll progression updated",
+          {
+            progressed: Number(progressed.toFixed(4)),
+            stageTop: Number(rect.top.toFixed(2)),
+            stageHeight: Number(rect.height.toFixed(2)),
+            viewportHeight: window.innerHeight,
+            scale: Number(scale.toFixed(4)),
+            opacity: Number(opacity.toFixed(4)),
+            scrollLogoBoost: Number((progressed * 0.16).toFixed(4)),
+          },
+        );
+      }
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = window.requestAnimationFrame(updateByScroll);
+    };
+    updateByScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      setScrollLogoBoost(0);
+      setScrollProgress(0);
+    };
+  }, [reduceMotion]);
+
+  const shaderInkScale = lerp(
+    controls.inkScale,
+    controls.inkScale * 2.8,
+    scrollProgress,
+  );
+  const shaderWarpScale = lerp(
+    controls.warpScale,
+    controls.warpScale * 2.2,
+    scrollProgress,
+  );
+  const shaderOpacity = reduceMotion ? 1 : lerp(1, 0, scrollProgress);
+  const isNextItemVisible = reduceMotion ? true : scrollProgress >= 0.75;
+
+  useEffect(() => {
+    debugLog(
+      "initial",
+      "H2",
+      "dev-burst-overlay/+Page.tsx:shaderScale",
+      "Derived shader scales changed",
+      {
+        scrollProgress: Number(scrollProgress.toFixed(4)),
+        shaderInkScale: Number(shaderInkScale.toFixed(4)),
+        shaderWarpScale: Number(shaderWarpScale.toFixed(4)),
+      },
+    );
+  }, [scrollProgress, shaderInkScale, shaderWarpScale]);
+
+  return (
+    <main className={styles.page}>
+      {mounted ? <Leva collapsed oneLineLabels /> : null}
+
+      <section ref={stageRef} className={styles.stage}>
+        <div className={styles.stickyViewport}>
+          <HeroLogoInkWebGL
+            className={styles.logoLayer}
+            paused={reduceMotion}
+            // bgColor="#ffffff"
+            {...controls}
+            flowMode={controls.flowMode as FlowMode}
+            logoSize={controls.logoSize + scrollLogoBoost}
+            mouseEnabled={reduceMotion ? false : controls.mouseEnabled}
+            inkScale={shaderInkScale}
+            warpScale={shaderWarpScale}
+            style={{ opacity: shaderOpacity }}
+          />
+
+          <div ref={barcodeFrameRef} className={styles.barcodeFrame}>
+            <PathBarcodeTemplate3D
+              paused={reduceMotion}
+              className={styles.barcodeTheme}
+              flowDurationMs={33000}
+              textUnit="*0123456789ABCDEF* "
+              textRepeat={11}
+              pathD="
+                M 8 2
+                H 92
+                Q 98 2 98 8
+                V 92
+                Q 98 98 92 98
+                H 8
+                Q 2 98 2 92
+                V 8
+                Q 2 2 8 2
+                Z
+              "
+            />
+          </div>
+
+          <div
+            className={`${styles.nextItemCard} ${
+              isNextItemVisible ? styles.nextItemCardVisible : ""
+            }`}
+            aria-hidden={!isNextItemVisible}
+          >
+            <p className={styles.nextItemEyebrow}>Next Section</p>
+            <h2 className={styles.nextItemTitle}>
+              次の項目がここで出てくるサンプル
+            </h2>
+            <p className={styles.nextItemBody}>
+              ロゴのズーム進行が一定値を超えると、このカードをフェードイン表示します。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <style>{`
+        .${styles.barcodeTheme} {
+          font-family: "Libre Barcode 39", ui-monospace, monospace;
+          font-size: clamp(${fs.min}, ${fs.preferred}, ${fs.max});
+          line-height: 1;
+          letter-spacing: ${HERO_BARCODE.letterSpacing};
+          fill: ${HERO_BARCODE.fill};
+        }
+      `}</style>
+    </main>
+  );
+}

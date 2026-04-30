@@ -1,0 +1,96 @@
+.page {
+  min-height: 100dvh;
+  color: #f8fafc;
+}
+
+.intro {
+  min-height: 72dvh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 0.85rem;
+  padding: 2rem 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.3vw, 2.4rem);
+  font-weight: 800;
+}
+
+.copy {
+  margin: 0;
+  opacity: 0.78;
+}
+
+.track {
+  height: 280dvh;
+  position: relative;
+}
+
+.stickyStage {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.bgLayer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: 0.55rem;
+  pointer-events: none;
+}
+
+.bgRow {
+  margin: 0;
+  font-size: clamp(0.78rem, 1.5vw, 1rem);
+  letter-spacing: 0.28em;
+  white-space: nowrap;
+  text-align: center;
+  color: rgb(148 163 184 / 32%);
+  opacity: 0.12;
+  transform: translateX(0) scale(0.96);
+  will-change: transform, opacity;
+}
+
+.frontLayer {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 0.8rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.frontText {
+  margin: 0;
+  font-size: clamp(2.2rem, 14vw, 9rem);
+  line-height: 0.9;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  opacity: 0.45;
+  color: #e2e8f0;
+  transform: scale(0.88);
+  will-change: transform, opacity, letter-spacing;
+}
+
+.frontSub {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.74rem;
+  color: rgb(191 219 254 / 78%);
+}
+
+.outro {
+  min-height: 50dvh;
+  display: grid;
+  place-content: center;
+  opacity: 0.65;
+  padding: 2rem 1rem 4rem;
+}

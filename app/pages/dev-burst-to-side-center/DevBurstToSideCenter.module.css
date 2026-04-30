@@ -1,0 +1,191 @@
+.page {
+  min-height: 100dvh;
+  color: var(--color-anime-front-word);
+}
+
+.intro {
+  min-height: 70dvh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 0.7rem;
+  padding: 1.2rem 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 800;
+}
+
+.copy {
+  margin: 0;
+  opacity: 0.82;
+}
+
+.stage {
+  position: relative;
+  min-height: 320dvh;
+  overflow: hidden;
+}
+
+.stickyFrame {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.burstLayer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  justify-items: center;
+  align-content: stretch;
+  padding: 0.4rem 0;
+}
+
+.bgRow {
+  margin: 0;
+  min-width: 180vw;
+  text-align: center;
+  font-size: clamp(1.05rem, 2.2vw, 2rem);
+  font-weight: 800;
+  font-style: italic;
+  color: var(--color-anime-bg-row);
+  line-height: 1;
+  opacity: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+.centerLayer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 0.55rem;
+  z-index: 2;
+}
+
+.centerWord {
+  margin: 0;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(3.2rem, 11vw, 8.6rem);
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.centerLine {
+  justify-self: center;
+  width: clamp(220px, 50vw, 640px);
+  height: 7px;
+  background: var(--color-anime-underline);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}
+
+.wordBlock {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-items: center;
+  gap: 0.28rem;
+  user-select: none;
+  will-change: transform;
+  z-index: 2;
+}
+
+.leftBlock {
+  left: 0;
+  transform: translate3d(0vw, 0, 0);
+}
+
+.rightBlock {
+  right: 0;
+  transform: translate3d(0vw, 0px, 0px) scaleX(-1);
+}
+
+.sideText {
+  margin: 0;
+  color: var(--color-anime-side-text);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(0.92rem, 1.43vw, 1.28rem);
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  white-space: nowrap;
+  text-shadow: 0 0 8px rgb(255 255 255 / 0.18);
+  opacity: 0.2;
+}
+
+.sideTyping {
+  display: inline-block;
+  overflow: hidden;
+  border-right: 2px solid var(--color-anime-side-caret);
+  white-space: nowrap;
+  width: 0;
+  animation:
+    typingLoop 2.4s steps(14, end) infinite,
+    caretBlink 0.8s steps(1, end) infinite;
+}
+
+@keyframes typingLoop {
+  0% {
+    width: 0;
+  }
+
+  46% {
+    width: 100%;
+  }
+
+  78% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes caretBlink {
+  0%,
+  49% {
+    border-right-color: var(--color-anime-side-caret);
+  }
+
+  50%,
+  100% {
+    border-right-color: transparent;
+  }
+}
+
+.outro {
+  min-height: 60dvh;
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+.outroText {
+  margin: 0;
+  font-size: clamp(1rem, 1.8vw, 1.4rem);
+  opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sideTyping {
+    width: 100%;
+    border-right: 0;
+    animation: none;
+  }
+}

@@ -1,0 +1,207 @@
+.page {
+  min-height: 100dvh;
+  padding: 2.2rem 1rem 3rem;
+  color: var(--color-text-heading);
+}
+
+.hero {
+  margin: 0 auto;
+  width: min(100%, 960px);
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.description {
+  margin: 0.85rem auto 0;
+  width: min(100%, 680px);
+  font-size: clamp(0.94rem, 1.6vw, 1.04rem);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.iconSection {
+  margin: 2.6rem auto 0;
+  width: min(100%, 1100px);
+}
+
+.sectionTitle {
+  margin: 0 0 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: var(--color-text-heading);
+}
+
+.categoryRole {
+  margin: 0.4rem 0 0.95rem;
+  font-size: 0.9rem;
+  color: var(--color-text-body);
+}
+
+.categoryLabel {
+  font-weight: 700;
+}
+
+.iconGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(136px, 1fr));
+  gap: 0.9rem;
+  max-height: 296px;
+  overflow: hidden;
+  transition: max-height 260ms ease;
+}
+
+.iconGridLanguages {
+  grid-template-columns: repeat(2, minmax(136px, 1fr));
+}
+
+.iconGridFadeHint::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 74%;
+  bottom: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0) 0%,
+    color-mix(in srgb, var(--app-bg-color) 34%, transparent) 48%,
+    color-mix(in srgb, var(--app-bg-color) 72%, transparent) 80%,
+    var(--app-bg-color) 100%
+  );
+  backdrop-filter: blur(calc(var(--fx-collapse-blur) * 0.58));
+  -webkit-backdrop-filter: blur(calc(var(--fx-collapse-blur) * 0.58));
+  mask-image: linear-gradient(to bottom, transparent 0%, black 62%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 62%, black 100%);
+}
+
+.iconGridExpanded {
+  max-height: 1200px;
+}
+
+.iconGridExpanded::after {
+  display: none;
+}
+
+.expandArea {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.expandButton {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 999px;
+  padding: 0.38rem 0.92rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-body);
+  background: var(--surface-card-strong);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.expandButton:hover {
+  border-color: var(--color-border-strong);
+  background-color: var(--surface-card);
+  color: var(--color-text-heading);
+}
+
+.expandButton:focus-visible {
+  outline: 2px solid var(--color-accent-main);
+  outline-offset: 2px;
+}
+
+.iconCard {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 16px;
+  background: var(--surface-card-tool);
+  backdrop-filter: blur(2px);
+  min-height: 122px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.56rem;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease,
+    background-color 180ms ease;
+  box-shadow: 0 12px 28px -24px rgba(15, 23, 42, 0.55);
+}
+
+.iconCard:hover {
+  border-color: var(--color-border-strong);
+  background: var(--surface-card-tool-hover);
+  box-shadow: 0 20px 30px -24px rgba(15, 23, 42, 0.7);
+}
+
+.iconCard:focus-visible {
+  outline: 2px solid var(--color-accent-main);
+  outline-offset: 2px;
+}
+
+.iconImage {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.iconLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-body);
+}
+
+.fallbackBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--color-surface-soft);
+  color: var(--color-text-body);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding-top: 1.6rem;
+  }
+
+  .iconGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .iconGridLanguages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .iconCard {
+    min-height: 106px;
+    border-radius: 14px;
+  }
+}

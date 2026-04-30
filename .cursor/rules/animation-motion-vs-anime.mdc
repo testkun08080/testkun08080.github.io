@@ -1,0 +1,42 @@
+---
+description: 大きなモーションは Motion、細かいアニメは anime.js を使う
+globs: "**/*.{tsx,ts}"
+alwaysApply: false
+---
+
+# アニメーションの使い分け
+
+## Motion（`motion/react`）
+
+**大きなモーション**・レイアウト連動・スクロール駆動に使う。
+
+- ヒーロー／章のスクロール連動、`useScroll` / `useTransform` など
+- セクション単位のフェード・スライド・パララックス
+- `motion` コンポーネントによる DOM のアニメーションと React との統合
+
+```tsx
+import { motion, useScroll, useTransform } from "motion/react";
+```
+
+## anime.js（`animejs`）
+
+**細かいアニメーション**（マイクロインタラクション・短いタイムライン）に使う。
+
+- アイコン・ボタン・小さな UI パーツのトゥイーン
+- テキストの逐次表示、ローディングの細かい動き
+- 複雑なイージングや短いシーケンスが主役のとき
+
+```ts
+import anime from "animejs";
+```
+
+（プロジェクトで anime.js v4 を使う場合は、そのバージョンの推奨 import に合わせる。）
+
+## 判断の目安
+
+| 用途 | 使うもの |
+|------|----------|
+| 画面・ブロック単位、スクロールと連動 | Motion |
+| 部品レベル、短い・精密な動き | anime.js |
+
+同じ要素に両方を重ねないよう、役割を分ける。既存コードは `motion/react` が前提のため、大きなモーションを anime.js だけで組み替えない。
