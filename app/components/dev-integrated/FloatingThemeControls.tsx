@@ -15,6 +15,8 @@ const ROOT_VAR_MAP = {
   animeBgRow: "--color-anime-bg-row",
   animeFrontWord: "--color-anime-front-word",
   animeUnderline: "--color-anime-underline",
+  animeGreetingWord: "--color-anime-greeting-word",
+  animeGreetingUnderline: "--color-anime-greeting-underline",
   animeBarcode: "--color-anime-barcode",
   animeSideText: "--color-anime-side-text",
   animeSideCaret: "--color-anime-side-caret",
@@ -37,6 +39,8 @@ type ThemeControls = {
   animeBgRow: string;
   animeFrontWord: string;
   animeUnderline: string;
+  animeGreetingWord: string;
+  animeGreetingUnderline: string;
   animeBarcode: string;
   animeSideText: string;
   animeSideCaret: string;
@@ -57,6 +61,8 @@ const DEFAULT_CONTROLS: ThemeControls = {
   animeBgRow: "rgb(248 250 252 / 70%)",
   animeFrontWord: "#0f172a",
   animeUnderline: "#0b0b0b",
+  animeGreetingWord: "#0f172a",
+  animeGreetingUnderline: "#0b0b0b",
   animeBarcode: "#7f1d1d",
   animeSideText: "#ffffff",
   animeSideCaret: "rgb(255 255 255 / 0.9)",
@@ -103,6 +109,8 @@ export function FloatingThemeControls() {
       animeBgRow: { value: initialControls.animeBgRow },
       animeFrontWord: { value: initialControls.animeFrontWord },
       animeUnderline: { value: initialControls.animeUnderline },
+      animeGreetingWord: { value: initialControls.animeGreetingWord },
+      animeGreetingUnderline: { value: initialControls.animeGreetingUnderline },
       animeBarcode: { value: initialControls.animeBarcode },
       animeSideText: { value: initialControls.animeSideText },
       animeSideCaret: { value: initialControls.animeSideCaret },
@@ -126,6 +134,8 @@ export function FloatingThemeControls() {
     root.style.setProperty(ROOT_VAR_MAP.animeBgRow, controls.animeBgRow);
     root.style.setProperty(ROOT_VAR_MAP.animeFrontWord, controls.animeFrontWord);
     root.style.setProperty(ROOT_VAR_MAP.animeUnderline, controls.animeUnderline);
+    root.style.setProperty(ROOT_VAR_MAP.animeGreetingWord, controls.animeGreetingWord);
+    root.style.setProperty(ROOT_VAR_MAP.animeGreetingUnderline, controls.animeGreetingUnderline);
     root.style.setProperty(ROOT_VAR_MAP.animeBarcode, controls.animeBarcode);
     root.style.setProperty(ROOT_VAR_MAP.animeSideText, controls.animeSideText);
     root.style.setProperty(ROOT_VAR_MAP.animeSideCaret, controls.animeSideCaret);

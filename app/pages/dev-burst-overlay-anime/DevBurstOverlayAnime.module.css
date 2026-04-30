@@ -1,6 +1,6 @@
 .page {
   min-height: 100dvh;
-  color: var(--color-anime-front-word);
+  color: var(--color-anime-greeting-word, var(--color-anime-front-word));
 }
 
 .intro {
@@ -71,14 +71,14 @@
   font-size: clamp(3.2rem, 11vw, 8.6rem);
   font-weight: 900;
   letter-spacing: 0.01em;
-  color: var(--color-anime-front-word);
+  color: var(--color-anime-greeting-word, var(--color-anime-front-word));
 }
 
 .underline {
   justify-self: center;
   width: clamp(220px, 50vw, 640px);
   height: 7px;
-  background: var(--color-anime-center-heading);
+  background: var(--color-anime-greeting-underline, var(--color-anime-center-heading));
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }

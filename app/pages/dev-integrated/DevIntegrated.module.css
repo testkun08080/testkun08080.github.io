@@ -27,7 +27,7 @@
 .sectionHeadingLine {
   width: min(72vw, 520px);
   height: 6px;
-  background: var(--color-anime-underline);
+  background: var(--color-anime-about-text);
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }
@@ -55,21 +55,40 @@
   min-height: 24dvh;
   display: grid;
   place-content: center;
-  gap: 0.35rem;
+  gap: 0.45rem;
   text-align: center;
   padding: 2rem 1rem;
-  border-top: 1px solid var(--color-border-subtle);
-  background: var(--color-footer-bg);
-  color: var(--color-text-inverse);
+  background: transparent;
 }
 
-.footer p {
+.languageToggle {
+  border: 0;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: clamp(1rem, 2.3vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.languageActiveRed {
+  color: var(--color-anime-side-text);
+}
+
+.languageActiveBlue {
+  color: var(--color-anime-center-heading);
+}
+
+.languageInactive,
+.languageSeparator {
+  color: color-mix(in srgb, var(--color-anime-side-text) 55%, var(--color-anime-center-heading) 45%);
+}
+
+.copyright {
   margin: 0;
-}
-
-.footer a {
-  color: var(--color-text-inverse);
-  text-underline-offset: 0.16em;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  color: color-mix(in srgb, var(--color-anime-center-heading) 58%, var(--color-anime-side-text) 42%);
 }
 
 @media (prefers-reduced-motion: reduce) {

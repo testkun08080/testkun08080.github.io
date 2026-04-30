@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ContactCardSection } from "../../components/dev-integrated/ContactCardSection";
 import { FloatingThemeControls } from "../../components/dev-integrated/FloatingThemeControls";
 import { GreetingBurstSection } from "../../components/dev-integrated/GreetingBurstSection";
@@ -19,6 +19,11 @@ export default function Page() {
   const workSectionRef = useRef<HTMLElement>(null);
   const skillsSectionRef = useRef<HTMLElement>(null);
   const contactSectionRef = useRef<HTMLElement>(null);
+  const [language, setLanguage] = useState<"ja" | "en">("ja");
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
 
   const menuItems = [
     { href: "#hero", label: "hero" },
@@ -91,8 +96,25 @@ export default function Page() {
       </section>
 
       <footer id="footer" className={styles.footer}>
-        <p>© {new Date().getFullYear()} Shoichi Hasegawa</p>
-        <a href="/dev">Back to /dev</a>
+        <button
+          type="button"
+          className={styles.languageToggle}
+          onClick={() => setLanguage((prev) => (prev === "ja" ? "en" : "ja"))}
+          aria-label="Switch language between Japanese and English"
+        >
+          <span
+            className={language === "ja" ? styles.languageActiveRed : styles.languageInactive}
+          >
+            日本語
+          </span>
+          <span className={styles.languageSeparator}> / </span>
+          <span
+            className={language === "en" ? styles.languageActiveBlue : styles.languageInactive}
+          >
+            English
+          </span>
+        </button>
+        <p className={styles.copyright}>© {new Date().getFullYear()} Shoichi Hasegawa</p>
       </footer>
 
       <StickyQuickMenu items={menuItems} />

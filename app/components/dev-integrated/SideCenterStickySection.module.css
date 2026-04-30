@@ -32,14 +32,14 @@
   font-size: clamp(2rem, 6.2vw, 4.3rem);
   font-weight: 900;
   letter-spacing: 0.01em;
-  color: var(--color-anime-center-heading);
+  color: var(--color-anime-about-text);
   text-shadow: 0 0 22px var(--color-anime-center-heading-glow);
 }
 
 .centerLine {
   width: min(72vw, 520px);
   height: 6px;
-  background: var(--color-anime-underline);
+  background: var(--color-anime-about-text);
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }
