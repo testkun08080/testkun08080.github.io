@@ -41,6 +41,7 @@ export function HeroBurstLogoSection() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const stageRef = useRef<HTMLElement>(null);
   const barcodeFrameRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef(0);
 
   useEffect(() => {
     if (!stageRef.current || !barcodeFrameRef.current) return;
@@ -66,6 +67,8 @@ export function HeroBurstLogoSection() {
       const opacity = 1 - progressed;
       barcodeFrame.style.transform = `scale(${scale})`;
       barcodeFrame.style.opacity = String(opacity);
+      if (Math.abs(progressed - progressRef.current) < 0.01) return;
+      progressRef.current = progressed;
       setScrollLogoBoost(progressed * 0.16);
       setScrollProgress(progressed);
     };
@@ -81,6 +84,7 @@ export function HeroBurstLogoSection() {
       cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
+      progressRef.current = 0;
       setScrollLogoBoost(0);
       setScrollProgress(0);
     };

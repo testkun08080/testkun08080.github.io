@@ -28,6 +28,7 @@ export function StickyQuickMenu({
 }: StickyQuickMenuProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const menuId = useId();
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -37,11 +38,21 @@ export function StickyQuickMenu({
   const rafIdRef = useRef(0);
 
   const menuItems = useMemo(() => items, [items]);
+  const menuVisible = menuOpen || prefersReducedMotion;
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("matchMedia" in window)) return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setPrefersReducedMotion(media.matches);
+    onChange();
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     const button = buttonRef.current;
     const menu = menuRef.current;
-    if (!button || !menu) return;
+    if (!button || !menu || prefersReducedMotion) return;
 
     animate(button, {
       scale: [1, 0.92, 1.06, 1],
@@ -76,7 +87,7 @@ export function StickyQuickMenu({
       duration: 180,
       ease: "in(2)",
     });
-  }, [menuOpen]);
+  }, [menuOpen, prefersReducedMotion]);
 
   useEffect(() => {
     const updateVisibility = () => {
@@ -149,8 +160,8 @@ export function StickyQuickMenu({
       <div
         id={menuId}
         ref={menuRef}
-        className={`${styles.fabMenu} ${menuOpen ? styles.fabMenuOpen : ""}`}
-        aria-hidden={!menuOpen}
+        className={`${styles.fabMenu} ${menuVisible ? styles.fabMenuOpen : ""}`}
+        aria-hidden={!menuVisible}
       >
         {menuItems.map((item) => (
           <a key={item.href} href={item.href} onClick={closeMenu}>

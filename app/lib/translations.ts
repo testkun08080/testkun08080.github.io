@@ -112,3 +112,105 @@ export const messages = {
 } as const;
 
 export type MessageKey = keyof (typeof messages)["ja"];
+
+export type ProductionHomeCopy = {
+  greetingFrontWord: string;
+  greetingBgRowText: string;
+  aboutHeading: string;
+  aboutText: string;
+  sideWords: readonly string[];
+  workHeading: string;
+  skillsHeading: string;
+  contactHeading: string;
+  menuButton: string;
+  menuLanguageLabel: string;
+  menuItems: { href: string; label: string }[];
+  reelsFallbackPrefix: string;
+  reelsFallbackLink: string;
+  skillsShowMore: string;
+  skillsClose: string;
+  resumeHeading: string;
+  resumeJaLabel: string;
+  resumeEnLabel: string;
+  resumeDownloadLabel: string;
+  footerLanguageAriaLabel: string;
+};
+
+export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
+  ja: {
+    greetingFrontWord: "こんにちは",
+    greetingBgRowText: "こんにちは やあ どうも",
+    aboutHeading: "About",
+    aboutText: `はじめまして！
+長谷川翔一と申します。日本生まれです (๑•᎑•๑)
+テクノロジーを活用して素晴らしいアートやコンテンツを支援・創造することに情熱を持っています。特にLookDevやシェーダー開発が得意分野です。
+エンジニアリングとアートの両方のバックグラウンドを持ち、技術的な問題解決力とクリエイティブなビジョンを兼ね備えています。`,
+    sideWords: [
+      "ルックデブ",
+      "シェーダー開発",
+      "クリエイティブコーディング",
+      "スクロール演出",
+      "アニメーション実装",
+      "ビジュアル制作",
+    ],
+    workHeading: "Work",
+    skillsHeading: "Skills",
+    contactHeading: "Contact",
+    menuButton: "メニュー",
+    menuLanguageLabel: "言語",
+    menuItems: [
+      { href: "#hero", label: "TOP" },
+      { href: "#sticky-side", label: "自己紹介" },
+      { href: "#work", label: "作品" },
+      { href: "#skills", label: "スキル" },
+      { href: "#contact", label: "連絡先" },
+    ],
+    reelsFallbackPrefix: "埋め込みが表示されない場合は",
+    reelsFallbackLink: "YouTubeで開く",
+    skillsShowMore: "もっと見る",
+    skillsClose: "閉じる",
+    resumeHeading: "レジュメをダウンロード",
+    resumeJaLabel: "日本語",
+    resumeEnLabel: "英語",
+    resumeDownloadLabel: "ダウンロード",
+    footerLanguageAriaLabel: "日本語と英語を切り替える",
+  },
+  en: {
+    greetingFrontWord: "konchiwa",
+    greetingBgRowText: "hi there hello oi",
+    aboutHeading: "About",
+    aboutText: `Nice to meet you!
+I'm Shoichi Hasegawa from Japan (๑•᎑•๑)
+I am passionate about creating and supporting outstanding art through technology, especially LookDev and shader development.
+With both engineering and art backgrounds, I bridge technical problem-solving and creative vision.`,
+    sideWords: [
+      "lookdev pipeline",
+      "shader support",
+      "creative coding",
+      "scroll linked",
+      "animejs motion",
+      "visual crafting",
+    ],
+    workHeading: "Work",
+    skillsHeading: "Skills",
+    contactHeading: "Contact",
+    menuButton: "Menu",
+    menuLanguageLabel: "Language",
+    menuItems: [
+      { href: "#hero", label: "TOP" },
+      { href: "#sticky-side", label: "about" },
+      { href: "#work", label: "work" },
+      { href: "#skills", label: "skills" },
+      { href: "#contact", label: "contact" },
+    ],
+    reelsFallbackPrefix: "If the embed is unavailable,",
+    reelsFallbackLink: "open on YouTube",
+    skillsShowMore: "Show more",
+    skillsClose: "Close",
+    resumeHeading: "Download Resume",
+    resumeJaLabel: "Japanese",
+    resumeEnLabel: "English",
+    resumeDownloadLabel: "Download",
+    footerLanguageAriaLabel: "Switch language between Japanese and English",
+  },
+};

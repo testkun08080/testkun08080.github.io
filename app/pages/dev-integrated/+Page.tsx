@@ -36,7 +36,6 @@ export default function Page() {
 
   return (
     <main className={styles.page}>
-      {/* <FloatingThemeControls /> */}
       <section id="hero" className={styles.section}>
         <HeroBurstLogoSection />
       </section>

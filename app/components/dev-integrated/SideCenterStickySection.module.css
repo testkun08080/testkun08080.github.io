@@ -139,7 +139,15 @@
   }
 
   .sideBlock {
-    display: none;
+    display: flex;
+    width: 28vw;
+    opacity: 0.42;
+    gap: 0.2rem;
+  }
+
+  .sideText {
+    font-size: clamp(0.66rem, 2.4vw, 0.82rem);
+    line-height: 1;
   }
 }
 

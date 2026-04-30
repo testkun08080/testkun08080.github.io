@@ -141,8 +141,6 @@
   }
 
   .fabMenu {
-    opacity: 1;
-    transform: none;
-    pointer-events: auto;
+    transition: none;
   }
 }
