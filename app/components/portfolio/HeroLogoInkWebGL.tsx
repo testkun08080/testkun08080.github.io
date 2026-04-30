@@ -19,9 +19,6 @@ export type HeroLogoInkWebGLProps = {
   className?: string;
   paused?: boolean;
 
-  // background (plain solid color)
-  bgColor?: string;
-
   // logo placement
   logoUrl?: string;
   logoSize?: number;
@@ -89,8 +86,6 @@ varying vec2 v_uv;
 uniform float u_time;
 uniform float u_paused;
 uniform vec2  u_resolution;
-
-uniform vec3  u_bgColor;
 
 uniform sampler2D u_logoTex;
 uniform float u_logoReady;
@@ -174,7 +169,8 @@ void main() {
 
   float t = mix(0.0, u_time, 1.0 - u_paused);
 
-  vec3 col = u_bgColor;
+  vec3 col = vec3(0.0);
+  float alpha = 0.0;
 
   // -------- flow (computed in screen space, shared by all instances) --------
   vec2 toCenter = uv - u_center;
@@ -265,6 +261,7 @@ void main() {
     vec3 inkCol = mix(u_inkLight, u_inkDark, ink);
     float inside = logoA * u_inkOpacity;
     col = mix(col, inkCol, inside);
+    alpha = max(alpha, inside);
 
     // edge band
     float edge = max(0.0, blurA - logoA);
@@ -272,9 +269,10 @@ void main() {
     vec3 edgeCol = mix(u_edgeColor, u_inkDark, ink * u_edgeInkMix);
     float edgeAlpha = clamp(edge * u_edgeStrength, 0.0, 1.0);
     col = mix(col, edgeCol, edgeAlpha);
+    alpha = max(alpha, edgeAlpha);
   }
 
-  gl_FragColor = vec4(col, 1.0);
+  gl_FragColor = vec4(col, alpha);
 }
 `;
 
@@ -292,7 +290,6 @@ function setVec3(target: number[], src: [number, number, number]) {
 export function HeroLogoInkWebGL({
   className,
   paused = false,
-  bgColor = "#f4ecdb",
   logoUrl = "/logo-trans.svg",
   logoSize = 0.32,
   centerX = 0.0,
@@ -332,7 +329,6 @@ export function HeroLogoInkWebGL({
 
   const propsRef = useRef({
     paused,
-    bgColor,
     logoSize,
     centerX,
     centerY,
@@ -368,7 +364,6 @@ export function HeroLogoInkWebGL({
   });
   propsRef.current = {
     paused,
-    bgColor,
     logoSize,
     centerX,
     centerY,
@@ -415,7 +410,7 @@ export function HeroLogoInkWebGL({
     try {
       renderer = new WebGLRenderer({
         canvas,
-        alpha: false,
+        alpha: true,
         antialias: true,
         premultipliedAlpha: true,
       });
@@ -424,7 +419,7 @@ export function HeroLogoInkWebGL({
       return;
     }
     renderer.outputColorSpace = SRGBColorSpace;
-    renderer.setClearColor(0x000000, 1);
+    renderer.setClearColor(0x000000, 0);
 
     const scene = new Scene();
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -442,7 +437,6 @@ export function HeroLogoInkWebGL({
       u_time: { value: 0 },
       u_paused: { value: paused ? 1 : 0 },
       u_resolution: { value: new Vector2(1, 1) },
-      u_bgColor: { value: hexToVec3(bgColor) },
       u_logoTex: { value: placeholderTex },
       u_logoReady: { value: 0 },
       u_logoSize: { value: logoSize },
@@ -575,7 +569,6 @@ export function HeroLogoInkWebGL({
       const p = propsRef.current;
       uniforms.u_time.value = elapsed;
       uniforms.u_paused.value = p.paused ? 1 : 0;
-      setVec3(uniforms.u_bgColor.value as unknown as number[], hexToVec3(p.bgColor));
       uniforms.u_logoSize.value = p.logoSize;
       uniforms.u_center.value.set(p.centerX, p.centerY);
       uniforms.u_instanceCount.value = Math.max(1, Math.min(12, Math.round(p.instanceCount)));

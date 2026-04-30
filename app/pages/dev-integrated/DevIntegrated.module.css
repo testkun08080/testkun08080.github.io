@@ -1,0 +1,60 @@
+.page {
+  color: var(--color-text-heading);
+}
+
+.section {
+  position: relative;
+}
+
+.sectionHead {
+  width: min(100%, 1100px);
+  margin: 0 auto;
+  padding: 2rem 1rem 0.8rem;
+}
+
+.sectionHead p {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.78rem;
+  color: var(--color-text-subtitle);
+}
+
+.sectionHead h2 {
+  margin: 0.4rem 0 0;
+  font-size: clamp(1.5rem, 3.8vw, 2.6rem);
+  line-height: 1.15;
+}
+
+.workSection {
+  z-index: 8;
+}
+
+.skillsSection {
+  z-index: 9;
+}
+
+.contactSection {
+  z-index: 10;
+}
+
+.footer {
+  min-height: 24dvh;
+  display: grid;
+  place-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  border-top: 1px solid var(--color-border-subtle);
+  background: #020617;
+  color: var(--color-text-inverse);
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer a {
+  color: var(--color-text-inverse);
+  text-underline-offset: 0.16em;
+}

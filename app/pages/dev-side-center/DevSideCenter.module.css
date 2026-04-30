@@ -1,6 +1,5 @@
 .page {
   min-height: 100dvh;
-  background: #ddd4c8;
   color: #09090b;
 }
 
@@ -35,7 +34,6 @@
   top: 0;
   height: 100dvh;
   overflow: hidden;
-  background: #ddd4c8;
 }
 
 .centerContent {

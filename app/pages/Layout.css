@@ -6,6 +6,20 @@
   src: url("../fonts/Libre_Barcode_39/LibreBarcode39-Regular.ttf") format("truetype");
 }
 
+:root {
+  --app-bg-color: #f7efe4;
+  --color-text-heading: #0f172a;
+  --color-text-subtitle: #64748b;
+  --color-text-body: #334155;
+  --color-text-muted: #475569;
+  --color-text-inverse: #f8fafc;
+  --color-border-subtle: rgb(148 163 184 / 0.32);
+  --color-border-strong: rgb(148 163 184 / 0.46);
+  --surface-card: rgb(255 255 255 / 0.7);
+  --surface-card-strong: rgb(255 255 255 / 0.84);
+  --fx-collapse-blur: 7px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -26,11 +40,11 @@ body {
     "Yu Gothic",
     sans-serif;
   /* hero.png ベースのウォームトーン（ページ背景） */
-  background: #e8dcc8;
+  background: var(--app-bg-color);
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  color: #0f172a;
+  color: var(--color-text-heading);
   overscroll-behavior: none;
 }
 

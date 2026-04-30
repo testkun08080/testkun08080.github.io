@@ -1,7 +1,6 @@
 .page {
   min-height: 100dvh;
   padding: clamp(1.2rem, 2vw, 2rem);
-  background: radial-gradient(circle at top, #fff6db 0%, #ffefd0 52%, #f5e2c4 100%);
   color: #8f7b7b;
 }
 
