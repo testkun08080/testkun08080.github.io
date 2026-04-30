@@ -4,7 +4,6 @@ import styles from "./ScrollTypingHeading.module.css";
 
 type ScrollTypingHeadingProps = {
   text: string;
-  targetRef: React.RefObject<HTMLElement | null>;
   enter?: string;
   leave?: string;
   headingClassName?: string;
@@ -28,7 +27,6 @@ function usePrefersReducedMotion() {
 
 export function ScrollTypingHeading({
   text,
-  targetRef,
   enter = "bottom top",
   leave = "center top",
   headingClassName,
@@ -45,8 +43,7 @@ export function ScrollTypingHeading({
     const root = rootRef.current;
     const word = wordRef.current;
     const line = lineRef.current;
-    const target = targetRef.current;
-    if (!root || !word || !line || !target) return;
+    if (!root || !word || !line) return;
 
     if (reduceMotion) {
       word.textContent = text;
@@ -61,7 +58,6 @@ export function ScrollTypingHeading({
       animate(line, {
         scaleX: [0, 1],
         autoplay: onScroll({
-          target,
           enter,
           leave,
           sync: true,
@@ -71,7 +67,6 @@ export function ScrollTypingHeading({
       animate(word, {
         opacity: [0.45, 1],
         autoplay: onScroll({
-          target,
           enter,
           leave,
           sync: true,
@@ -95,7 +90,7 @@ export function ScrollTypingHeading({
       line.style.transform = "scaleX(1)";
       typedCountRef.current = -1;
     };
-  }, [text, targetRef, enter, leave, reduceMotion]);
+  }, [text, enter, leave, reduceMotion]);
 
   return (
     <div ref={rootRef} className={styles.heading}>

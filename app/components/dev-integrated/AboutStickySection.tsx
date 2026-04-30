@@ -53,7 +53,13 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
     const right = rightRef.current;
     const center = centerRef.current;
     const aboutEl = aboutTextRef.current;
-    if (!track || !left || !right || !center || !aboutEl) return;
+    if (!aboutEl) return;
+
+    // If the sticky track is temporarily disabled, keep About text visible.
+    if (!track || !left || !right || !center) {
+      aboutEl.textContent = aboutText;
+      return;
+    }
 
     if (reduceMotion) {
       left.style.transform = "translate3d(0, 0, 0)";
@@ -110,12 +116,10 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
       });
 
       animate(aboutEl, {
-        opacity: [1, 1],
         autoplay: onScroll({
           target: track,
-          enter: "top+=26% top",
-          leave: "top+=78% top",
           sync: true,
+          debug: true,
           onUpdate: (self) => {
             const observer = self as { progress?: number };
             if (typeof observer.progress !== "number") return;
@@ -129,7 +133,7 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
       });
 
       animate(track, {
-        opacity: [1, 1],
+        opacity: [0, 1],
         autoplay: onScroll({
           target: track,
           enter: "top+=8% top",
@@ -169,13 +173,40 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
   }, [aboutText, reduceMotion]);
 
   return (
-    <main ref={rootRef} className={styles.page}>
-      <section ref={trackRef} className={styles.track}>
+    <main
+      ref={rootRef}
+      className={styles.page}
+      style={{
+        paddingLeft: "43px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "56px",
+      }}
+    >
+      <ScrollTypingHeading
+        text="About"
+        headingClassName={styles.centerHeading}
+        underlineClassName={styles.centerLine}
+      />
+      <p
+        ref={aboutTextRef}
+        className={styles.outroText}
+        style={{
+          width: "min(86vw, 980px)",
+          textAlign: "center",
+          marginInline: "auto",
+          whiteSpace: "pre-line",
+          lineHeight: 2.3,
+          color: "var(--color-anime-about-text)",
+          fontSize: "clamp(0.98rem, 1.55vw, 1.16rem)",
+          opacity: 1,
+        }}
+      />
+      {/* <section ref={trackRef} className={styles.track}>
         <div className={styles.stickyFrame}>
           <div ref={centerRef} className={styles.centerContent}>
             <ScrollTypingHeading
               text="About"
-              targetRef={trackRef}
               headingClassName={styles.centerHeading}
               underlineClassName={styles.centerLine}
             />
@@ -185,6 +216,7 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
               style={{
                 width: "min(86vw, 980px)",
                 textAlign: "center",
+                marginInline: "auto",
                 whiteSpace: "pre-line",
                 lineHeight: 1.55,
                 color: "var(--color-anime-about-text)",
@@ -229,7 +261,7 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
     </main>
   );
 }

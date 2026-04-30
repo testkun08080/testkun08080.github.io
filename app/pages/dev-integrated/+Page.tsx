@@ -45,11 +45,14 @@ export default function Page() {
         <AboutStickySection aboutText={ABOUT_TEXT} />
       </section>
 
-      <section id="work" ref={workSectionRef} className={`${styles.section} ${styles.workSection}`}>
+      <section
+        id="work"
+        ref={workSectionRef}
+        className={`${styles.section} ${styles.workSection}`}
+      >
         <header className={styles.sectionHead}>
           <ScrollTypingHeading
             text="Work"
-            targetRef={workSectionRef}
             headingClassName={styles.sectionHeadingWord}
             underlineClassName={styles.sectionHeadingLine}
           />
@@ -65,7 +68,6 @@ export default function Page() {
         <header className={styles.sectionHead}>
           <ScrollTypingHeading
             text="Skills"
-            targetRef={skillsSectionRef}
             headingClassName={styles.sectionHeadingWord}
             underlineClassName={styles.sectionHeadingLine}
           />
@@ -81,7 +83,6 @@ export default function Page() {
         <header className={styles.sectionHead}>
           <ScrollTypingHeading
             text="Contact"
-            targetRef={contactSectionRef}
             headingClassName={styles.sectionHeadingWord}
             underlineClassName={styles.sectionHeadingLine}
           />
