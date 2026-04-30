@@ -30,15 +30,12 @@ function usePrefersReducedMotion() {
 }
 
 export default function Page() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
   const rootRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const sideTypingSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
 
@@ -124,47 +121,6 @@ export default function Page() {
     };
   }, [reduceMotion]);
 
-  useEffect(() => {
-    const button = buttonRef.current;
-    const menu = menuRef.current;
-    if (!button || !menu || reduceMotion) return;
-
-    animate(button, {
-      scale: [1, 0.92, 1.06, 1],
-      rotate: menuOpen ? ["0deg", "4deg", "0deg"] : ["0deg", "-3deg", "0deg"],
-      duration: 420,
-      ease: "out(4)",
-    });
-
-    if (menuOpen) {
-      const links = menu.querySelectorAll("a");
-      animate(menu, {
-        opacity: [0, 1],
-        scale: [0.8, 1],
-        translateY: [8, 0],
-        duration: 260,
-        ease: "out(3)",
-      });
-      animate(links, {
-        opacity: [0, 1],
-        translateX: [10, 0],
-        delay: (el, i) => i * 55,
-        duration: 260,
-        ease: "out(2)",
-      });
-    } else {
-      animate(menu, {
-        opacity: [1, 0],
-        scale: [1, 0.92],
-        translateY: [0, 8],
-        duration: 180,
-        ease: "in(2)",
-      });
-    }
-  }, [menuOpen, reduceMotion]);
-
-  const closeMenu = () => setMenuOpen(false);
-
   return (
     <main ref={rootRef} className={styles.page}>
       <section id="intro" className={styles.intro}>
@@ -228,34 +184,6 @@ export default function Page() {
         ))}
       </section>
 
-      <nav className={styles.fabArea}>
-        <button
-          type="button"
-          ref={buttonRef}
-          className={styles.fabButton}
-          onClick={() => setMenuOpen((prev) => !prev)}
-          aria-expanded={menuOpen}
-          aria-controls="quick-menu"
-        >
-          Menu
-        </button>
-        <div
-          id="quick-menu"
-          ref={menuRef}
-          className={`${styles.fabMenu} ${menuOpen ? styles.fabMenuOpen : ""}`}
-          aria-hidden={!menuOpen}
-        >
-          <a href="#intro" onClick={closeMenu}>
-            intro
-          </a>
-          <a href="#side-center" onClick={closeMenu}>
-            side-center
-          </a>
-          <a href="#outro" onClick={closeMenu}>
-            outro
-          </a>
-        </div>
-      </nav>
     </main>
   );
 }

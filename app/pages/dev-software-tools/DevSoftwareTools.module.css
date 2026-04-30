@@ -32,9 +32,13 @@
 
 .sectionTitle {
   margin: 0 0 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   font-size: clamp(1.05rem, 2.1vw, 1.35rem);
   font-weight: 800;
   letter-spacing: 0.03em;
+  text-align: center;
   color: var(--color-text-heading);
 }
 
