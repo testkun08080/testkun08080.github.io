@@ -127,7 +127,7 @@
 .iconCard {
   border: 1px solid var(--color-border-subtle);
   border-radius: 16px;
-  background: var(--surface-card);
+  background: var(--surface-card-tool);
   backdrop-filter: blur(2px);
   min-height: 122px;
   display: grid;
@@ -145,7 +145,7 @@
 
 .iconCard:hover {
   border-color: var(--color-border-strong);
-  background: var(--surface-card-strong);
+  background: var(--surface-card-tool-hover);
   box-shadow: 0 20px 30px -24px rgba(15, 23, 42, 0.7);
 }
 

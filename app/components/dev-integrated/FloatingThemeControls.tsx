@@ -60,12 +60,12 @@ const DEFAULT_CONTROLS: ThemeControls = {
   collapseBlurPx: 7,
   animeBgRow: "#ffc5c5",
   animeFrontWord: "#0f172a",
-  animeUnderline: "#f67777",
+  animeUnderline: "#0b0b0b",
   animeGreetingWord: "#0f172a",
   animeGreetingUnderline: "#0b0b0b",
   animeBarcode: "#7f1d1d",
-  animeSideText: "#ffc5c5",
-  animeSideCaret: "rgba(0, 110, 255, 0.58)",
+  animeSideText: "#ffa3a3",
+  animeSideCaret: "rgba(255, 225, 225, 0.9)",
   animeAboutText: "#111827",
 };
 

@@ -98,7 +98,7 @@ export function HeroBurstLogoSection() {
           className={styles.logoLayer}
           paused={reduceMotion}
           flowMode={"radial" as FlowMode}
-          logoSize={0.33 + scrollLogoBoost}
+          logoSize={0.2 + scrollLogoBoost}
           mouseEnabled={!reduceMotion}
           inkScale={shaderInkScale}
           warpScale={shaderWarpScale}

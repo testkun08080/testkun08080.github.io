@@ -293,7 +293,7 @@ export function HeroLogoInkWebGL({
   style,
   paused = false,
   logoUrl = "/logo-trans.svg",
-  logoSize = 0.2,
+  logoSize = 0.1,
   centerX = 0.0,
   centerY = 0.0,
   instanceCount = 1,

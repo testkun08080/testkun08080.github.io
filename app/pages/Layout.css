@@ -16,7 +16,11 @@
   --color-border-subtle: rgb(148 163 184 / 0.32);
   --color-border-strong: rgb(148 163 184 / 0.46);
   --surface-card: rgba(255, 230, 230, 0.7);
-  --surface-card-strong: rgba(253, 225, 225, 0.84);
+  --surface-card-strong: rgba(237, 236, 236, 0.84);
+  --surface-card-reel: rgba(255, 255, 255, 0.84);
+  --surface-card-reel-frame: rgba(255, 230, 230, 0.7);
+  --surface-card-tool: rgba(255, 255, 255, 0.7);
+  --surface-card-tool-hover: rgba(253, 247, 247, 0.84);
   --fx-collapse-blur: 7px;
   --color-anime-bg-row: #ffc5c5;
   --color-anime-front-word: #0f172a;
