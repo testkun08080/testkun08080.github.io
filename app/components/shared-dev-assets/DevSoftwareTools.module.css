@@ -62,6 +62,10 @@
   transition: max-height 260ms ease;
 }
 
+.iconGridLanguages {
+  grid-template-columns: repeat(2, minmax(136px, 1fr));
+}
+
 .iconGridFadeHint::after {
   content: "";
   position: absolute;
@@ -190,6 +194,10 @@
   .iconGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.7rem;
+  }
+
+  .iconGridLanguages {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .iconCard {

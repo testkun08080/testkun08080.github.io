@@ -116,7 +116,9 @@ export function SkillsToolsSection({
             ref={(node) => {
               gridRefs.current[category.id] = node;
             }}
-            className={`${styles.iconGrid} ${expandedMap[category.id] ? styles.iconGridExpanded : ""} ${
+            className={`${styles.iconGrid} ${category.id === "languages" ? styles.iconGridLanguages : ""} ${
+              expandedMap[category.id] ? styles.iconGridExpanded : ""
+            } ${
               overflowMap[category.id] && !expandedMap[category.id]
                 ? styles.iconGridFadeHint
                 : ""

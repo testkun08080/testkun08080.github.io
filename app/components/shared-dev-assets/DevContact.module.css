@@ -131,7 +131,10 @@
 
 @media (max-width: 640px) {
   .card {
-    transform: translate3d(5px, -2px, 0) rotate(0.55deg);
+    width: min(640px, calc(100% - 1.25rem));
+    margin-inline: auto;
+    padding: 1rem;
+    transform: translate3d(0, -1px, 0) rotate(0.35deg);
   }
 
   .item {
