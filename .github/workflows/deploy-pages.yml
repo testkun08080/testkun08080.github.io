@@ -33,6 +33,10 @@ jobs:
         run: npm ci
         working-directory: app
 
+      - name: Ensure Linux native binaries are present
+        run: npm install --no-save lightningcss-linux-x64-gnu
+        working-directory: app
+
       - name: Typecheck
         run: npm run typecheck
         working-directory: app
