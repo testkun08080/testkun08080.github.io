@@ -74,12 +74,12 @@
 
 .leftBlock {
   left: 0;
-  transform: translate3d(10vw, 0, 0) scaleX(-1);
+  transform: translate3d(0vw, 0, 0) scaleX(-1);
 }
 
 .rightBlock {
   right: 0;
-  transform: translate3d(-10vw, 0, 0) scaleX(-1);
+  transform: translate3d(0vw, 0, 0) scaleX(-1);
 }
 
 .sideText {

@@ -42,7 +42,7 @@ export function SkillsToolsSection() {
       translateY: ["0px", "-4px"],
       rotate: ["0deg", "1.2deg"],
       duration: 2400,
-      delay: stagger(95, { from: "center" }),
+      delay: stagger(50, { from: "center" }),
       ease: "inOut(3)",
       loop: true,
       alternate: true,

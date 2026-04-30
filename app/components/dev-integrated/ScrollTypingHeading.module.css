@@ -18,7 +18,7 @@
 .underline {
   justify-self: center;
   width: clamp(220px, 50vw, 640px);
-  height: 7px;
+  height: 6px;
   background: var(--color-anime-underline);
   transform: scaleX(0);
   transform-origin: 50% 50%;

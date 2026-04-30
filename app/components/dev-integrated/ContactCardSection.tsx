@@ -9,8 +9,8 @@ type ContactItem = {
 const CONTACT_ITEMS = [
   {
     label: "Email",
-    value: "testkun.08080@gmial.com",
-    href: "mailto:testkun.08080@gmial.com",
+    value: "testkun.08080@gmail.com",
+    href: "mailto:testkun.08080@gmail.com",
   },
   {
     label: "X",

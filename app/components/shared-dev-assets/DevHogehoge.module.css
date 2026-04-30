@@ -1,50 +1,15 @@
 .page {
   color: var(--color-text-heading);
-  font-family: "Inter", system-ui, sans-serif;
   overflow-x: hidden;
 }
 
-.hero {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
-}
-
-.heroLabel {
-  font-size: clamp(0.72rem, 1.2vw, 0.88rem);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-text-subtitle);
-  margin-bottom: 0.9rem;
-}
-
-.heroTitle {
-  font-size: clamp(2rem, 6.5vw, 4.5rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1.1;
-  color: var(--color-text-heading);
-}
-
-.heroSub {
-  font-size: clamp(0.85rem, 1.5vw, 1rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  margin-top: 1rem;
-}
 
 .reelSection {
-  min-height: 100dvh;
+  min-height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 4rem 2rem;
   border-bottom: 1px solid var(--color-border-subtle);
 }
 
@@ -56,7 +21,14 @@
   border-radius: 16px;
   background: var(--surface-card-reel);
   box-shadow: 0 12px 28px -24px rgb(15 23 42 / 0.55);
-  will-change: transform, opacity;
+  transform: translate3d(-10px, 6px, 0) rotate(-0.85deg);
+  will-change: opacity;
+}
+
+@media (max-width: 768px) {
+  .reelCard {
+    transform: translate3d(-4px, 3px, 0) rotate(-0.45deg);
+  }
 }
 
 .reelLabel {
@@ -104,8 +76,3 @@
   text-underline-offset: 0.18em;
 }
 
-@media (max-width: 768px) {
-  .hero {
-    min-height: 75dvh;
-  }
-}
