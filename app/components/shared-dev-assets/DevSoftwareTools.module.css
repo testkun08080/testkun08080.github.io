@@ -62,25 +62,25 @@
   transition: max-height 260ms ease;
 }
 
-.iconGrid::after {
+.iconGridFadeHint::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  top: 66%;
+  top: 74%;
   bottom: 0;
   pointer-events: none;
   background: linear-gradient(
     to bottom,
     rgb(255 255 255 / 0) 0%,
-    color-mix(in srgb, var(--app-bg-color) 52%, transparent) 42%,
-    color-mix(in srgb, var(--app-bg-color) 88%, transparent) 76%,
+    color-mix(in srgb, var(--app-bg-color) 34%, transparent) 48%,
+    color-mix(in srgb, var(--app-bg-color) 72%, transparent) 80%,
     var(--app-bg-color) 100%
   );
-  backdrop-filter: blur(var(--fx-collapse-blur));
-  -webkit-backdrop-filter: blur(var(--fx-collapse-blur));
-  mask-image: linear-gradient(to bottom, transparent 0%, black 54%, black 100%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 54%, black 100%);
+  backdrop-filter: blur(calc(var(--fx-collapse-blur) * 0.58));
+  -webkit-backdrop-filter: blur(calc(var(--fx-collapse-blur) * 0.58));
+  mask-image: linear-gradient(to bottom, transparent 0%, black 62%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 62%, black 100%);
 }
 
 .iconGridExpanded {

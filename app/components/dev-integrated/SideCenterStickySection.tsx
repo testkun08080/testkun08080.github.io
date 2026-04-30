@@ -12,7 +12,7 @@ const WORDS = [
   "visual crafting",
 ] as const;
 
-const LINE_COUNT = 34;
+const LINE_COUNT = 33;
 const START_OFFSET_VW = 22;
 
 function usePrefersReducedMotion() {
@@ -104,7 +104,7 @@ export function SideCenterStickySection({
       });
 
       animate(leftBlock, {
-        translateX: ["0vw", `${START_OFFSET_VW}vw`],
+        translateX: [`${START_OFFSET_VW}vw`, "0vw"],
         ease: "linear",
         autoplay: onScroll({
           target: track,
@@ -115,7 +115,7 @@ export function SideCenterStickySection({
       });
 
       animate(rightBlock, {
-        translateX: ["0vw", `-${START_OFFSET_VW}vw`],
+        translateX: [`-${START_OFFSET_VW}vw`, "0vw"],
         scaleX: [-1, -1],
         ease: "linear",
         autoplay: onScroll({
@@ -151,7 +151,11 @@ export function SideCenterStickySection({
   }, [aboutText, reduceMotion]);
 
   return (
-    <section ref={rootRef} className={styles.stage} aria-label="Side center sticky">
+    <section
+      ref={rootRef}
+      className={styles.stage}
+      aria-label="Side center sticky"
+    >
       <section ref={trackRef} className={styles.track}>
         <div className={styles.stickyFrame}>
           <div className={styles.centerArea}>
@@ -163,7 +167,10 @@ export function SideCenterStickySection({
             <p ref={aboutTextRef} className={styles.aboutText} />
           </div>
 
-          <div ref={leftRef} className={`${styles.sideBlock} ${styles.leftBlock}`}>
+          <div
+            ref={leftRef}
+            className={`${styles.sideBlock} ${styles.leftBlock}`}
+          >
             {Array.from({ length: LINE_COUNT }).map((_, i) => (
               <p key={`l-${i}`} className={styles.sideText}>
                 <span
@@ -178,7 +185,10 @@ export function SideCenterStickySection({
             ))}
           </div>
 
-          <div ref={rightRef} className={`${styles.sideBlock} ${styles.rightBlock}`}>
+          <div
+            ref={rightRef}
+            className={`${styles.sideBlock} ${styles.rightBlock}`}
+          >
             {Array.from({ length: LINE_COUNT }).map((_, i) => (
               <p key={`r-${i}`} className={styles.sideText}>
                 <span

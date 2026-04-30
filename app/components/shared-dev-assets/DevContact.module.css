@@ -8,18 +8,29 @@
 
 .card {
   width: min(640px, 100%);
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid color-mix(in oklab, #97cbff 35%, #ffc5c5 65%);
   border-radius: 16px;
   padding: clamp(1.1rem, 2.2vw, 1.6rem);
   background:
     radial-gradient(
-      120% 80% at 100% 0%,
-      color-mix(in oklab, var(--color-accent-main) 18%, transparent),
-      transparent 55%
+      115% 90% at 0% 0%,
+      color-mix(in oklab, #ffc5c5 46%, transparent),
+      transparent 60%
     ),
-    color-mix(in oklab, var(--color-card-surface) 92%, transparent);
+    radial-gradient(
+      95% 85% at 100% 100%,
+      color-mix(in oklab, #97cbff 44%, transparent),
+      transparent 62%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, #ffc5c5 16%, white) 0%,
+      color-mix(in oklab, #97cbff 14%, white) 100%
+    );
   backdrop-filter: blur(8px);
-  box-shadow: 0 18px 40px rgba(2, 6, 23, 0.18);
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
   transform: translate3d(12px, -6px, 0) rotate(1deg);
 }
 
@@ -34,8 +45,12 @@
   gap: 0.4rem;
   padding: 0.3rem 0.6rem;
   border-radius: 999px;
-  border: 1px solid var(--color-border-subtle);
-  background: color-mix(in oklab, var(--color-card-surface) 72%, transparent);
+  border: 1px solid color-mix(in oklab, #97cbff 42%, #ffc5c5 58%);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, #ffc5c5 38%, white),
+    color-mix(in oklab, #97cbff 32%, white)
+  );
   font-size: 0.74rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -64,9 +79,8 @@
   align-items: center;
   padding: 0.8rem 0.9rem;
   border-radius: 14px;
-  border: 1px solid var(--color-border-subtle);
-  background: color-mix(in oklab, var(--color-card-surface) 72%, transparent);
-  border-color: color-mix(in oklab, var(--color-border-subtle) 92%, var(--color-accent-main));
+  border: 1px solid color-mix(in oklab, #97cbff 32%, #ffc5c5 68%);
+  background: color-mix(in oklab, #ffc5c5 12%, white);
 }
 
 .itemMeta {
@@ -100,12 +114,12 @@
 }
 
 .valueLink:hover {
-  color: var(--color-accent-main);
-  border-color: color-mix(in oklab, var(--color-accent-main) 70%, transparent);
+  color: color-mix(in oklab, #97cbff 74%, #172554);
+  border-color: color-mix(in oklab, #97cbff 82%, transparent);
 }
 
 .valueLink:focus-visible {
-  outline: 2px solid var(--color-accent-main);
+  outline: 2px solid #97cbff;
   outline-offset: 2px;
   border-radius: 4px;
 }

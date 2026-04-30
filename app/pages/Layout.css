@@ -26,8 +26,8 @@
   --color-anime-front-word: #0f172a;
   --color-anime-underline: #f67777;
   --color-anime-greeting-word: #0f172a;
-  --color-anime-greeting-underline: #97cbff;
-  --color-anime-barcode: #7f1d1d;
+  --color-anime-greeting-underline: #0f172a;
+  --color-anime-barcode: #b75555;
   --color-anime-side-text: #ffc5c5;
   --color-anime-side-caret: rgba(0, 110, 255, 0.58);
   --color-anime-about-text: #111827;
@@ -76,8 +76,8 @@ a {
 
 #page-content {
   opacity: 1;
-  transform: translateY(0);
-  filter: blur(0);
+  transform: none;
+  filter: none;
   transition:
     opacity 280ms ease,
     transform 320ms ease,

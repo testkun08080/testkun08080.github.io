@@ -24,6 +24,10 @@ export function ProductionHomePage() {
     document.documentElement.lang = language;
   }, [language]);
 
+  const toggleLanguage = () => {
+    setLanguage((prev) => (prev === "ja" ? "en" : "ja"));
+  };
+
   const menuItems = [
     { href: "#hero", label: "hero" },
     { href: "#greeting", label: "greeting" },
@@ -98,7 +102,7 @@ export function ProductionHomePage() {
         <button
           type="button"
           className={styles.languageToggle}
-          onClick={() => setLanguage((prev) => (prev === "ja" ? "en" : "ja"))}
+          onClick={toggleLanguage}
           aria-label="Switch language between Japanese and English"
         >
           <span
@@ -116,7 +120,7 @@ export function ProductionHomePage() {
         <p className={styles.copyright}>© {new Date().getFullYear()} Shoichi Hasegawa</p>
       </footer>
 
-      <StickyQuickMenu items={menuItems} />
+      <StickyQuickMenu items={menuItems} language={language} onToggleLanguage={toggleLanguage} />
     </main>
   );
 }

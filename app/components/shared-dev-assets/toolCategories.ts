@@ -82,7 +82,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   },
   {
     id: "programming-languages",
-    title: "Languages",
+    title: "Programming-Languages",
     role: "実装、マークアップ、スタイリング、クエリ、シェーダー記述",
     tools: [
       {
@@ -100,6 +100,15 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
       { name: "C#", iconPath: "/plang-icons/lang_csya.svg" },
       { name: "Python", iconPath: "/plang-icons/python.svg" },
       { name: "HLSL", iconPath: "/plang-icons/lang_hlsl.svg" },
+    ],
+  },
+  {
+    id: "languages",
+    title: "Languages",
+    role: "コミュニケーション、仕様理解、ドキュメント対応",
+    tools: [
+      { name: "日本語", iconPath: "/plang-icons/lang_japanese.svg" },
+      { name: "English", iconPath: "/plang-icons/lang_english.svg" },
     ],
   },
 ];

@@ -34,10 +34,12 @@
 
 .workSection {
   z-index: 8;
+  padding-top: 4rem;
 }
 
 .skillsSection {
   z-index: 9;
+  padding-top: 4rem;
 }
 
 .contactSection {
@@ -58,7 +60,8 @@
   gap: 0.75rem;
   text-align: center;
   padding: 3rem 1rem;
-  background: var(--color-footer-bg);
+  background: transparent;
+  color: var(--color-text-body);
 }
 
 .languageToggle {
@@ -72,23 +75,23 @@
 }
 
 .languageActiveRed {
-  color: var(--color-anime-side-text);
+  color: var(--color-text-body);
 }
 
 .languageActiveBlue {
-  color: var(--color-anime-center-heading);
+  color: var(--color-text-body);
 }
 
 .languageInactive,
 .languageSeparator {
-  color: color-mix(in srgb, var(--color-anime-side-text) 55%, var(--color-anime-center-heading) 45%);
+  color: var(--color-text-body);
 }
 
 .copyright {
   margin: 0;
   font-size: 0.82rem;
   letter-spacing: 0.03em;
-  color: color-mix(in srgb, var(--color-anime-center-heading) 58%, var(--color-anime-side-text) 42%);
+  color: var(--color-text-body);
 }
 
 @media (prefers-reduced-motion: reduce) {

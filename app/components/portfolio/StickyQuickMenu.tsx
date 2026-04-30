@@ -11,25 +11,16 @@ type StickyQuickMenuProps = {
   items: StickyQuickMenuItem[];
   heroSelector?: string;
   upwardThreshold?: number;
+  language?: "ja" | "en";
+  onToggleLanguage?: () => void;
 };
-
-function getScrollableAncestor(element: HTMLElement | null): HTMLElement | null {
-  if (!element) return null;
-  let node: HTMLElement | null = element.parentElement;
-  while (node) {
-    const style = window.getComputedStyle(node);
-    const overflowY = style.overflowY;
-    const canScroll = (overflowY === "auto" || overflowY === "scroll") && node.scrollHeight > node.clientHeight;
-    if (canScroll) return node;
-    node = node.parentElement;
-  }
-  return null;
-}
 
 export function StickyQuickMenu({
   items,
   heroSelector = "#hero",
-  upwardThreshold = 22,
+  upwardThreshold = 10,
+  language,
+  onToggleLanguage,
 }: StickyQuickMenuProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -39,6 +30,7 @@ export function StickyQuickMenu({
   const lastScrollYRef = useRef(0);
   const upwardDistanceRef = useRef(0);
   const visibleRef = useRef(false);
+  const rafIdRef = useRef(0);
 
   const menuItems = useMemo(() => items, [items]);
 
@@ -55,7 +47,7 @@ export function StickyQuickMenu({
     });
 
     if (menuOpen) {
-      const links = menu.querySelectorAll("a");
+      const links = menu.querySelectorAll("a, button");
       animate(menu, {
         opacity: [0, 1],
         scale: [0.8, 1],
@@ -83,18 +75,12 @@ export function StickyQuickMenu({
   }, [menuOpen]);
 
   useEffect(() => {
-    const hero = document.querySelector<HTMLElement>(heroSelector);
-    const detectedScroller = getScrollableAncestor(hero) ?? document.querySelector<HTMLElement>("#page-content");
-    const scrollHost: Window | HTMLElement = detectedScroller ?? window;
-
-    const getScrollPosition = () =>
-      scrollHost === window ? window.scrollY : (scrollHost as HTMLElement).scrollTop;
-
     const updateVisibility = () => {
-      const currentScrollY = getScrollPosition();
+      const currentScrollY = window.scrollY;
       const hero = document.querySelector<HTMLElement>(heroSelector);
       const heroBottom = hero?.getBoundingClientRect().bottom ?? -1;
       const isOutsideHero = heroBottom <= 0;
+      const deltaY = currentScrollY - lastScrollYRef.current;
 
       if (!isOutsideHero) {
         upwardDistanceRef.current = 0;
@@ -106,8 +92,6 @@ export function StickyQuickMenu({
         lastScrollYRef.current = currentScrollY;
         return;
       }
-
-      const deltaY = currentScrollY - lastScrollYRef.current;
       lastScrollYRef.current = currentScrollY;
 
       if (deltaY > 0) {
@@ -129,13 +113,18 @@ export function StickyQuickMenu({
       }
     };
 
-    lastScrollYRef.current = getScrollPosition();
-    updateVisibility();
-    scrollHost.addEventListener("scroll", updateVisibility, { passive: true });
-    window.addEventListener("resize", updateVisibility);
+    const onScroll = () => {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = requestAnimationFrame(updateVisibility);
+    };
+
+    lastScrollYRef.current = window.scrollY;
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
-      scrollHost.removeEventListener("scroll", updateVisibility);
-      window.removeEventListener("resize", updateVisibility);
+      cancelAnimationFrame(rafIdRef.current);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
     };
   }, [heroSelector, upwardThreshold]);
 
@@ -164,6 +153,19 @@ export function StickyQuickMenu({
             {item.label}
           </a>
         ))}
+        {onToggleLanguage ? (
+          <button
+            type="button"
+            className={styles.menuAction}
+            onClick={() => {
+              onToggleLanguage();
+              closeMenu();
+            }}
+            aria-label="Switch language between Japanese and English"
+          >
+            Language: {language === "en" ? "English" : "日本語"}
+          </button>
+        ) : null}
       </div>
     </nav>
   );

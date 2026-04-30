@@ -4,7 +4,7 @@ import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
 
 const FRONT_WORD = "konchiwa";
-const BG_ROW_COUNT = 20;
+const BG_ROW_COUNT = 22;
 const BG_ROW_TEXT = Array.from({ length: 15 })
   .map(() => "hi there hello oi")
   .join(" ");
@@ -91,7 +91,6 @@ export function GreetingBurstSection() {
         <div className={styles.frontLayer}>
           <ScrollTypingHeading
             text={FRONT_WORD}
-            targetRef={triggerRef}
             headingClassName={styles.word}
             underlineClassName={styles.underline}
           />

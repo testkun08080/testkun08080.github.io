@@ -25,7 +25,7 @@
 
 .stage {
   position: relative;
-  min-height: 120dvh;
+  min-height: 180dvh;
   overflow: hidden;
 }
 
