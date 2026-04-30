@@ -34,8 +34,7 @@ const SKILL_SECTIONS = [
   },
   {
     title: "R&D / Problem Solving",
-    summary:
-      "AI識別検証やテクスチャ生成など、実制作に直結する検証を推進。",
+    summary: "AI識別検証やテクスチャ生成など、実制作に直結する検証を推進。",
     tags: ["YOLO", "ComfyUI", "Texture workflow", "Optimization tooling"],
   },
 ] as const;
@@ -145,7 +144,8 @@ export default function Page() {
   const rootRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const sideLinks = useMemo(
-    () => devLinks.filter((href) => href !== "/dev-test-portfolio").slice(0, 24),
+    () =>
+      devLinks.filter((href) => href !== "/dev-test-portfolio").slice(0, 24),
     [],
   );
 
@@ -191,7 +191,9 @@ export default function Page() {
       observer.observe(s);
     });
 
-    const tags = Array.from(root.querySelectorAll<HTMLElement>("[data-skill-tag]"));
+    const tags = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-skill-tag]"),
+    );
     const tagAnim = animate(tags, {
       opacity: [0, 1],
       translateY: [14, 0],
@@ -201,7 +203,9 @@ export default function Page() {
     });
     cleanups.push(() => tagAnim.revert());
 
-    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-video-card]"));
+    const cards = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-video-card]"),
+    );
     const floating = animate(cards, {
       translateY: ["-4px", "4px"],
       duration: 2200,
@@ -212,7 +216,9 @@ export default function Page() {
     });
     cleanups.push(() => floating.revert());
 
-    const artOrbs = Array.from(root.querySelectorAll<HTMLElement>("[data-art-orb]"));
+    const artOrbs = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-art-orb]"),
+    );
     const orbAnim = animate(artOrbs, {
       translateY: ["-22px", "22px"],
       translateX: ["-12px", "12px"],
@@ -226,7 +232,9 @@ export default function Page() {
     });
     cleanups.push(() => orbAnim.revert());
 
-    const marquees = Array.from(root.querySelectorAll<HTMLElement>("[data-marquee]"));
+    const marquees = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-marquee]"),
+    );
     marquees.forEach((row, i) => {
       const direction = i % 2 === 0 ? ["0%", "-26%"] : ["-26%", "0%"];
       const loopAnim = animate(row, {
@@ -238,7 +246,9 @@ export default function Page() {
       cleanups.push(() => loopAnim.revert());
     });
 
-    const panels = Array.from(root.querySelectorAll<HTMLElement>("[data-panel]"));
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>("[data-panel]"),
+    );
     const panelPulse = animate(panels, {
       boxShadow: [
         "0 10px 24px -18px rgba(15,23,42,0.45)",
@@ -339,7 +349,6 @@ export default function Page() {
           <div
             className="absolute inset-0 opacity-25"
             style={{
-              backgroundImage: "url(/images/hero.png)",
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -358,7 +367,8 @@ export default function Page() {
               スクロールで直感的に紹介
             </h1>
             <p className="max-w-2xl text-sm leading-relaxed text-[#334155] sm:text-base">
-              `resume_en.pdf` の情報を元に、スキル・職歴・動画紹介を視線誘導しやすい
+              `resume_en.pdf`
+              の情報を元に、スキル・職歴・動画紹介を視線誘導しやすい
               レイアウトに再編しています。ページ全体はスムーズに読み進められる設計です。
             </p>
           </div>
@@ -367,8 +377,8 @@ export default function Page() {
               data-marquee
               className="whitespace-nowrap text-xs font-semibold uppercase tracking-[0.28em] text-[#7f1d1d]"
             >
-              TECHNICAL ARTIST • SHADER • LOOKDEV • PIPELINE • TECHNICAL ARTIST •
-              SHADER • LOOKDEV • PIPELINE •
+              TECHNICAL ARTIST • SHADER • LOOKDEV • PIPELINE • TECHNICAL ARTIST
+              • SHADER • LOOKDEV • PIPELINE •
             </p>
             <p
               data-marquee
@@ -486,7 +496,9 @@ export default function Page() {
                     loading="lazy"
                     draggable={false}
                   />
-                  <span className="text-sm font-medium text-[#334155]">{item.name}</span>
+                  <span className="text-sm font-medium text-[#334155]">
+                    {item.name}
+                  </span>
                 </article>
               ))}
             </div>

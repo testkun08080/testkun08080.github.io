@@ -14,9 +14,21 @@ export function DocumentChapter({ className }: Props) {
     offset: ["start end", "end start"],
   });
 
-  const op0 = useTransform(scrollYProgress, [0, 0.06, 0.22, 0.28], [0, 1, 1, 0]);
-  const op1 = useTransform(scrollYProgress, [0.22, 0.28, 0.47, 0.53], [0, 1, 1, 0]);
-  const op2 = useTransform(scrollYProgress, [0.47, 0.53, 0.72, 0.78], [0, 1, 1, 0]);
+  const op0 = useTransform(
+    scrollYProgress,
+    [0, 0.06, 0.22, 0.28],
+    [0, 1, 1, 0],
+  );
+  const op1 = useTransform(
+    scrollYProgress,
+    [0.22, 0.28, 0.47, 0.53],
+    [0, 1, 1, 0],
+  );
+  const op2 = useTransform(
+    scrollYProgress,
+    [0.47, 0.53, 0.72, 0.78],
+    [0, 1, 1, 0],
+  );
   const op3 = useTransform(scrollYProgress, [0.72, 0.78, 1], [0, 1, 1]);
 
   const ops = [op0, op1, op2, op3];
@@ -32,7 +44,6 @@ export function DocumentChapter({ className }: Props) {
         <div
           className="absolute inset-0 opacity-40"
           style={{
-            backgroundImage: "url(/images/hero.png)",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

@@ -27,7 +27,6 @@ body {
     sans-serif;
   /* hero.png ベースのウォームトーン（ページ背景） */
   background: #e8dcc8;
-  /* background-image: url(/images/hero.png); */
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -106,7 +105,7 @@ body.page-transition #page-content {
   }
 }
 
-.noise-effect:after {
+/* .noise-effect:after {
   animation: grain 8s steps(10) infinite;
   background-image: url(/noise.png);
   content: "";
@@ -119,7 +118,7 @@ body.page-transition #page-content {
   mix-blend-mode: overlay;
   pointer-events: none;
   z-index: 9999;
-}
+} */
 
 /* 
 @keyframes grain {

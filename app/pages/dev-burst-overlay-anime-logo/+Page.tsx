@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Leva, folder, useControls } from "leva";
 import {
   FlowMode,
@@ -35,11 +35,14 @@ function usePrefersReducedMotion() {
 export default function Page() {
   const reduceMotion = usePrefersReducedMotion();
   const [mounted, setMounted] = useState(false);
+  const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
+  const stageRef = useRef<HTMLElement>(null);
+  const barcodeFrameRef = useRef<HTMLDivElement>(null);
   useEffect(() => setMounted(true), []);
   const fs = HERO_BARCODE.fontSize;
   const controls = useControls("Logo Ink", {
     Background: folder({
-      bgColor: { value: "#f7efe4" },
+      bgColor: { value: "#fff" },
     }),
     Logo: folder({
       logoUrl: {
@@ -96,47 +99,84 @@ export default function Page() {
     }),
   });
 
+  useEffect(() => {
+    if (!stageRef.current || !barcodeFrameRef.current) return;
+
+    const stage = stageRef.current;
+    const barcodeFrame = barcodeFrameRef.current;
+
+    if (reduceMotion) {
+      barcodeFrame.style.opacity = "1";
+      barcodeFrame.style.transform = "scale(1)";
+      setScrollLogoBoost(0);
+      return;
+    }
+
+    let rafId = 0;
+    const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
+    const updateByScroll = () => {
+      const rect = stage.getBoundingClientRect();
+      const scrollable = Math.max(rect.height - window.innerHeight, 1);
+      const progressed = clamp01(-rect.top / scrollable);
+      const scale = 1 + progressed * 0.9;
+      const opacity = 1 - progressed;
+      barcodeFrame.style.transform = `scale(${scale})`;
+      barcodeFrame.style.opacity = String(opacity);
+      setScrollLogoBoost(progressed * 0.16);
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = window.requestAnimationFrame(updateByScroll);
+    };
+    updateByScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      setScrollLogoBoost(0);
+    };
+  }, [reduceMotion]);
+
   return (
     <main className={styles.page}>
       {mounted ? <Leva collapsed oneLineLabels /> : null}
 
-      <section className={styles.intro}>
-        <h1 className={styles.title}>dev-burst-overlay-anime-logo</h1>
-        <p className={styles.copy}>
-          ロゴ + ヒーロー枠バーコードの合成テスト。
-          スクロール連動なし。
-        </p>
-      </section>
-
-      <section className={styles.stage}>
-        <HeroLogoInkWebGL
-          className={styles.logoLayer}
-          paused={reduceMotion}
-          {...controls}
-          flowMode={controls.flowMode as FlowMode}
-          mouseEnabled={reduceMotion ? false : controls.mouseEnabled}
-        />
-
-        <div className={styles.barcodeFrame}>
-          <PathBarcodeTemplate3D
+      <section ref={stageRef} className={styles.stage}>
+        <div className={styles.stickyViewport}>
+          <HeroLogoInkWebGL
+            className={styles.logoLayer}
             paused={reduceMotion}
-            className={styles.barcodeTheme}
-            flowDurationMs={33000}
-            textUnit="*0123456789ABCDEF* "
-            textRepeat={11}
-            pathD="
-              M 8 2
-              H 92
-              Q 98 2 98 8
-              V 92
-              Q 98 98 92 98
-              H 8
-              Q 2 98 2 92
-              V 8
-              Q 2 2 8 2
-              Z
-            "
+            // bgColor="#ffffff"
+            // {...controls}
+            flowMode={controls.flowMode as FlowMode}
+            logoSize={controls.logoSize + scrollLogoBoost}
+            mouseEnabled={reduceMotion ? false : controls.mouseEnabled}
           />
+
+          <div ref={barcodeFrameRef} className={styles.barcodeFrame}>
+            <PathBarcodeTemplate3D
+              paused={reduceMotion}
+              className={styles.barcodeTheme}
+              flowDurationMs={33000}
+              textUnit="*0123456789ABCDEF* "
+              textRepeat={11}
+              pathD="
+                M 8 2
+                H 92
+                Q 98 2 98 8
+                V 92
+                Q 98 98 92 98
+                H 8
+                Q 2 98 2 92
+                V 8
+                Q 2 2 8 2
+                Z
+              "
+            />
+          </div>
         </div>
       </section>
 
