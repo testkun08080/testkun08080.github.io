@@ -7,7 +7,7 @@
 .stage {
   position: relative;
   min-height: 220dvh;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .stickyViewport {
@@ -36,6 +36,51 @@
 }
 
 .barcodeTheme {}
+
+.nextItemCard {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.5rem, 4vw, 3rem);
+  z-index: 3;
+  width: min(42rem, calc(100% - 2rem));
+  padding: 1rem 1.2rem;
+  border: 1px solid rgb(255 255 255 / 0.45);
+  border-radius: 0.75rem;
+  background: rgb(15 23 42 / 0.72);
+  color: #f8fafc;
+  backdrop-filter: blur(8px);
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  transition:
+    opacity 360ms ease,
+    transform 360ms ease;
+  pointer-events: none;
+}
+
+.nextItemCardVisible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.nextItemEyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+}
+
+.nextItemTitle {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1rem, 2.4vw, 1.5rem);
+}
+
+.nextItemBody {
+  margin: 0;
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+  line-height: 1.5;
+  color: #e2e8f0;
+}
 
 :global(.hero-barcode-template3d) {
   position: absolute;

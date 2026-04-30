@@ -1,9 +1,9 @@
 import { useRef } from "react";
-import { AboutStickySection } from "../../components/dev-integrated/AboutStickySection";
 import { ContactCardSection } from "../../components/dev-integrated/ContactCardSection";
 import { FloatingThemeControls } from "../../components/dev-integrated/FloatingThemeControls";
 import { GreetingBurstSection } from "../../components/dev-integrated/GreetingBurstSection";
 import { HeroBurstLogoSection } from "../../components/dev-integrated/HeroBurstLogoSection";
+import { SideCenterStickySection } from "../../components/dev-integrated/SideCenterStickySection";
 import { ScrollTypingHeading } from "../../components/dev-integrated/ScrollTypingHeading";
 import { StickyQuickMenu } from "../../components/portfolio/StickyQuickMenu";
 import { SkillsToolsSection } from "../../components/dev-integrated/SkillsToolsSection";
@@ -23,7 +23,7 @@ export default function Page() {
   const menuItems = [
     { href: "#hero", label: "hero" },
     { href: "#greeting", label: "greeting" },
-    { href: "#about", label: "about" },
+    { href: "#sticky-side", label: "sticky" },
     { href: "#work", label: "work" },
     { href: "#skills", label: "skills" },
     { href: "#contact", label: "contact" },
@@ -41,8 +41,8 @@ export default function Page() {
         <GreetingBurstSection />
       </section>
 
-      <section id="about" className={styles.section}>
-        <AboutStickySection aboutText={ABOUT_TEXT} />
+      <section id="sticky-side" className={styles.section}>
+        <SideCenterStickySection aboutText={ABOUT_TEXT} />
       </section>
 
       <section

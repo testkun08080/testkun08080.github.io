@@ -13,7 +13,7 @@ export type ToolCategory = {
 export const TOOL_CATEGORIES: ToolCategory[] = [
   {
     id: "creative-tools-3d-design",
-    title: "1. Creative Tools (3D & Design)",
+    title: "Creative Tools (3D & Design)",
     role: "アセット制作、スカルプティング、テクスチャリング、デザイン",
     tools: [
       { name: "Maya", iconPath: "/tool-icons/tool_maya.svg" },
@@ -32,7 +32,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   },
   {
     id: "graphics-game-engines",
-    title: "2. Graphics & Game Engines",
+    title: "Graphics & Game Engines",
     role: "シェーダー開発、レンダリング最適化、ゲームロジック実装",
     tools: [
       { name: "Unity", iconPath: "/tool-icons/tool_unity.svg" },
@@ -43,7 +43,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   },
   {
     id: "web-app-development",
-    title: "3. Web & App Development",
+    title: "Web & App Development",
     role: "フロントエンド開発、UI実装、Web向け機能開発",
     tools: [
       { name: "React", iconPath: "/plang-icons/lang_react.svg" },
@@ -53,16 +53,13 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   },
   {
     id: "platform-infrastructure",
-    title: "4. Platform & Infrastructure",
+    title: "Platform & Infrastructure",
     role: "基盤開発、データ処理、低レイヤー実装",
-    tools: [
-      { name: "Cloudflare" },
-      { name: "Vercel" },
-    ],
+    tools: [{ name: "Cloudflare" }, { name: "Vercel" }],
   },
   {
     id: "development-operations",
-    title: "5. Development Operations (DevOps & Tools)",
+    title: "Development Operations (DevOps & Tools)",
     role: "バージョン管理、CI/CD、環境統一、チーム運用",
     tools: [
       { name: "Git", iconPath: "/tool-icons/tool_git.svg" },
@@ -73,7 +70,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
   },
   {
     id: "programming-languages",
-    title: "6. Languages",
+    title: "Languages",
     role: "実装、マークアップ、スタイリング、クエリ、シェーダー記述",
     tools: [
       { name: "TypeScript" },
