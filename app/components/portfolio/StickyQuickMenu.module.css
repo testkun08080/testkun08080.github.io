@@ -1,0 +1,98 @@
+.fabArea {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 120;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 0.65rem;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.fabAreaHidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.fabAreaVisible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.fabButton {
+  border: 1px solid rgb(148 163 184 / 0.45);
+  border-radius: 999px;
+  padding: 0.6rem 0.95rem;
+  background: rgb(15 23 42 / 0.9);
+  color: #e2e8f0;
+  cursor: pointer;
+  transform-origin: center;
+}
+
+.fabMenu {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 132px;
+  max-width: calc(100vw - 2rem);
+  border: 1px solid rgb(148 163 184 / 0.28);
+  border-radius: 10px;
+  padding: 0.6rem;
+  background: rgb(15 23 42 / 0.94);
+  box-shadow: 0 12px 34px rgb(2 6 23 / 0.45);
+  opacity: 0;
+  transform: translateY(10px) scale(0.92);
+  transform-origin: bottom right;
+  pointer-events: none;
+}
+
+.fabMenuOpen {
+  pointer-events: auto;
+}
+
+.fabMenu a {
+  display: block;
+  padding: 0.22rem 0.1rem;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 768px) {
+  .fabArea {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .fabButton {
+    padding: 0.58rem 0.88rem;
+    font-size: 0.9rem;
+  }
+
+  .fabMenu {
+    min-width: 120px;
+    padding: 0.52rem;
+    border-radius: 12px;
+  }
+
+  .fabMenu a {
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fabArea {
+    transition: none;
+  }
+
+  .fabMenu {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}

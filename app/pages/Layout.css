@@ -18,6 +18,13 @@
   --surface-card: rgb(255 255 255 / 0.7);
   --surface-card-strong: rgb(255 255 255 / 0.84);
   --fx-collapse-blur: 7px;
+  --color-anime-bg-row: rgb(248 250 252 / 70%);
+  --color-anime-front-word: #0f172a;
+  --color-anime-underline: #0b0b0b;
+  --color-anime-barcode: #7f1d1d;
+  --color-anime-side-text: #ffffff;
+  --color-anime-side-caret: rgb(255 255 255 / 0.9);
+  --color-anime-about-text: #111827;
 }
 
 * {

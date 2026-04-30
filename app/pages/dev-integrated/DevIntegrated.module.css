@@ -1,5 +1,6 @@
 .page {
   color: var(--color-text-heading);
+  scroll-behavior: smooth;
 }
 
 .section {
@@ -9,21 +10,26 @@
 .sectionHead {
   width: min(100%, 1100px);
   margin: 0 auto;
-  padding: 2rem 1rem 0.8rem;
+  padding: 2rem 1rem 0.6rem;
 }
 
-.sectionHead p {
+.sectionHeadingWord {
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.78rem;
-  color: var(--color-text-subtitle);
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(2.2rem, 6.2vw, 4.2rem);
+  font-weight: 900;
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  color: var(--color-anime-front-word);
 }
 
-.sectionHead h2 {
-  margin: 0.4rem 0 0;
-  font-size: clamp(1.5rem, 3.8vw, 2.6rem);
-  line-height: 1.15;
+.sectionHeadingLine {
+  width: min(72vw, 520px);
+  height: 6px;
+  background: var(--color-anime-underline);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
 }
 
 .workSection {
@@ -57,4 +63,10 @@
 .footer a {
   color: var(--color-text-inverse);
   text-underline-offset: 0.16em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    scroll-behavior: auto;
+  }
 }

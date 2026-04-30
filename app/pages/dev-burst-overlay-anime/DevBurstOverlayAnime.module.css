@@ -1,6 +1,6 @@
 .page {
   min-height: 100dvh;
-  color: #0f172a;
+  color: var(--color-anime-front-word);
 }
 
 .intro {
@@ -45,7 +45,7 @@
   font-size: clamp(1.05rem, 2.2vw, 2rem);
   font-weight: 800;
   font-style: italic;
-  color: rgb(248 250 252 / 70%);
+  color: var(--color-anime-bg-row);
   line-height: 1;
   opacity: 0;
   text-decoration: underline;
@@ -77,7 +77,7 @@
   justify-self: center;
   width: clamp(220px, 50vw, 640px);
   height: 7px;
-  background: #0b0b0b;
+  background: var(--color-anime-underline);
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }

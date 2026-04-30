@@ -63,13 +63,20 @@
   position: absolute;
   left: 0;
   right: 0;
+  top: 66%;
   bottom: 0;
-  height: 72px;
   pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0) 0%,
+    color-mix(in srgb, var(--app-bg-color) 52%, transparent) 42%,
+    color-mix(in srgb, var(--app-bg-color) 88%, transparent) 76%,
+    var(--app-bg-color) 100%
+  );
   backdrop-filter: blur(var(--fx-collapse-blur));
   -webkit-backdrop-filter: blur(var(--fx-collapse-blur));
-  mask-image: linear-gradient(to bottom, transparent, black 36%);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 36%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 54%, black 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 54%, black 100%);
 }
 
 .iconGridExpanded {

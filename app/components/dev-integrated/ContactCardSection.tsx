@@ -20,9 +20,6 @@ export function ContactCardSection() {
         <p className={styles.eyebrow} style={{ color: "var(--color-text-subtitle)" }}>
           CONTACT
         </p>
-        <h2 className={styles.title} style={{ color: "var(--color-text-heading)" }}>
-          Get in touch
-        </h2>
         <ul className={styles.list}>
           {CONTACT_ITEMS.map((item) => (
             <li

@@ -1,5 +1,6 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef, useState } from "react";
+import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "../../pages/dev-side-center-anime/DevSideCenterAnime.module.css";
 
 const WORDS = [
@@ -69,6 +70,10 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
     }
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
+      const sideChars = sideTypingSpansRef.current.map(
+        (span) => (span?.textContent?.length ?? 12) + 1,
+      );
+
       animate(left, {
         translateX: [`${START_OFFSET_VW}vw`, "0vw"],
         ease: "linear",
@@ -93,8 +98,8 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
       });
 
       animate(center, {
-        opacity: [0, 1],
-        translateY: [24, 0],
+        opacity: [0.28, 1],
+        translateY: [14, 0],
         ease: "linear",
         autoplay: onScroll({
           target: track,
@@ -123,20 +128,28 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
         }),
       });
 
-      sideTypingSpansRef.current.forEach((span, i) => {
-        if (!span) return;
-        const chars = (span.textContent?.length ?? 12) + 1;
-        const baseDelay =
-          i < LINE_COUNT ? (i % 8) * 100 : ((i - LINE_COUNT) % 8) * 120;
-        animate(span, {
-          width: [`0ch`, `${chars}ch`],
-          ease: "steps(14)",
-          duration: 1100,
-          delay: baseDelay,
-          loop: true,
-          alternate: true,
-          loopDelay: 750,
-        });
+      animate(track, {
+        opacity: [1, 1],
+        autoplay: onScroll({
+          target: track,
+          enter: "top+=8% top",
+          leave: "top+=84% top",
+          sync: true,
+          onUpdate: (self) => {
+            const observer = self as { progress?: number };
+            if (typeof observer.progress !== "number") return;
+            const clamped = Math.min(Math.max(observer.progress, 0), 1);
+
+            sideTypingSpansRef.current.forEach((span, i) => {
+              if (!span) return;
+              const phaseOffset = i < LINE_COUNT ? (i % 8) * 0.04 : ((i - LINE_COUNT) % 8) * 0.04;
+              const phaseProgress = Math.min(Math.max((clamped - phaseOffset) / 0.65, 0), 1);
+              const width = Math.max(Math.floor(phaseProgress * sideChars[i]), 1);
+              span.style.width = `${width}ch`;
+              span.style.borderRightWidth = phaseProgress >= 1 ? "0" : "2px";
+            });
+          },
+        }),
       });
     });
 
@@ -153,8 +166,14 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
       <section ref={trackRef} className={styles.track}>
         <div className={styles.stickyFrame}>
           <div ref={centerRef} className={styles.centerContent}>
-            <h2 className={styles.centerHeading}>about</h2>
-            <div className={styles.centerLine} />
+            <ScrollTypingHeading
+              text="About"
+              targetRef={trackRef}
+              enter="top+=20% top"
+              leave="top+=72% top"
+              headingClassName={styles.centerHeading}
+              underlineClassName={styles.centerLine}
+            />
             <p
               ref={aboutTextRef}
               className={styles.outroText}
@@ -163,7 +182,7 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
                 textAlign: "center",
                 whiteSpace: "pre-line",
                 lineHeight: 1.55,
-                color: "#111827",
+                color: "var(--color-anime-about-text)",
                 fontSize: "clamp(0.98rem, 1.55vw, 1.16rem)",
               }}
             />

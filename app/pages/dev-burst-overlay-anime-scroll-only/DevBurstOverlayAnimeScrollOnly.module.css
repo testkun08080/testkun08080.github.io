@@ -1,6 +1,6 @@
 .page {
   min-height: 100dvh;
-  color: #0f172a;
+  color: var(--color-anime-front-word);
 }
 
 .intro {
@@ -51,7 +51,7 @@
   justify-self: center;
   width: clamp(220px, 50vw, 640px);
   height: 7px;
-  background: #0b0b0b;
+  background: var(--color-anime-underline);
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }

@@ -19,7 +19,9 @@ export function SkillsToolsSection() {
     ).matches;
     if (prefersReducedMotion) return;
 
-    const cards = Array.from(page.querySelectorAll<HTMLElement>("[data-tool-card]"));
+    const cards = Array.from(
+      page.querySelectorAll<HTMLElement>("[data-tool-card]"),
+    );
     if (!cards.length) return;
 
     cards.forEach((card) => {
@@ -74,7 +76,8 @@ export function SkillsToolsSection() {
         const grid = gridRefs.current[category.id];
         if (!grid) return;
 
-        nextOverflowMap[category.id] = grid.scrollHeight > COLLAPSED_GRID_MAX_HEIGHT + 2;
+        nextOverflowMap[category.id] =
+          grid.scrollHeight > COLLAPSED_GRID_MAX_HEIGHT + 2;
       });
 
       setOverflowMap(nextOverflowMap);
@@ -97,9 +100,9 @@ export function SkillsToolsSection() {
       {TOOL_CATEGORIES.map((category) => (
         <section key={category.id} className={styles.iconSection}>
           <h2 className={styles.sectionTitle}>{category.title}</h2>
-          <p className={styles.categoryRole}>
+          {/* <p className={styles.categoryRole}>
             <span className={styles.categoryLabel}>Role:</span> {category.role}
-          </p>
+          </p> */}
           <div
             id={`tools-grid-${category.id}`}
             ref={(node) => {

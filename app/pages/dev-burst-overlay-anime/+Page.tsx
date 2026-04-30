@@ -1,5 +1,6 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef, useState } from "react";
+import { ScrollTypingHeading } from "../../components/dev-integrated/ScrollTypingHeading";
 import styles from "./DevBurstOverlayAnime.module.css";
 
 const FRONT_WORD = "konchiwa";
@@ -29,23 +30,15 @@ export default function Page() {
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const triggerRef = useRef<HTMLElement>(null);
   const bgRowsRef = useRef<(HTMLParagraphElement | null)[]>([]);
-  const wordRef = useRef<HTMLHeadingElement>(null);
-  const lineRef = useRef<HTMLDivElement>(null);
-  const typedCountRef = useRef(-1);
 
   useEffect(() => {
     if (!rootRef.current) return;
 
     const triggerEl = triggerRef.current;
-    const wordEl = wordRef.current;
-    const lineEl = lineRef.current;
-
     const rows = bgRowsRef.current.filter(Boolean) as HTMLParagraphElement[];
-    if (!triggerEl || !wordEl || !lineEl || rows.length === 0) return;
+    if (!triggerEl || rows.length === 0) return;
 
     if (reduceMotion) {
-      wordEl.textContent = FRONT_WORD;
-      lineEl.style.transform = "scaleX(1)";
       rows.forEach((row) => {
         row.style.opacity = "0.9";
         row.style.transform = "translateX(0px)";
@@ -72,43 +65,11 @@ export default function Page() {
         });
       });
 
-      animate(lineEl, {
-        scaleX: [0, 1],
-        autoplay: onScroll({
-          enter: "bottom top",
-          leave: "center top-=100",
-          sync: true,
-          // repeat: true,
-          // debug: true,
-        }),
-      });
-
-      animate(wordEl, {
-        opacity: [1, 1],
-        autoplay: onScroll({
-          enter: "bottom top",
-          leave: "center top-=100",
-          sync: true,
-          // repeat: true,
-          // debug: true,
-          onUpdate: (self) => {
-            const observer = self as { progress?: number };
-            if (typeof observer.progress !== "number") return;
-            const clamped = Math.min(Math.max(observer.progress, 0), 1);
-            const nextCount = Math.floor(clamped * FRONT_WORD.length);
-            if (nextCount === typedCountRef.current) return;
-            typedCountRef.current = nextCount;
-            wordEl.textContent = FRONT_WORD.slice(0, nextCount);
-          },
-        }),
-      });
     });
 
     return () => {
       scopeRef.current?.revert();
       scopeRef.current = null;
-      wordEl.textContent = "";
-      typedCountRef.current = -1;
     };
   }, [reduceMotion]);
 
@@ -137,10 +98,14 @@ export default function Page() {
         </div>
 
         <div className={styles.frontLayer}>
-          <h2 ref={wordRef} className={styles.word}>
-            {reduceMotion ? FRONT_WORD : ""}
-          </h2>
-          <div ref={lineRef} className={styles.underline} />
+          <ScrollTypingHeading
+            text={FRONT_WORD}
+            targetRef={triggerRef}
+            enter="bottom top"
+            leave="center top-=100"
+            headingClassName={styles.word}
+            underlineClassName={styles.underline}
+          />
         </div>
       </section>
     </main>

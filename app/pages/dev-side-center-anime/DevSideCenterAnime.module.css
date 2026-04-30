@@ -1,6 +1,7 @@
 .page {
   min-height: 100dvh;
-  color: #09090b;
+  color: var(--color-anime-front-word);
+  scroll-behavior: smooth;
 }
 
 .intro {
@@ -43,9 +44,9 @@
   align-content: center;
   justify-items: center;
   gap: 1.15rem;
-  opacity: 0;
-  transform: translateY(24px);
-  z-index: 1;
+  opacity: 0.28;
+  transform: translateY(14px);
+  z-index: 4;
   pointer-events: none;
 }
 
@@ -54,13 +55,13 @@
   font-size: clamp(3.1rem, 11vw, 8.5rem);
   line-height: 0.96;
   font-weight: 900;
-  color: #0a0a0a;
+  color: var(--color-anime-front-word);
 }
 
 .centerLine {
   width: min(76vw, 900px);
   height: 7px;
-  background: #0a0a0a;
+  background: var(--color-anime-underline);
 }
 
 .wordBlock {
@@ -91,7 +92,7 @@
 
 .sideText {
   margin: 0;
-  color: #ffffff;
+  color: var(--color-anime-side-text);
   font-style: italic;
   font-weight: 700;
   font-size: clamp(0.92rem, 1.43vw, 1.28rem);
@@ -107,7 +108,7 @@
 .sideTyping {
   display: inline-block;
   overflow: hidden;
-  border-right: 2px solid rgb(255 255 255 / 0.86);
+  border-right: 2px solid var(--color-anime-side-caret);
   white-space: nowrap;
   width: 0ch;
 }
@@ -124,12 +125,97 @@
   margin: 0;
   font-size: clamp(1rem, 1.8vw, 1.4rem);
   opacity: 0.75;
+  min-height: 4lh;
+}
+
+.fabArea {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 30;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 0.65rem;
+}
+
+.fabButton {
+  border: 1px solid rgb(148 163 184 / 0.45);
+  border-radius: 999px;
+  padding: 0.6rem 0.95rem;
+  background: rgb(15 23 42 / 0.9);
+  color: #e2e8f0;
+  cursor: pointer;
+  transform-origin: center;
+}
+
+.fabMenu {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 132px;
+  max-width: calc(100vw - 2rem);
+  border: 1px solid rgb(148 163 184 / 0.28);
+  border-radius: 10px;
+  padding: 0.6rem;
+  background: rgb(15 23 42 / 0.94);
+  box-shadow: 0 12px 34px rgb(2 6 23 / 0.45);
+  opacity: 0;
+  transform: translateY(10px) scale(0.92);
+  transform-origin: bottom right;
+  pointer-events: none;
+}
+
+.fabMenuOpen {
+  pointer-events: auto;
+}
+
+.fabMenu a {
+  display: block;
+  padding: 0.22rem 0.1rem;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 768px) {
+  .fabArea {
+    right: 0.75rem;
+    bottom: 0.75rem;
+  }
+
+  .fabButton {
+    padding: 0.58rem 0.88rem;
+    font-size: 0.9rem;
+  }
+
+  .fabMenu {
+    min-width: 120px;
+    padding: 0.52rem;
+    border-radius: 12px;
+  }
+
+  .fabMenu a {
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .page {
+    scroll-behavior: auto;
+  }
+
   .sideTyping {
     width: 100%;
     border-right: 0;
     animation: none;
+  }
+
+  .fabMenu {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
   }
 }

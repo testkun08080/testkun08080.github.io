@@ -13,7 +13,7 @@ const HERO_BARCODE = {
     max: "1.23rem",
   },
   letterSpacing: "0.02em",
-  fill: "#7f1d1d",
+  fill: "var(--color-anime-barcode)",
 } as const;
 
 function usePrefersReducedMotion() {

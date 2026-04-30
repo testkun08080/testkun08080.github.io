@@ -1,6 +1,6 @@
 .page {
   min-height: 100dvh;
-  color: #09090b;
+  color: var(--color-anime-front-word);
 }
 
 .intro {
@@ -52,7 +52,7 @@
   font-size: clamp(1.05rem, 2.2vw, 2rem);
   font-weight: 800;
   font-style: italic;
-  color: #f8fafc;
+  color: var(--color-anime-bg-row);
   line-height: 1;
   opacity: 0;
   text-decoration: underline;
@@ -83,7 +83,7 @@
   justify-self: center;
   width: clamp(220px, 50vw, 640px);
   height: 7px;
-  background: #0b0b0b;
+  background: var(--color-anime-underline);
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }
@@ -115,7 +115,7 @@
 
 .sideText {
   margin: 0;
-  color: #ffffff;
+  color: var(--color-anime-side-text);
   font-style: italic;
   font-weight: 700;
   font-size: clamp(0.92rem, 1.43vw, 1.28rem);
@@ -131,7 +131,7 @@
 .sideTyping {
   display: inline-block;
   overflow: hidden;
-  border-right: 2px solid rgb(255 255 255 / 0.86);
+  border-right: 2px solid var(--color-anime-side-caret);
   white-space: nowrap;
   width: 0;
   animation:
@@ -160,7 +160,7 @@
 @keyframes caretBlink {
   0%,
   49% {
-    border-right-color: rgb(255 255 255 / 0.9);
+    border-right-color: var(--color-anime-side-caret);
   }
 
   50%,
