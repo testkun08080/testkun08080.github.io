@@ -12,7 +12,7 @@ const WORDS = [
 ] as const;
 
 const LINE_COUNT = 36;
-const START_OFFSET_VW = 26;
+const START_OFFSET_VW = 33;
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -66,9 +66,10 @@ export default function Page() {
         ease: "linear",
         autoplay: onScroll({
           target: track,
-          enter: "top top",
-          leave: "bottom bottom",
+          enter: "bottom top",
+          leave: "center top",
           sync: true,
+          debug: true,
         }),
       });
 
@@ -78,9 +79,10 @@ export default function Page() {
         ease: "linear",
         autoplay: onScroll({
           target: track,
-          enter: "top top",
-          leave: "bottom bottom",
+          enter: "bottom top",
+          leave: "center top",
           sync: true,
+          debug: true,
         }),
       });
 
