@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./DevBurstOverlayAnime.module.css";
 
 const FRONT_WORD = "konchiwa";
-const BG_ROW_TEXT = Array.from({ length: 18 })
+const BG_ROW_COUNT = 20;
+const BG_ROW_TEXT = Array.from({ length: 15 })
   .map(() => "hi there hello oi")
   .join(" ");
 
@@ -59,6 +60,7 @@ export default function Page() {
           translateX: [window.innerWidth * 0.45 * direction, 0],
           opacity: [0.15, 0.82],
           duration: 1000,
+          delay: i * 100,
           ease: "linear",
           autoplay: onScroll({
             enter: "bottom top",
@@ -85,7 +87,7 @@ export default function Page() {
         opacity: [1, 1],
         autoplay: onScroll({
           enter: "bottom top",
-          leave: "center bottom",
+          leave: "center top-=100",
           sync: true,
           // repeat: true,
           // debug: true,
@@ -121,7 +123,7 @@ export default function Page() {
 
       <section ref={triggerRef} className={styles.stage}>
         <div className={styles.bgLayer}>
-          {Array.from({ length: 28 }).map((_, i) => (
+          {Array.from({ length: BG_ROW_COUNT }).map((_, i) => (
             <p
               key={`row-${i}`}
               ref={(el) => {
