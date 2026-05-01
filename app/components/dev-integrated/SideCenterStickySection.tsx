@@ -1,10 +1,11 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "./SideCenterStickySection.module.css";
 
-const LINE_COUNT = 33;
+const LINE_COUNT_DESKTOP = 33;
+const LINE_COUNT_MOBILE = 33;
 const START_OFFSET_VW = 22;
 
 type SideCenterStickySectionProps = {
@@ -34,8 +35,22 @@ export function SideCenterStickySection({
   const sideTypingSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const aboutTypedCountRef = useRef(-1);
+  const [isMobileViewport, setIsMobileViewport] = useState(
+    () =>
+      typeof window !== "undefined"
+        ? window.matchMedia("(max-width: 640px)").matches
+        : false,
+  );
   // Hold typing animation instances for pause/resume
   const typingAnimsRef = useRef<ReturnType<typeof animate>[]>([]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 640px)");
+    setIsMobileViewport(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobileViewport(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     if (
@@ -52,6 +67,7 @@ export function SideCenterStickySection({
     const leftBlock = leftRef.current;
     const rightBlock = rightRef.current;
     const aboutEl = aboutTextRef.current;
+    const lineCount = isMobileViewport ? LINE_COUNT_MOBILE : LINE_COUNT_DESKTOP;
     aboutEl.textContent = "";
     aboutTypedCountRef.current = -1;
 
@@ -122,7 +138,7 @@ export function SideCenterStickySection({
         if (!span) return;
         const chars = (span.textContent?.length ?? 12) + 1;
         const baseDelay =
-          i < LINE_COUNT ? (i % 8) * 95 : ((i - LINE_COUNT) % 8) * 120;
+          i < lineCount ? (i % 8) * 95 : ((i - lineCount) % 8) * 120;
         const anim = animate(span, {
           width: ["0ch", `${chars}ch`],
           ease: "steps(14)",
@@ -160,7 +176,9 @@ export function SideCenterStickySection({
       typingAnimsRef.current = [];
       aboutTypedCountRef.current = -1;
     };
-  }, [aboutText, reduceMotion]);
+  }, [aboutText, isMobileViewport, reduceMotion]);
+
+  const lineCount = isMobileViewport ? LINE_COUNT_MOBILE : LINE_COUNT_DESKTOP;
 
   return (
     <section
@@ -183,7 +201,7 @@ export function SideCenterStickySection({
             ref={leftRef}
             className={`${styles.sideBlock} ${styles.leftBlock}`}
           >
-            {Array.from({ length: LINE_COUNT }).map((_, i) => (
+            {Array.from({ length: lineCount }).map((_, i) => (
               <p key={`l-${i}`} className={styles.sideText}>
                 <span
                   className={styles.sideTyping}
@@ -201,12 +219,12 @@ export function SideCenterStickySection({
             ref={rightRef}
             className={`${styles.sideBlock} ${styles.rightBlock}`}
           >
-            {Array.from({ length: LINE_COUNT }).map((_, i) => (
+            {Array.from({ length: lineCount }).map((_, i) => (
               <p key={`r-${i}`} className={styles.sideText}>
                 <span
                   className={styles.sideTyping}
                   ref={(el) => {
-                    sideTypingSpansRef.current[LINE_COUNT + i] = el;
+                    sideTypingSpansRef.current[lineCount + i] = el;
                   }}
                 >
                   {sideWords[i % sideWords.length]}
