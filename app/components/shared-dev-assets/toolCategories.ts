@@ -1,6 +1,7 @@
 export type ToolItem = {
   name: string;
   iconPath?: string;
+  iconEmoji?: string;
 };
 
 export type ToolCategory = {
@@ -16,18 +17,20 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     title: "Creative Tools (3D & Design)",
     role: "アセット制作、スカルプティング、テクスチャリング、デザイン",
     tools: [
-      { name: "Maya", iconPath: "/tool-icons/tool_maya.svg" },
-      { name: "Houdini", iconPath: "/tool-icons/tool_houdini.svg" },
-      { name: "Blender", iconPath: "/tool-icons/tool_blender.svg" },
-      { name: "ZBrush", iconPath: "/tool-icons/tool_zbrush.svg" },
-      { name: "Substance Painter", iconPath: "/tool-icons/tool_painter.svg" },
-      { name: "Substance Designer", iconPath: "/tool-icons/tool_designer.svg" },
-      { name: "Photoshop", iconPath: "/tool-icons/tool_ps.svg" },
-      { name: "Illustrator", iconPath: "/tool-icons/tool_ai.svg" },
-      { name: "After Effects", iconPath: "/tool-icons/tool_ae.svg" },
-      { name: "Premiere Pro", iconPath: "/tool-icons/tool_pr.svg" },
-      { name: "Adobe XD", iconPath: "/tool-icons/tool_xd.svg" },
-      { name: "Lightroom", iconPath: "/tool-icons/tool_lightroom.svg" },
+      { name: "Maya", iconPath: "/skills-icons/tool_maya.svg" },
+      { name: "Houdini", iconPath: "/skills-icons/tool_houdini.svg" },
+      { name: "Blender", iconPath: "/skills-icons/tool_blender.svg" },
+      { name: "ZBrush", iconPath: "/skills-icons/tool_zbrush.svg" },
+      { name: "Substance Painter", iconPath: "/skills-icons/tool_painter.svg" },
+      { name: "Substance Designer", iconPath: "/skills-icons/tool_designer.svg" },
+      { name: "Affinity", iconPath: "/skills-icons/tool_affinity.svg" },
+      { name: "Figma", iconPath: "/skills-icons/tool_figma.svg" },
+      { name: "After Effects", iconPath: "/skills-icons/tool_ae.svg" },
+      { name: "Premiere Pro", iconPath: "/skills-icons/tool_pr.svg" },
+      // { name: "Adobe XD", iconPath: "/skills-icons/tool_xd.svg" },
+      { name: "Photoshop", iconPath: "/skills-icons/tool_ps.svg" },
+      { name: "Illustrator", iconPath: "/skills-icons/tool_ai.svg" },
+      { name: "Lightroom", iconPath: "/skills-icons/tool_lightroom.svg" },
     ],
   },
   {
@@ -35,10 +38,10 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     title: "Graphics & Game Engines",
     role: "シェーダー開発、レンダリング最適化、ゲームロジック実装",
     tools: [
-      { name: "Unity", iconPath: "/tool-icons/tool_unity.svg" },
-      { name: "Unreal Engine", iconPath: "/tool-icons/tool_ue4.svg" },
-      { name: "OpenGL", iconPath: "/plang-icons/lang_opengl.svg" },
-      { name: "Maya Language", iconPath: "/plang-icons/lang_maya.svg" },
+      { name: "Unity", iconPath: "/skills-icons/tool_unity.svg" },
+      { name: "Unreal Engine", iconPath: "/skills-icons/tool_ue4.svg" },
+      { name: "OpenGL", iconPath: "/skills-icons/lang_opengl.svg" },
+      // { name: "Maya Language", iconPath: "/skills-icons/lang_maya.svg" },
     ],
   },
   {
@@ -46,11 +49,11 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     title: "Web & App Development",
     role: "フロントエンド開発、UI実装、Web向け機能開発",
     tools: [
-      { name: "React", iconPath: "/plang-icons/lang_react.svg" },
-      { name: "Flutter", iconPath: "/app-dev/mobile/icon_flutter.svg" },
+      { name: "React", iconPath: "/skills-icons/lang_react.svg" },
+      { name: "Flutter", iconPath: "/skills-icons/icon_flutter.svg" },
       {
         name: "Kotlin Multiplatform",
-        iconPath: "/app-dev/cross-platform/kotlin-multiplatform-icon.svg",
+        iconPath: "/skills-icons/kotlin-multiplatform-icon.svg",
       },
     ],
   },
@@ -61,11 +64,11 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     tools: [
       {
         name: "Cloudflare",
-        iconPath: "/platform-web/infrastructure/cloudflare-color.svg",
+        iconPath: "/skills-icons/cloudflare-color.svg",
       },
       {
         name: "Vercel",
-        iconPath: "/platform-web/hosting/vercel-logotype-light.png",
+        iconPath: "/skills-icons/vercel-logotype-light.png",
       },
     ],
   },
@@ -74,10 +77,10 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     title: "Development Operations (DevOps & Tools)",
     role: "バージョン管理、CI/CD、環境統一、チーム運用",
     tools: [
-      { name: "Git", iconPath: "/tool-icons/tool_git.svg" },
-      { name: "Docker", iconPath: "/tool-icons/tool_docker.svg" },
-      { name: "Jenkins", iconPath: "/tool-icons/tool_jenkins.svg" },
-      { name: "Perforce", iconPath: "/tool-icons/tool_p4.svg" },
+      { name: "Git", iconPath: "/skills-icons/tool_git.svg" },
+      { name: "Docker", iconPath: "/skills-icons/tool_docker.svg" },
+      { name: "Jenkins", iconPath: "/skills-icons/tool_jenkins.svg" },
+      { name: "Perforce", iconPath: "/skills-icons/tool_p4.svg" },
     ],
   },
   {
@@ -85,21 +88,22 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     title: "Programming-Languages",
     role: "実装、マークアップ、スタイリング、クエリ、シェーダー記述",
     tools: [
+      { name: "Python", iconPath: "/skills-icons/python.svg" },
+      { name: "HLSL", iconPath: "/skills-icons/lang_hlsl.svg" },
+      { name: "GLSL", iconPath: "/skills-icons/lang_glsl.svg" },
       {
         name: "TypeScript",
-        iconPath: "/software-tools/language/ts-logo-128.svg",
+        iconPath: "/skills-icons/ts-logo-128.svg",
       },
-      { name: "HTML", iconPath: "/plang-icons/lang_html.svg" },
-      { name: "CSS", iconPath: "/plang-icons/lang_css.svg" },
+      { name: "HTML", iconPath: "/skills-icons/lang_html.svg" },
+      { name: "CSS", iconPath: "/skills-icons/lang_css.svg" },
       {
         name: "SQL",
-        iconPath: "/software-tools/database/sql-database-with-logo.png",
+        iconPath: "/skills-icons/sql-database-with-logo.png",
       },
-      { name: "C", iconPath: "/plang-icons/lang_c.svg" },
-      { name: "C++", iconPath: "/plang-icons/lang_c++.svg" },
-      { name: "C#", iconPath: "/plang-icons/lang_csya.svg" },
-      { name: "Python", iconPath: "/plang-icons/python.svg" },
-      { name: "HLSL", iconPath: "/plang-icons/lang_hlsl.svg" },
+      { name: "C", iconPath: "/skills-icons/lang_c.svg" },
+      { name: "C++", iconPath: "/skills-icons/lang_c++.svg" },
+      { name: "C#", iconPath: "/skills-icons/lang_csya.svg" },
     ],
   },
   {
@@ -107,8 +111,8 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     title: "Languages",
     role: "コミュニケーション、仕様理解、ドキュメント対応",
     tools: [
-      { name: "日本語", iconPath: "/plang-icons/lang_japanese.svg" },
-      { name: "English", iconPath: "/plang-icons/lang_english.svg" },
+      { name: "日本語", iconEmoji: "🇯🇵" },
+      { name: "English", iconEmoji: "🇬🇧" },
     ],
   },
 ];

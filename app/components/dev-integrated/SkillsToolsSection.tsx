@@ -109,17 +109,19 @@ export function SkillsToolsSection({
 
     checkOverflow();
 
-    let resizeTimer = 0;
-    const onResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(checkOverflow, 150);
-    };
-    window.addEventListener("resize", onResize, { passive: true });
+    const resizeObserver = new ResizeObserver(() => {
+      checkOverflow();
+    });
+
+    TOOL_CATEGORIES.forEach((category) => {
+      const grid = gridRefs.current[category.id];
+      if (grid) resizeObserver.observe(grid);
+    });
+
     return () => {
-      clearTimeout(resizeTimer);
-      window.removeEventListener("resize", onResize);
+      resizeObserver.disconnect();
     };
-  }, [expandedMap]);
+  }, []);
 
   const toggleExpanded = (categoryId: string) => {
     setExpandedMap((prev) => ({
@@ -134,40 +136,62 @@ export function SkillsToolsSection({
         <section key={category.id} className={styles.iconSection}>
           <h2 className={styles.sectionTitle}>{category.title}</h2>
           <div
-            id={`tools-grid-${category.id}`}
-            ref={(node) => {
-              gridRefs.current[category.id] = node;
-            }}
-            className={`${styles.iconGrid} ${category.id === "languages" ? styles.iconGridLanguages : ""} ${
-              expandedMap[category.id] ? styles.iconGridExpanded : ""
-            } ${
+            className={`${styles.iconGridShell} ${
               overflowMap[category.id] && !expandedMap[category.id]
                 ? styles.iconGridFadeHint
                 : ""
             }`}
           >
-            {category.tools.map((tool) => (
-              <button
-                key={tool.name}
-                type="button"
-                data-tool-card
-                className={styles.iconCard}
-                aria-label={`${tool.name} icon`}
+            <div
+              id={`tools-grid-${category.id}`}
+              className={`${styles.iconGridViewport} ${
+                overflowMap[category.id] ? styles.iconGridViewportCollapsible : ""
+              } ${
+                overflowMap[category.id] && !expandedMap[category.id]
+                  ? styles.iconGridViewportCollapsed
+                  : ""
+              } ${
+                expandedMap[category.id] ? styles.iconGridViewportExpanded : ""
+              }`}
+            >
+              <div
+                ref={(node) => {
+                  gridRefs.current[category.id] = node;
+                }}
+                className={`${styles.iconGrid} ${category.id === "languages" ? styles.iconGridLanguages : ""}`}
               >
-                {tool.iconPath ? (
-                  <img
-                    src={tool.iconPath}
-                    alt={tool.name}
-                    className={styles.iconImage}
-                    loading="lazy"
-                    draggable={false}
-                  />
-                ) : (
-                  <span className={styles.fallbackBadge}>TEXT</span>
-                )}
-                <span className={styles.iconLabel}>{tool.name}</span>
-              </button>
-            ))}
+                {category.tools.map((tool) => (
+                  <button
+                    key={tool.name}
+                    type="button"
+                    data-tool-card
+                    className={styles.iconCard}
+                    aria-label={`${tool.name} icon`}
+                  >
+                    {tool.iconPath ? (
+                      <img
+                        src={tool.iconPath}
+                        alt={tool.name}
+                        className={styles.iconImage}
+                        loading="lazy"
+                        draggable={false}
+                      />
+                    ) : tool.iconEmoji ? (
+                      <span
+                        className={`${styles.fallbackBadge} ${styles.emojiBadge}`}
+                        role="img"
+                        aria-label={tool.name}
+                      >
+                        {tool.iconEmoji}
+                      </span>
+                    ) : (
+                      <span className={styles.fallbackBadge}>TEXT</span>
+                    )}
+                    <span className={styles.iconLabel}>{tool.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
           {overflowMap[category.id] ? (
             <div className={styles.expandArea}>

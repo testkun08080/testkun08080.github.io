@@ -81,9 +81,20 @@ export default function Page() {
     };
 
     checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => window.removeEventListener("resize", checkOverflow);
-  }, [expandedMap]);
+
+    const resizeObserver = new ResizeObserver(() => {
+      checkOverflow();
+    });
+
+    TOOL_CATEGORIES.forEach((category) => {
+      const grid = gridRefs.current[category.id];
+      if (grid) resizeObserver.observe(grid);
+    });
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   const toggleExpanded = (categoryId: string) => {
     setExpandedMap((prev) => ({
@@ -108,34 +119,54 @@ export default function Page() {
             <span className={styles.categoryLabel}>役割:</span> {category.role}
           </p>
           <div
-            id={`tools-grid-${category.id}`}
-            ref={(node) => {
-              gridRefs.current[category.id] = node;
-            }}
-            className={`${styles.iconGrid} ${expandedMap[category.id] ? styles.iconGridExpanded : ""}`}
+            className={`${styles.iconGridShell} ${
+              overflowMap[category.id] && !expandedMap[category.id] ? styles.iconGridFadeHint : ""
+            }`}
           >
-            {category.tools.map((tool) => (
-              <button
-                key={tool.name}
-                type="button"
-                data-tool-card
-                className={styles.iconCard}
-                aria-label={`${tool.name} icon`}
+            <div
+              id={`tools-grid-${category.id}`}
+              className={`${styles.iconGridViewport} ${
+                expandedMap[category.id] ? styles.iconGridViewportExpanded : ""
+              }`}
+            >
+              <div
+                ref={(node) => {
+                  gridRefs.current[category.id] = node;
+                }}
+                className={styles.iconGrid}
               >
-                {tool.iconPath ? (
-                  <img
-                    src={tool.iconPath}
-                    alt={tool.name}
-                    className={styles.iconImage}
-                    loading="lazy"
-                    draggable={false}
-                  />
-                ) : (
-                  <span className={styles.fallbackBadge}>TEXT</span>
-                )}
-                <span className={styles.iconLabel}>{tool.name}</span>
-              </button>
-            ))}
+                {category.tools.map((tool) => (
+                  <button
+                    key={tool.name}
+                    type="button"
+                    data-tool-card
+                    className={styles.iconCard}
+                    aria-label={`${tool.name} icon`}
+                  >
+                    {tool.iconPath ? (
+                      <img
+                        src={tool.iconPath}
+                        alt={tool.name}
+                        className={styles.iconImage}
+                        loading="lazy"
+                        draggable={false}
+                      />
+                    ) : tool.iconEmoji ? (
+                      <span
+                        className={`${styles.fallbackBadge} ${styles.emojiBadge}`}
+                        role="img"
+                        aria-label={tool.name}
+                      >
+                        {tool.iconEmoji}
+                      </span>
+                    ) : (
+                      <span className={styles.fallbackBadge}>TEXT</span>
+                    )}
+                    <span className={styles.iconLabel}>{tool.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
           {overflowMap[category.id] ? (
             <div className={styles.expandArea}>

@@ -19,7 +19,7 @@ const HERO_BARCODE = {
 
 // Fewer characters on mobile to reduce DOM node count (209 → 95)
 const TEXT_REPEAT_DESKTOP = 11;
-const TEXT_REPEAT_MOBILE = 5;
+const TEXT_REPEAT_MOBILE = 8;
 
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
