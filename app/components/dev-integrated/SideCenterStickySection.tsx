@@ -4,8 +4,7 @@ import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "./SideCenterStickySection.module.css";
 
-const LINE_COUNT_DESKTOP = 33;
-const LINE_COUNT_MOBILE = 33;
+const INITIAL_LINE_COUNT = 33;
 const START_OFFSET_VW = 22;
 
 type SideCenterStickySectionProps = {
@@ -29,6 +28,7 @@ export function SideCenterStickySection({
   const reduceMotion = usePrefersReducedMotion();
   const rootRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLElement>(null);
+  const stickyFrameRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const aboutTextRef = useRef<HTMLParagraphElement>(null);
@@ -41,6 +41,7 @@ export function SideCenterStickySection({
         ? window.matchMedia("(max-width: 640px)").matches
         : false,
   );
+  const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
   // Hold typing animation instances for pause/resume
   const typingAnimsRef = useRef<ReturnType<typeof animate>[]>([]);
 
@@ -51,6 +52,42 @@ export function SideCenterStickySection({
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
+
+  useEffect(() => {
+    let rafId = 0;
+    const updateLineCount = () => {
+      const stickyFrame = stickyFrameRef.current;
+      const leftBlock = leftRef.current;
+      if (!stickyFrame || !leftBlock) return;
+      const sampleRow = leftBlock.querySelector(`.${styles.sideText}`) as HTMLParagraphElement | null;
+      const sampleHeight = sampleRow?.getBoundingClientRect().height ?? 0;
+      if (sampleHeight <= 0) return;
+      const blockStyles = window.getComputedStyle(leftBlock);
+      const gap = Number.parseFloat(blockStyles.rowGap || blockStyles.gap || "0") || 0;
+      const rowPitch = sampleHeight + gap;
+      const frameHeight = stickyFrame.getBoundingClientRect().height || window.innerHeight;
+      const buffer = isMobileViewport ? 2 : 1;
+      const minRows = isMobileViewport ? 34 : 24;
+      const maxRows = isMobileViewport ? 56 : 44;
+      const desired = Math.ceil(frameHeight / rowPitch) + buffer;
+      const nextCount = Math.min(maxRows, Math.max(minRows, desired));
+      setLineCount((prev) => (prev === nextCount ? prev : nextCount));
+    };
+
+    const scheduleUpdate = () => {
+      cancelAnimationFrame(rafId);
+      rafId = window.requestAnimationFrame(updateLineCount);
+    };
+
+    scheduleUpdate();
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("orientationchange", scheduleUpdate);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("orientationchange", scheduleUpdate);
+    };
+  }, [isMobileViewport]);
 
   useEffect(() => {
     if (
@@ -67,9 +104,9 @@ export function SideCenterStickySection({
     const leftBlock = leftRef.current;
     const rightBlock = rightRef.current;
     const aboutEl = aboutTextRef.current;
-    const lineCount = isMobileViewport ? LINE_COUNT_MOBILE : LINE_COUNT_DESKTOP;
     aboutEl.textContent = "";
     aboutTypedCountRef.current = -1;
+    sideTypingSpansRef.current = sideTypingSpansRef.current.slice(0, lineCount * 2);
 
     const setAboutTypedByProgress = (progress: unknown) => {
       if (typeof progress !== "number") return;
@@ -176,9 +213,7 @@ export function SideCenterStickySection({
       typingAnimsRef.current = [];
       aboutTypedCountRef.current = -1;
     };
-  }, [aboutText, isMobileViewport, reduceMotion]);
-
-  const lineCount = isMobileViewport ? LINE_COUNT_MOBILE : LINE_COUNT_DESKTOP;
+  }, [aboutText, lineCount, reduceMotion]);
 
   return (
     <section
@@ -187,7 +222,7 @@ export function SideCenterStickySection({
       aria-label="Side center sticky"
     >
       <section ref={trackRef} className={styles.track}>
-        <div className={styles.stickyFrame}>
+        <div ref={stickyFrameRef} className={styles.stickyFrame}>
           <div className={styles.centerArea}>
             <ScrollTypingHeading
               text={aboutHeading}

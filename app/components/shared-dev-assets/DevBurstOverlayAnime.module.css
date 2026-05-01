@@ -66,6 +66,12 @@
   will-change: transform, opacity;
 }
 
+.measureRow {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .frontLayer {
   position: sticky;
   top: 0;
