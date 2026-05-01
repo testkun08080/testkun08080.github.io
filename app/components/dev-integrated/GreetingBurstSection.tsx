@@ -1,10 +1,10 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
 
-const BG_ROW_COUNT = 22;
+const INITIAL_BG_ROW_COUNT = 14;
 
 type GreetingBurstSectionProps = {
   frontWord?: string;
@@ -19,13 +19,53 @@ export function GreetingBurstSection({
   const rootRef = useRef<HTMLElement>(null);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const triggerRef = useRef<HTMLElement>(null);
+  const bgLayerRef = useRef<HTMLDivElement>(null);
+  const measureRowRef = useRef<HTMLParagraphElement>(null);
   const bgRowsRef = useRef<(HTMLParagraphElement | null)[]>([]);
+  const [bgRowCount, setBgRowCount] = useState(INITIAL_BG_ROW_COUNT);
+
+  useEffect(() => {
+    let rafId = 0;
+    const updateBgRowCount = () => {
+      if (typeof window === "undefined") return;
+      const measuredRow = measureRowRef.current;
+      const bgLayer = bgLayerRef.current;
+      if (!measuredRow || !bgLayer) return;
+      const rowHeight = measuredRow.getBoundingClientRect().height;
+      if (rowHeight <= 0) return;
+      const layerStyles = window.getComputedStyle(bgLayer);
+      const rowGap = Number.parseFloat(layerStyles.rowGap || "0") || 0;
+      const rowPitch = rowHeight + rowGap;
+      const isMobile = window.matchMedia("(max-width: 640px)").matches;
+      const minRows = isMobile ? 10 : 12;
+      const maxRows = isMobile ? 16 : 24;
+      const buffer = isMobile ? 1 : 2;
+      const viewportHeight = window.innerHeight;
+      const desired = Math.ceil(viewportHeight / rowPitch) + buffer;
+      const nextCount = Math.min(maxRows, Math.max(minRows, desired));
+      setBgRowCount((prev) => (prev === nextCount ? prev : nextCount));
+    };
+
+    const scheduleUpdate = () => {
+      cancelAnimationFrame(rafId);
+      rafId = window.requestAnimationFrame(updateBgRowCount);
+    };
+
+    scheduleUpdate();
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("orientationchange", scheduleUpdate);
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("orientationchange", scheduleUpdate);
+    };
+  }, []);
 
   useEffect(() => {
     if (!rootRef.current) return;
 
     const triggerEl = triggerRef.current;
-    const rows = bgRowsRef.current.filter(Boolean) as HTMLParagraphElement[];
+    const rows = bgRowsRef.current.slice(0, bgRowCount).filter(Boolean) as HTMLParagraphElement[];
     if (!triggerEl || rows.length === 0) return;
 
     if (reduceMotion) {
@@ -59,13 +99,16 @@ export function GreetingBurstSection({
       scopeRef.current?.revert();
       scopeRef.current = null;
     };
-  }, [reduceMotion]);
+  }, [bgRowCount, reduceMotion]);
 
   return (
     <main ref={rootRef} className={styles.page}>
       <section ref={triggerRef} className={styles.stage}>
-        <div className={styles.bgLayer}>
-          {Array.from({ length: BG_ROW_COUNT }).map((_, i) => (
+        <div ref={bgLayerRef} className={styles.bgLayer}>
+          <p ref={measureRowRef} className={`${styles.bgRow} ${styles.measureRow}`} aria-hidden>
+            {bgRowText}
+          </p>
+          {Array.from({ length: bgRowCount }).map((_, i) => (
             <p
               key={`row-${i}`}
               ref={(el) => {
