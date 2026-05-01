@@ -4,7 +4,7 @@ export function Head() {
   const description =
     "Testkun's portfolio site. Showcasing shader development, LookDev, and creative web projects bridging technology and art.";
   const siteUrl = "https://testkun08080.github.io";
-  const ogImage = `${siteUrl}/utils/thumb.png`;
+  const ogImage = `${siteUrl}/utils/thumb.webp`;
 
   return (
     <>
@@ -13,9 +13,26 @@ export function Head() {
       <meta name="robots" content="index,follow" />
       <link rel="canonical" href={siteUrl} />
 
-      <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+      <link rel="icon" href="/utils/thumb.webp" type="image/webp" />
+      <link rel="icon" href="/utils/thumb.png" type="image/png" />
+      <link rel="apple-touch-icon" href="/utils/thumb.png" />
       <meta name="theme-color" content="#0f172a" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+      <script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-EY0MWFVRQB"
+      />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-EY0MWFVRQB');
+          `,
+        }}
+      />
 
       {/* Google Fonts: preconnect first, then stylesheet — avoids blocking @import in CSS */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
