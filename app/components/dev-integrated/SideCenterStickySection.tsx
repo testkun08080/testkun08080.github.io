@@ -43,7 +43,6 @@ export function SideCenterStickySection({
   );
   // Hold typing animation instances for pause/resume
   const typingAnimsRef = useRef<ReturnType<typeof animate>[]>([]);
-  const progressLoggedRef = useRef(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 640px)");
@@ -71,32 +70,6 @@ export function SideCenterStickySection({
     const lineCount = isMobileViewport ? LINE_COUNT_MOBILE : LINE_COUNT_DESKTOP;
     aboutEl.textContent = "";
     aboutTypedCountRef.current = -1;
-    progressLoggedRef.current = false;
-
-    // #region agent log
-    fetch("http://127.0.0.1:7935/ingest/62717cfa-0848-4f80-be4f-ac448c9e6877", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Debug-Session-Id": "09b2bb",
-      },
-      body: JSON.stringify({
-        sessionId: "09b2bb",
-        runId: "pre-fix",
-        hypothesisId: "H1",
-        location: "SideCenterStickySection.tsx:effect-entry",
-        message: "mobile flags and viewport snapshot",
-        data: {
-          isMobileViewport,
-          innerWidth: window.innerWidth,
-          match640: window.matchMedia("(max-width: 640px)").matches,
-          lineCount,
-          reduceMotion,
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
 
     const setAboutTypedByProgress = (progress: unknown) => {
       if (typeof progress !== "number") return;
@@ -119,74 +92,6 @@ export function SideCenterStickySection({
       return;
     }
 
-    // #region agent log
-    requestAnimationFrame(() => {
-      const center = rootRef.current?.querySelector(`.${styles.centerArea}`) as
-        | HTMLElement
-        | null;
-      const sticky = rootRef.current?.querySelector(`.${styles.stickyFrame}`) as
-        | HTMLElement
-        | null;
-      const centerRect = center?.getBoundingClientRect();
-      const aboutRect = aboutEl.getBoundingClientRect();
-      const leftRect = leftBlock.getBoundingClientRect();
-      const rightRect = rightBlock.getBoundingClientRect();
-      const probeX = aboutRect.left + aboutRect.width / 2;
-      const probeY = aboutRect.top + aboutRect.height / 2;
-      const topEl = document.elementFromPoint(probeX, probeY);
-      fetch("http://127.0.0.1:7935/ingest/62717cfa-0848-4f80-be4f-ac448c9e6877", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Debug-Session-Id": "09b2bb",
-        },
-        body: JSON.stringify({
-          sessionId: "09b2bb",
-          runId: "pre-fix",
-          hypothesisId: "H2",
-          location: "SideCenterStickySection.tsx:layout-snapshot",
-          message: "computed layout and stacking snapshot",
-          data: {
-            centerZ: center ? getComputedStyle(center).zIndex : null,
-            leftZ: getComputedStyle(leftBlock).zIndex,
-            rightZ: getComputedStyle(rightBlock).zIndex,
-            aboutRect: {
-              top: aboutRect.top,
-              left: aboutRect.left,
-              width: aboutRect.width,
-              height: aboutRect.height,
-            },
-            leftRect: {
-              top: leftRect.top,
-              left: leftRect.left,
-              width: leftRect.width,
-              height: leftRect.height,
-            },
-            rightRect: {
-              top: rightRect.top,
-              left: rightRect.left,
-              width: rightRect.width,
-              height: rightRect.height,
-            },
-            stickyHeight: sticky?.getBoundingClientRect().height ?? null,
-            trackMinHeight: getComputedStyle(track).minHeight,
-            probeTopElement: topEl
-              ? {
-                  tagName: topEl.tagName,
-                  className: topEl.className,
-                }
-              : null,
-            probePoint: {
-              x: probeX,
-              y: probeY,
-            },
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-    });
-    // #endregion
-
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
       animate(aboutEl, {
         opacity: [0.26, 1],
@@ -200,38 +105,6 @@ export function SideCenterStickySection({
           onUpdate: (self) => {
             const observer = self as { progress?: number };
             setAboutTypedByProgress(observer.progress);
-            if (
-              typeof observer.progress === "number" &&
-              observer.progress > 0.48 &&
-              observer.progress < 0.52 &&
-              !progressLoggedRef.current
-            ) {
-              progressLoggedRef.current = true;
-              // #region agent log
-              fetch(
-                "http://127.0.0.1:7935/ingest/62717cfa-0848-4f80-be4f-ac448c9e6877",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    "X-Debug-Session-Id": "09b2bb",
-                  },
-                  body: JSON.stringify({
-                    sessionId: "09b2bb",
-                    runId: "pre-fix",
-                    hypothesisId: "H3",
-                    location: "SideCenterStickySection.tsx:on-scroll-midpoint",
-                    message: "scroll progress midpoint reached",
-                    data: {
-                      progress: observer.progress,
-                      aboutCharsShown: aboutEl.textContent?.length ?? 0,
-                    },
-                    timestamp: Date.now(),
-                  }),
-                },
-              ).catch(() => {});
-              // #endregion
-            }
           },
         }),
       });
@@ -283,27 +156,6 @@ export function SideCenterStickySection({
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          // #region agent log
-          fetch("http://127.0.0.1:7935/ingest/62717cfa-0848-4f80-be4f-ac448c9e6877", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Debug-Session-Id": "09b2bb",
-            },
-            body: JSON.stringify({
-              sessionId: "09b2bb",
-              runId: "pre-fix",
-              hypothesisId: "H4",
-              location: "SideCenterStickySection.tsx:intersection",
-              message: "section intersection state",
-              data: {
-                isIntersecting: entry.isIntersecting,
-                intersectionRatio: entry.intersectionRatio,
-              },
-              timestamp: Date.now(),
-            }),
-          }).catch(() => {});
-          // #endregion
           for (const anim of typingAnimsRef.current) {
             if (entry.isIntersecting) {
               anim.play();
