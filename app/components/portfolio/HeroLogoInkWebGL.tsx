@@ -78,8 +78,11 @@ void main() {
 
 const MAX_INSTANCES = 12;
 
-const FRAGMENT_SHADER = `
+function buildFragmentShader(opts: { fbmIters: number; blurSamples: 4 | 8 | 12 }) {
+  return `
 #define MAX_INSTANCES ${MAX_INSTANCES}
+#define FBM_ITERS ${opts.fbmIters}
+#define BLUR_SAMPLES ${opts.blurSamples}
 precision highp float;
 
 varying vec2 v_uv;
@@ -149,7 +152,7 @@ float vnoise(vec2 p) {
 float fbm(vec2 p) {
   float v = 0.0;
   float a = 0.5;
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < FBM_ITERS; i++) {
     v += a * vnoise(p);
     p = p * 2.03 + vec2(13.1, 7.7);
     a *= 0.5;
@@ -238,15 +241,19 @@ void main() {
     blurA += sampleLogoAlpha(dluv + vec2(-br,    0.0));
     blurA += sampleLogoAlpha(dluv + vec2( 0.0,   br));
     blurA += sampleLogoAlpha(dluv + vec2( 0.0,  -br));
+#if BLUR_SAMPLES >= 8
     blurA += sampleLogoAlpha(dluv + vec2( br*0.7,  br*0.7));
     blurA += sampleLogoAlpha(dluv + vec2(-br*0.7,  br*0.7));
     blurA += sampleLogoAlpha(dluv + vec2( br*0.7, -br*0.7));
     blurA += sampleLogoAlpha(dluv + vec2(-br*0.7, -br*0.7));
+#endif
+#if BLUR_SAMPLES >= 12
     blurA += sampleLogoAlpha(dluv + vec2( br*1.6,  0.0));
     blurA += sampleLogoAlpha(dluv + vec2(-br*1.6,  0.0));
     blurA += sampleLogoAlpha(dluv + vec2( 0.0,   br*1.6));
     blurA += sampleLogoAlpha(dluv + vec2( 0.0,  -br*1.6));
-    blurA *= 1.0 / 12.0;
+#endif
+    blurA *= 1.0 / float(BLUR_SAMPLES);
     blurA = mix(blurA, logoA, 0.15);
 
     // ink fbm inside the mask
@@ -276,6 +283,7 @@ void main() {
   gl_FragColor = vec4(col, alpha);
 }
 `;
+}
 
 function hexToVec3(hex: string): [number, number, number] {
   const c = new Color(hex);
@@ -482,9 +490,13 @@ export function HeroLogoInkWebGL({
       u_edgeInkMix: { value: edgeInkMix },
     };
 
+    const mobileForShader = isMobileDevice();
     const material = new ShaderMaterial({
       vertexShader: VERTEX_SHADER,
-      fragmentShader: FRAGMENT_SHADER,
+      fragmentShader: buildFragmentShader({
+        fbmIters: mobileForShader ? 3 : 5,
+        blurSamples: mobileForShader ? 4 : 12,
+      }),
       uniforms,
     });
     const geometry = new PlaneGeometry(2, 2);
@@ -530,9 +542,9 @@ export function HeroLogoInkWebGL({
     img.onerror = () => {};
     img.src = logoUrl;
 
-    // Cap DPR at 1.5 on mobile to reduce GPU load significantly
+    // Mobile は DPR=1.0 まで下げて GPU 負荷を大幅に抑える
     const mobile = isMobileDevice();
-    const maxDpr = mobile ? 1.5 : 2;
+    const maxDpr = mobile ? 1.0 : 2;
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
@@ -656,18 +668,37 @@ export function HeroLogoInkWebGL({
       rafId = window.requestAnimationFrame(draw);
     };
 
-    const handleVisibility = () => {
-      if (document.hidden) {
-        if (rafId) window.cancelAnimationFrame(rafId);
-        rafId = 0;
-      } else if (!rafId) {
+    let inView = true;
+    let docVisible = !document.hidden;
+    const updateRafState = () => {
+      const shouldRun = inView && docVisible;
+      if (shouldRun && !rafId) {
         lastNow = performance.now();
         rafId = window.requestAnimationFrame(draw);
+      } else if (!shouldRun && rafId) {
+        window.cancelAnimationFrame(rafId);
+        rafId = 0;
       }
+    };
+    const handleVisibility = () => {
+      docVisible = !document.hidden;
+      updateRafState();
     };
 
     rafId = window.requestAnimationFrame(draw);
     document.addEventListener("visibilitychange", handleVisibility);
+
+    // 画面外では RAF を完全停止
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          inView = entry.isIntersecting;
+        }
+        updateRafState();
+      },
+      { threshold: 0 },
+    );
+    io.observe(canvas);
 
     // resize only on actual size changes, not every frame
     const ro = new ResizeObserver(() => resize());
@@ -680,6 +711,7 @@ export function HeroLogoInkWebGL({
       document.removeEventListener("visibilitychange", handleVisibility);
       target.removeEventListener("pointermove", onPointerMove);
       canvas.removeEventListener("pointerleave", onPointerLeave);
+      io.disconnect();
       ro.disconnect();
       scene.remove(mesh);
       geometry.dispose();

@@ -1,10 +1,13 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
 
-const BG_ROW_COUNT = 22;
+const BG_ROW_COUNT_DESKTOP = 22;
+const BG_ROW_COUNT_MOBILE = 10;
+const TEXT_REPEAT_DESKTOP = 15;
+const TEXT_REPEAT_MOBILE = 6;
 
 type GreetingBurstSectionProps = {
   frontWord?: string;
@@ -20,6 +23,16 @@ export function GreetingBurstSection({
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const triggerRef = useRef<HTMLElement>(null);
   const bgRowsRef = useRef<(HTMLParagraphElement | null)[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  const rowCount = isMobile ? BG_ROW_COUNT_MOBILE : BG_ROW_COUNT_DESKTOP;
+  const textRepeat = isMobile ? TEXT_REPEAT_MOBILE : TEXT_REPEAT_DESKTOP;
 
   useEffect(() => {
     if (!rootRef.current) return;
@@ -59,13 +72,13 @@ export function GreetingBurstSection({
       scopeRef.current?.revert();
       scopeRef.current = null;
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, rowCount]);
 
   return (
     <main ref={rootRef} className={styles.page}>
       <section ref={triggerRef} className={styles.stage}>
         <div className={styles.bgLayer}>
-          {Array.from({ length: BG_ROW_COUNT }).map((_, i) => (
+          {Array.from({ length: rowCount }).map((_, i) => (
             <p
               key={`row-${i}`}
               ref={(el) => {
@@ -73,7 +86,7 @@ export function GreetingBurstSection({
               }}
               className={styles.bgRow}
             >
-              {Array.from({ length: 15 })
+              {Array.from({ length: textRepeat })
                 .map(() => bgRowText)
                 .join(" ")}
             </p>

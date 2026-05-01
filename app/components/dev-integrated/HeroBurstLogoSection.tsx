@@ -58,6 +58,7 @@ export function HeroBurstLogoSection() {
     }
 
     let rafId = 0;
+    let inView = true;
     const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
     const updateByScroll = () => {
       const rect = stage.getBoundingClientRect();
@@ -67,7 +68,8 @@ export function HeroBurstLogoSection() {
       const opacity = 1 - progressed;
       barcodeFrame.style.transform = `scale(${scale})`;
       barcodeFrame.style.opacity = String(opacity);
-      if (Math.abs(progressed - progressRef.current) < 0.01) return;
+      // setState はそこそこ粗い閾値で抑える（再レンダ削減）
+      if (Math.abs(progressed - progressRef.current) < 0.04) return;
       progressRef.current = progressed;
       setScrollLogoBoost(progressed * 0.16);
       setScrollProgress(progressed);
@@ -75,23 +77,36 @@ export function HeroBurstLogoSection() {
 
     let resizeTimer = 0;
     const onScroll = () => {
+      if (!inView) return;
       cancelAnimationFrame(rafId);
       rafId = window.requestAnimationFrame(updateByScroll);
     };
     const onResize = () => {
       clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(onScroll, 150);
+      resizeTimer = window.setTimeout(updateByScroll, 150);
     };
 
     updateByScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
 
+    // hero が画面外のときは scroll を無視
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          inView = entry.isIntersecting;
+        }
+      },
+      { threshold: 0, rootMargin: "20% 0px" },
+    );
+    io.observe(stage);
+
     return () => {
       cancelAnimationFrame(rafId);
       clearTimeout(resizeTimer);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      io.disconnect();
       progressRef.current = 0;
       setScrollLogoBoost(0);
       setScrollProgress(0);

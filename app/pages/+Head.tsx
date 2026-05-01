@@ -34,12 +34,13 @@ export function Head() {
         }}
       />
 
-      {/* Google Fonts: preconnect first, then stylesheet — avoids blocking @import in CSS */}
+      {/* Google Fonts: preconnect first, then stylesheet — avoids blocking @import in CSS.
+          Mobile を含む初回ロード軽量化のため weight を 400/700 に絞る（500 はシステムへ fallback）。 */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap"
       />
 
       <meta property="og:type" content="website" />

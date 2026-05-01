@@ -1,10 +1,11 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "./SideCenterStickySection.module.css";
 
-const LINE_COUNT = 33;
+const LINE_COUNT_DESKTOP = 33;
+const LINE_COUNT_MOBILE = 14;
 const START_OFFSET_VW = 22;
 
 type SideCenterStickySectionProps = {
@@ -26,6 +27,15 @@ export function SideCenterStickySection({
   ],
 }: SideCenterStickySectionProps) {
   const reduceMotion = usePrefersReducedMotion();
+  const [lineCount, setLineCount] = useState<number>(LINE_COUNT_DESKTOP);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const apply = () =>
+      setLineCount(mq.matches ? LINE_COUNT_MOBILE : LINE_COUNT_DESKTOP);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
   const rootRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
@@ -122,7 +132,7 @@ export function SideCenterStickySection({
         if (!span) return;
         const chars = (span.textContent?.length ?? 12) + 1;
         const baseDelay =
-          i < LINE_COUNT ? (i % 8) * 95 : ((i - LINE_COUNT) % 8) * 120;
+          i < lineCount ? (i % 8) * 95 : ((i - lineCount) % 8) * 120;
         const anim = animate(span, {
           width: ["0ch", `${chars}ch`],
           ease: "steps(14)",
@@ -160,7 +170,7 @@ export function SideCenterStickySection({
       typingAnimsRef.current = [];
       aboutTypedCountRef.current = -1;
     };
-  }, [aboutText, reduceMotion]);
+  }, [aboutText, reduceMotion, lineCount]);
 
   return (
     <section
@@ -183,7 +193,7 @@ export function SideCenterStickySection({
             ref={leftRef}
             className={`${styles.sideBlock} ${styles.leftBlock}`}
           >
-            {Array.from({ length: LINE_COUNT }).map((_, i) => (
+            {Array.from({ length: lineCount }).map((_, i) => (
               <p key={`l-${i}`} className={styles.sideText}>
                 <span
                   className={styles.sideTyping}
@@ -201,12 +211,12 @@ export function SideCenterStickySection({
             ref={rightRef}
             className={`${styles.sideBlock} ${styles.rightBlock}`}
           >
-            {Array.from({ length: LINE_COUNT }).map((_, i) => (
+            {Array.from({ length: lineCount }).map((_, i) => (
               <p key={`r-${i}`} className={styles.sideText}>
                 <span
                   className={styles.sideTyping}
                   ref={(el) => {
-                    sideTypingSpansRef.current[LINE_COUNT + i] = el;
+                    sideTypingSpansRef.current[lineCount + i] = el;
                   }}
                 >
                   {sideWords[i % sideWords.length]}

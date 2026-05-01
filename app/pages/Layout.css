@@ -50,6 +50,16 @@ html,
 body {
   margin: 0;
   min-height: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+@supports not (overflow-x: clip) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
 }
 
 body {
