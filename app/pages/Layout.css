@@ -50,6 +50,7 @@ html,
 body {
   margin: 0;
   min-height: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -102,6 +103,11 @@ body.page-transition #page-content {
   animation: app2-grain-pan 7s steps(12) infinite;
 }
 
+.noise-canvas-layer {
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+}
+
 @keyframes app2-grain-pan {
 
   0%,
@@ -142,6 +148,11 @@ body.page-transition #page-content {
 @media (max-width: 768px) {
   .noise-tile-layer {
     display: none;
+  }
+
+  .noise-canvas-layer {
+    opacity: 0.06;
+    mix-blend-mode: soft-light;
   }
 }
 

@@ -533,7 +533,6 @@ export function HeroLogoInkWebGL({
     // Cap DPR at 1.5 on mobile to reduce GPU load significantly
     const mobile = isMobileDevice();
     const maxDpr = mobile ? 1.5 : 2;
-
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
       const w = Math.max(1, canvas.clientWidth);
