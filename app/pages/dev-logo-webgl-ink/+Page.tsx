@@ -1,4 +1,3 @@
-import { useReducedMotion } from "motion/react";
 import { Leva, folder, useControls } from "leva";
 import { useEffect, useState } from "react";
 import {
@@ -8,9 +7,18 @@ import {
 import styles from "./DevLogoWebglInk.module.css";
 
 export default function Page() {
-  const reduceMotion = useReducedMotion() ?? false;
+  const [reduceMotion, setReduceMotion] = useState(false);
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    setMounted(true);
+
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleChange = () => setReduceMotion(media.matches);
+    handleChange();
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
+  }, []);
 
   const controls = useControls("Logo Ink", {
     Background: folder({
