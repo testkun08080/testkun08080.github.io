@@ -56,6 +56,21 @@ export function SkillsToolsSection({
       alternate: true,
     });
 
+    // Pause drift animation when section scrolls out of view
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            drift.play();
+          } else {
+            drift.pause();
+          }
+        }
+      },
+      { threshold: 0 },
+    );
+    io.observe(page);
+
     const pointerCleanups = cards.map((card) => {
       const handlePointerDown = () => {
         animate(card, {
@@ -70,6 +85,7 @@ export function SkillsToolsSection({
     });
 
     return () => {
+      io.disconnect();
       reveal.revert();
       drift.revert();
       pointerCleanups.forEach((cleanup) => cleanup());
@@ -92,8 +108,17 @@ export function SkillsToolsSection({
     };
 
     checkOverflow();
-    window.addEventListener("resize", checkOverflow);
-    return () => window.removeEventListener("resize", checkOverflow);
+
+    let resizeTimer = 0;
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(checkOverflow, 150);
+    };
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", onResize);
+    };
   }, [expandedMap]);
 
   const toggleExpanded = (categoryId: string) => {
@@ -108,9 +133,6 @@ export function SkillsToolsSection({
       {TOOL_CATEGORIES.map((category) => (
         <section key={category.id} className={styles.iconSection}>
           <h2 className={styles.sectionTitle}>{category.title}</h2>
-          {/* <p className={styles.categoryRole}>
-            <span className={styles.categoryLabel}>Role:</span> {category.role}
-          </p> */}
           <div
             id={`tools-grid-${category.id}`}
             ref={(node) => {

@@ -22,7 +22,7 @@
   background: var(--surface-card-reel);
   box-shadow: 0 12px 28px -24px rgb(15 23 42 / 0.55);
   transform: translate3d(-10px, 6px, 0) rotate(-0.85deg);
-  will-change: opacity;
+  will-change: transform, opacity;
 }
 
 @media (max-width: 768px) {

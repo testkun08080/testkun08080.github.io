@@ -1,5 +1,6 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
 
@@ -9,21 +10,6 @@ type GreetingBurstSectionProps = {
   frontWord?: string;
   bgRowText?: string;
 };
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !("matchMedia" in window)) return;
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduced(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  return reduced;
-}
 
 export function GreetingBurstSection({
   frontWord = "konchiwa",

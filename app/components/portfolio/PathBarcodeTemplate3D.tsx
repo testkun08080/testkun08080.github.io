@@ -1,5 +1,5 @@
 import { animate, createTimeline, stagger } from "animejs";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const DEFAULT_BARCODE_UNIT = "*0123456789ABCDEF*";
 
@@ -47,7 +47,7 @@ export function PathBarcodeTemplate3D({
   const chars = Array.from(textUnit.repeat(textRepeat));
   const play = !paused;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const svg = svgRef.current;
     const path = pathRef.current;
     const itemsLayer = itemsLayerRef.current;
