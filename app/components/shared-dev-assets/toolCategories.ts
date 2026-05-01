@@ -22,7 +22,10 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
       { name: "Blender", iconPath: "/skills-icons/tool_blender.svg" },
       { name: "ZBrush", iconPath: "/skills-icons/tool_zbrush.svg" },
       { name: "Substance Painter", iconPath: "/skills-icons/tool_painter.svg" },
-      { name: "Substance Designer", iconPath: "/skills-icons/tool_designer.svg" },
+      {
+        name: "Substance Designer",
+        iconPath: "/skills-icons/tool_designer.svg",
+      },
       { name: "Affinity", iconPath: "/skills-icons/tool_affinity.svg" },
       { name: "Figma", iconPath: "/skills-icons/tool_figma.svg" },
       { name: "After Effects", iconPath: "/skills-icons/tool_ae.svg" },
@@ -40,7 +43,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
     tools: [
       { name: "Unity", iconPath: "/skills-icons/tool_unity.svg" },
       { name: "Unreal Engine", iconPath: "/skills-icons/tool_ue4.svg" },
-      { name: "OpenGL", iconPath: "/skills-icons/lang_opengl.svg" },
+      // { name: "OpenGL", iconPath: "/skills-icons/lang_opengl.svg" },
       // { name: "Maya Language", iconPath: "/skills-icons/lang_maya.svg" },
     ],
   },
