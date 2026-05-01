@@ -1,5 +1,5 @@
 import { animate, createTimeline, stagger } from "animejs";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 const DEFAULT_BARCODE_UNIT = "*0123456789ABCDEF*";
 
@@ -44,14 +44,24 @@ export function PathBarcodeTemplate3D({
   const topRefs = useRef<Array<HTMLElement | null>>([]);
   const frontRefs = useRef<Array<HTMLElement | null>>([]);
   const bottomRefs = useRef<Array<HTMLElement | null>>([]);
-  const chars = Array.from(textUnit.repeat(textRepeat));
+  const chars = useMemo(
+    () => Array.from(textUnit.repeat(textRepeat)),
+    [textUnit, textRepeat],
+  );
   const play = !paused;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const svg = svgRef.current;
     const path = pathRef.current;
     const itemsLayer = itemsLayerRef.current;
     if (!svg || !path || !itemsLayer) return;
+
+    // Drop stale refs when text length changes across breakpoints/resizes.
+    itemRefs.current = itemRefs.current.slice(0, chars.length);
+    charRefs.current = charRefs.current.slice(0, chars.length);
+    topRefs.current = topRefs.current.slice(0, chars.length);
+    frontRefs.current = frontRefs.current.slice(0, chars.length);
+    bottomRefs.current = bottomRefs.current.slice(0, chars.length);
 
     const items = itemRefs.current.filter(
       (el): el is HTMLSpanElement => el !== null,
@@ -130,7 +140,17 @@ export function PathBarcodeTemplate3D({
       flowAnim?.revert();
       tl?.revert();
     };
-  }, [play, vbX, vbY, vbW, vbH, flowDurationMs, flipDurationMs]);
+  }, [
+    chars.length,
+    pathD,
+    play,
+    vbX,
+    vbY,
+    vbW,
+    vbH,
+    flowDurationMs,
+    flipDurationMs,
+  ]);
 
   return (
     <div className={`hero-barcode-template3d ${className ?? ""}`.trim()}>

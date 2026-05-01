@@ -4,6 +4,7 @@ import {
   HeroLogoInkWebGL,
 } from "../../components/portfolio/HeroLogoInkWebGL";
 import { PathBarcodeTemplate3D } from "../../components/portfolio/PathBarcodeTemplate3D";
+import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import styles from "../shared-dev-assets/DevBurstOverlayAnimeLogo.module.css";
 
 const HERO_BARCODE = {
@@ -16,32 +17,31 @@ const HERO_BARCODE = {
   fill: "var(--color-anime-barcode)",
 } as const;
 
+// Fewer characters on mobile to reduce DOM node count (209 → 95)
+const TEXT_REPEAT_DESKTOP = 11;
+const TEXT_REPEAT_MOBILE = 8;
+
 function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
-}
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !("matchMedia" in window)) return;
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduced(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  return reduced;
 }
 
 export function HeroBurstLogoSection() {
   const reduceMotion = usePrefersReducedMotion();
   const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const stageRef = useRef<HTMLElement>(null);
   const barcodeFrameRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
+
+  // Detect mobile once on mount
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    setIsMobile(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     if (!stageRef.current || !barcodeFrameRef.current) return;
@@ -72,18 +72,26 @@ export function HeroBurstLogoSection() {
       setScrollLogoBoost(progressed * 0.16);
       setScrollProgress(progressed);
     };
+
+    let resizeTimer = 0;
     const onScroll = () => {
       cancelAnimationFrame(rafId);
       rafId = window.requestAnimationFrame(updateByScroll);
     };
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(onScroll, 150);
+    };
+
     updateByScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
       cancelAnimationFrame(rafId);
+      clearTimeout(resizeTimer);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      window.removeEventListener("resize", onResize);
       progressRef.current = 0;
       setScrollLogoBoost(0);
       setScrollProgress(0);
@@ -94,6 +102,7 @@ export function HeroBurstLogoSection() {
   const shaderInkScale = lerp(4.0, 4.0 * 2.8, scrollProgress);
   const shaderWarpScale = lerp(2.0, 2.0 * 2.2, scrollProgress);
   const shaderOpacity = reduceMotion ? 1 : lerp(1, 0, scrollProgress);
+  const textRepeat = isMobile ? TEXT_REPEAT_MOBILE : TEXT_REPEAT_DESKTOP;
 
   return (
     <section ref={stageRef} className={styles.stage}>
@@ -115,7 +124,7 @@ export function HeroBurstLogoSection() {
             className={styles.barcodeTheme}
             flowDurationMs={33000}
             textUnit="*0123456789ABCDEF* "
-            textRepeat={11}
+            textRepeat={textRepeat}
             pathD="
               M 8 2
               H 92

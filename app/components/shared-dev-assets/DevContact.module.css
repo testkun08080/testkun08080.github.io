@@ -129,6 +129,13 @@
   word-break: break-word;
 }
 
+/* Clamp horizontal shift on medium screens to prevent overflow */
+@media (max-width: 900px) {
+  .card {
+    transform: translate3d(4px, -3px, 0) rotate(0.6deg);
+  }
+}
+
 @media (max-width: 640px) {
   .card {
     width: min(640px, calc(100% - 1.25rem));

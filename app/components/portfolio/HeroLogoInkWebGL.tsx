@@ -288,6 +288,11 @@ function setVec3(target: number[], src: [number, number, number]) {
   target[2] = src[2];
 }
 
+function isMobileDevice(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 768px)").matches || navigator.maxTouchPoints > 0;
+}
+
 export function HeroLogoInkWebGL({
   className,
   style,
@@ -525,21 +530,25 @@ export function HeroLogoInkWebGL({
     img.onerror = () => {};
     img.src = logoUrl;
 
-    const start = performance.now();
-    let rafId = 0;
-    let running = true;
-
-    // current (smoothed) mouse uniform values
-    const mouseCurrent = { x: 0, y: 0, active: 0 };
+    // Cap DPR at 1.5 on mobile to reduce GPU load significantly
+    const mobile = isMobileDevice();
+    const maxDpr = mobile ? 1.5 : 2;
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
       const w = Math.max(1, canvas.clientWidth);
       const h = Math.max(1, canvas.clientHeight);
       renderer.setPixelRatio(dpr);
       renderer.setSize(w, h, false);
       uniforms.u_resolution.value.set(w, h);
     };
+
+    const start = performance.now();
+    let rafId = 0;
+    let running = true;
+
+    // current (smoothed) mouse uniform values
+    const mouseCurrent = { x: 0, y: 0, active: 0 };
 
     // convert client pixel position → aspect-corrected uv space matching shader
     const updateMouseTargetFromEvent = (clientX: number, clientY: number) => {
@@ -633,10 +642,12 @@ export function HeroLogoInkWebGL({
       uniforms.u_edgeInkMix.value = p.edgeInkMix;
     };
 
+    // Initial resize before first frame
+    resize();
+
     let lastNow = start;
     const draw = (now: number) => {
       if (!running) return;
-      resize();
       const elapsed = (now - start) / 1000;
       const dt = Math.min(0.1, (now - lastNow) / 1000);
       lastNow = now;
@@ -657,6 +668,8 @@ export function HeroLogoInkWebGL({
 
     rafId = window.requestAnimationFrame(draw);
     document.addEventListener("visibilitychange", handleVisibility);
+
+    // resize only on actual size changes, not every frame
     const ro = new ResizeObserver(() => resize());
     ro.observe(canvas);
 

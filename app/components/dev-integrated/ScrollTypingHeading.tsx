@@ -1,5 +1,6 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import styles from "./ScrollTypingHeading.module.css";
 
 type ScrollTypingHeadingProps = {
@@ -9,21 +10,6 @@ type ScrollTypingHeadingProps = {
   headingClassName?: string;
   underlineClassName?: string;
 };
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !("matchMedia" in window)) return;
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduced(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  return reduced;
-}
 
 export function ScrollTypingHeading({
   text,

@@ -1,25 +1,11 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "./SideCenterStickySection.module.css";
 
 const LINE_COUNT = 33;
 const START_OFFSET_VW = 22;
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined" || !("matchMedia" in window)) return;
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduced(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  return reduced;
-}
 
 type SideCenterStickySectionProps = {
   aboutHeading?: string;
@@ -48,6 +34,8 @@ export function SideCenterStickySection({
   const sideTypingSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const aboutTypedCountRef = useRef(-1);
+  // Hold typing animation instances for pause/resume
+  const typingAnimsRef = useRef<ReturnType<typeof animate>[]>([]);
 
   useEffect(() => {
     if (
@@ -128,12 +116,14 @@ export function SideCenterStickySection({
         }),
       });
 
+      // Store typing animations for IntersectionObserver pause/resume
+      typingAnimsRef.current = [];
       sideTypingSpansRef.current.forEach((span, i) => {
         if (!span) return;
         const chars = (span.textContent?.length ?? 12) + 1;
         const baseDelay =
           i < LINE_COUNT ? (i % 8) * 95 : ((i - LINE_COUNT) % 8) * 120;
-        animate(span, {
+        const anim = animate(span, {
           width: ["0ch", `${chars}ch`],
           ease: "steps(14)",
           duration: 1100,
@@ -142,12 +132,32 @@ export function SideCenterStickySection({
           alternate: true,
           loopDelay: 750,
         });
+        typingAnimsRef.current.push(anim);
       });
     });
 
+    // Pause loop animations when section is not visible
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          for (const anim of typingAnimsRef.current) {
+            if (entry.isIntersecting) {
+              anim.play();
+            } else {
+              anim.pause();
+            }
+          }
+        }
+      },
+      { threshold: 0 },
+    );
+    if (rootRef.current) io.observe(rootRef.current);
+
     return () => {
+      io.disconnect();
       scopeRef.current?.revert();
       scopeRef.current = null;
+      typingAnimsRef.current = [];
       aboutTypedCountRef.current = -1;
     };
   }, [aboutText, reduceMotion]);

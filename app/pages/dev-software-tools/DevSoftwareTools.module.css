@@ -52,17 +52,30 @@
   font-weight: 700;
 }
 
-.iconGrid {
+.iconGridShell {
   position: relative;
+}
+
+.iconGridViewport {
+  display: grid;
+  grid-template-rows: 296px;
+  overflow: hidden;
+  transition: grid-template-rows 260ms ease;
+  will-change: grid-template-rows;
+}
+
+.iconGridViewportExpanded {
+  grid-template-rows: 1fr;
+}
+
+.iconGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(136px, 1fr));
   gap: 0.9rem;
-  max-height: 296px;
-  overflow: hidden;
-  transition: max-height 260ms ease;
+  min-height: 0;
 }
 
-.iconGrid::after {
+.iconGridFadeHint::after {
   content: "";
   position: absolute;
   left: 0;
@@ -81,14 +94,6 @@
   -webkit-backdrop-filter: blur(var(--fx-collapse-blur));
   mask-image: linear-gradient(to bottom, transparent 0%, black 54%, black 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 54%, black 100%);
-}
-
-.iconGridExpanded {
-  max-height: 1200px;
-}
-
-.iconGridExpanded::after {
-  display: none;
 }
 
 .expandArea {
@@ -180,6 +185,13 @@
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.08em;
+}
+
+.emojiBadge {
+  border-radius: 0;
+  background: transparent;
+  font-size: 1.8rem;
+  letter-spacing: normal;
 }
 
 @media (max-width: 640px) {
