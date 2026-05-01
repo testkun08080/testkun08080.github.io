@@ -71,7 +71,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
       },
       {
         name: "Vercel",
-        iconPath: "/skills-icons/vercel-logotype-light.png",
+        iconPath: "/skills-icons/vercel-icon-light.svg",
       },
     ],
   },
@@ -102,7 +102,7 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
       { name: "CSS", iconPath: "/skills-icons/lang_css.svg" },
       {
         name: "SQL",
-        iconPath: "/skills-icons/sql-database-with-logo.png",
+        iconPath: "/skills-icons/sql-database-with-logo.svg",
       },
       { name: "C", iconPath: "/skills-icons/lang_c.svg" },
       { name: "C++", iconPath: "/skills-icons/lang_c++.svg" },
