@@ -66,6 +66,8 @@ export type HeroLogoInkWebGLProps = {
   edgeStrength?: number;
   edgeColor?: string;
   edgeInkMix?: number;
+
+  onReady?: () => void;
 };
 
 const VERTEX_SHADER = `
@@ -330,9 +332,12 @@ export function HeroLogoInkWebGL({
   edgeStrength = 1.6,
   edgeColor = "#1a1714",
   edgeInkMix = 0.7,
+  onReady,
 }: HeroLogoInkWebGLProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [unavailable, setUnavailable] = useState(false);
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
 
   const propsRef = useRef({
     paused,
@@ -423,6 +428,7 @@ export function HeroLogoInkWebGL({
       });
     } catch {
       setUnavailable(true);
+      onReadyRef.current?.();
       return;
     }
     renderer.outputColorSpace = SRGBColorSpace;
@@ -526,8 +532,11 @@ export function HeroLogoInkWebGL({
       uniforms.u_logoTex.value = logoTex;
       uniforms.u_logoAspect.value = tw / th;
       uniforms.u_logoReady.value = 1;
+      onReadyRef.current?.();
     };
-    img.onerror = () => {};
+    img.onerror = () => {
+      onReadyRef.current?.();
+    };
     img.src = logoUrl;
 
     // Cap DPR at 1.5 on mobile to reduce GPU load significantly

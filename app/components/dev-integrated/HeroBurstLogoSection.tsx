@@ -25,7 +25,7 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-export function HeroBurstLogoSection() {
+export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
   const reduceMotion = usePrefersReducedMotion();
   const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -116,6 +116,7 @@ export function HeroBurstLogoSection() {
           inkScale={shaderInkScale}
           warpScale={shaderWarpScale}
           style={{ opacity: shaderOpacity }}
+          onReady={onReady}
         />
 
         <div ref={barcodeFrameRef} className={styles.barcodeFrame}>

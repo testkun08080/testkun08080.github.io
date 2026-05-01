@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { ContactCardSection } from "../dev-integrated/ContactCardSection";
 import { GreetingBurstSection } from "../dev-integrated/GreetingBurstSection";
 import { HeroBurstLogoSection } from "../dev-integrated/HeroBurstLogoSection";
@@ -8,6 +8,7 @@ import { SkillsToolsSection } from "../dev-integrated/SkillsToolsSection";
 import { WorkReelsSection } from "../dev-integrated/WorkReelsSection";
 import { productionHomeCopy } from "../../lib/translations";
 import { StickyQuickMenu } from "../portfolio/StickyQuickMenu";
+import { LoadingScreen } from "./LoadingScreen";
 import styles from "./ProductionHomePage.module.css";
 
 type SupportedLanguage = "ja" | "en";
@@ -17,6 +18,14 @@ export function ProductionHomePage() {
   const skillsSectionRef = useRef<HTMLElement>(null);
   const contactSectionRef = useRef<HTMLElement>(null);
   const [language, setLanguage] = useState<"ja" | "en">("ja");
+  const [heroReady, setHeroReady] = useState(false);
+  const handleHeroReady = useCallback(() => setHeroReady(true), []);
+
+  // Fallback: dismiss loading screen after 5 s if onReady never fires
+  useEffect(() => {
+    const id = setTimeout(() => setHeroReady(true), 5000);
+    return () => clearTimeout(id);
+  }, []);
 
   useEffect(() => {
     const previousLang = document.documentElement.lang;
@@ -32,9 +41,11 @@ export function ProductionHomePage() {
   const copy = productionHomeCopy[language];
 
   return (
+    <>
+      <LoadingScreen visible={!heroReady} />
     <main className={styles.page}>
       <section id="hero" className={styles.section}>
-        <HeroBurstLogoSection />
+        <HeroBurstLogoSection onReady={handleHeroReady} />
       </section>
 
       <section id="greeting" className={styles.section}>
@@ -105,14 +116,14 @@ export function ProductionHomePage() {
           <p className={styles.resumeDownloadHeading}>{copy.resumeHeading}</p>
           <div className={styles.resumeDownloadButtons}>
             <a
-              href="/resume_ja.pdf"
+              href="/resume/resume_ja.pdf"
               className={styles.resumeDownloadButton}
               download
             >
               {copy.resumeJaLabel} ({copy.resumeDownloadLabel})
             </a>
             <a
-              href="/resume_en.pdf"
+              href="/resume/resume_en.pdf"
               className={styles.resumeDownloadButton}
               download
             >
@@ -152,5 +163,6 @@ export function ProductionHomePage() {
         languageLabel={copy.menuLanguageLabel}
       />
     </main>
+    </>
   );
 }
