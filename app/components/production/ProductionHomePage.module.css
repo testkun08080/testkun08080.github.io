@@ -1,10 +1,17 @@
 .page {
   color: var(--color-text-heading);
-  scroll-behavior: smooth;
 }
 
 .section {
   position: relative;
+}
+
+.workSection,
+.skillsSection,
+.contactSection {
+  /* Children of the sticky-side stage need their own stacking context so they
+     paint above the sticky background animation while scrolling over it. */
+  isolation: isolate;
 }
 
 .sectionHead {
@@ -149,10 +156,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page {
-    scroll-behavior: auto;
-  }
-
   .resumeDownloadButton {
     transition: none;
   }

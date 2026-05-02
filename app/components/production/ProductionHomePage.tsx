@@ -60,80 +60,78 @@ export function ProductionHomePage() {
           aboutHeading={copy.aboutHeading}
           aboutText={copy.aboutText}
           sideWords={copy.sideWords}
-        />
-      </section>
+        >
+          <section
+            id="work"
+            ref={workSectionRef}
+            className={`${styles.section} ${styles.workSection}`}
+          >
+            <header className={styles.sectionHead}>
+              <ScrollTypingHeading
+                text={copy.workHeading}
+                headingClassName={styles.sectionHeadingWord}
+                underlineClassName={styles.sectionHeadingLine}
+              />
+            </header>
+            <WorkReelsSection
+              fallbackPrefix={copy.reelsFallbackPrefix}
+              fallbackLinkLabel={copy.reelsFallbackLink}
+            />
+          </section>
 
-      <section
-        id="work"
-        ref={workSectionRef}
-        className={`${styles.section} ${styles.workSection}`}
-      >
-        <header className={styles.sectionHead}>
-          <ScrollTypingHeading
-            text={copy.workHeading}
-            headingClassName={styles.sectionHeadingWord}
-            underlineClassName={styles.sectionHeadingLine}
-          />
-        </header>
-        <WorkReelsSection
-          fallbackPrefix={copy.reelsFallbackPrefix}
-          fallbackLinkLabel={copy.reelsFallbackLink}
-        />
-      </section>
+          <section
+            id="skills"
+            ref={skillsSectionRef}
+            className={`${styles.section} ${styles.skillsSection}`}
+          >
+            <header className={styles.sectionHead}>
+              <ScrollTypingHeading
+                text={copy.skillsHeading}
+                headingClassName={styles.sectionHeadingWord}
+                underlineClassName={styles.sectionHeadingLine}
+              />
+            </header>
+            <SkillsToolsSection
+              showMoreLabel={copy.skillsShowMore}
+              closeLabel={copy.skillsClose}
+            />
+          </section>
 
-      <section
-        id="skills"
-        ref={skillsSectionRef}
-        className={`${styles.section} ${styles.skillsSection}`}
-      >
-        <header className={styles.sectionHead}>
-          <ScrollTypingHeading
-            text={copy.skillsHeading}
-            headingClassName={styles.sectionHeadingWord}
-            underlineClassName={styles.sectionHeadingLine}
-          />
-        </header>
-        <SkillsToolsSection
-          showMoreLabel={copy.skillsShowMore}
-          closeLabel={copy.skillsClose}
-        />
-      </section>
+          <section
+            id="contact"
+            ref={contactSectionRef}
+            className={`${styles.section} ${styles.contactSection}`}
+          >
+            <header className={styles.sectionHead}>
+              <ScrollTypingHeading
+                text={copy.contactHeading}
+                headingClassName={styles.sectionHeadingWord}
+                underlineClassName={styles.sectionHeadingLine}
+              />
+            </header>
+            <ContactCardSection />
+            <div className={styles.resumeDownloadWrap}>
+              <p className={styles.resumeDownloadHeading}>{copy.resumeHeading}</p>
+              <div className={styles.resumeDownloadButtons}>
+                <a
+                  href="/resume/resume_ja.pdf"
+                  className={styles.resumeDownloadButton}
+                  download
+                >
+                  {copy.resumeJaLabel} ({copy.resumeDownloadLabel})
+                </a>
+                <a
+                  href="/resume/resume_en.pdf"
+                  className={styles.resumeDownloadButton}
+                  download
+                >
+                  {copy.resumeEnLabel} ({copy.resumeDownloadLabel})
+                </a>
+              </div>
+            </div>
+          </section>
 
-      <section
-        id="contact"
-        ref={contactSectionRef}
-        className={`${styles.section} ${styles.contactSection}`}
-      >
-        <header className={styles.sectionHead}>
-          <ScrollTypingHeading
-            text={copy.contactHeading}
-            headingClassName={styles.sectionHeadingWord}
-            underlineClassName={styles.sectionHeadingLine}
-          />
-        </header>
-        <ContactCardSection />
-        <div className={styles.resumeDownloadWrap}>
-          <p className={styles.resumeDownloadHeading}>{copy.resumeHeading}</p>
-          <div className={styles.resumeDownloadButtons}>
-            <a
-              href="/resume/resume_ja.pdf"
-              className={styles.resumeDownloadButton}
-              download
-            >
-              {copy.resumeJaLabel} ({copy.resumeDownloadLabel})
-            </a>
-            <a
-              href="/resume/resume_en.pdf"
-              className={styles.resumeDownloadButton}
-              download
-            >
-              {copy.resumeEnLabel} ({copy.resumeDownloadLabel})
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <footer id="footer" className={styles.footer}>
+          <footer id="footer" className={styles.footer}>
         <button
           type="button"
           className={styles.languageToggle}
@@ -152,8 +150,10 @@ export function ProductionHomePage() {
             English
           </span>
         </button>
-        <p className={styles.copyright}>© {new Date().getFullYear()} Shoichi Hasegawa</p>
-      </footer>
+            <p className={styles.copyright}>© {new Date().getFullYear()} Shoichi Hasegawa</p>
+          </footer>
+        </SideCenterStickySection>
+      </section>
 
       <StickyQuickMenu
         items={copy.menuItems}

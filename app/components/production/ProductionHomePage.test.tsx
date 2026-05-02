@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { ProductionHomePage } from "./ProductionHomePage";
 
@@ -15,7 +16,9 @@ vi.mock("../dev-integrated/ScrollTypingHeading", () => ({
   ScrollTypingHeading: ({ text }: { text: string }) => <h2>{text}</h2>,
 }));
 vi.mock("../dev-integrated/SideCenterStickySection", () => ({
-  SideCenterStickySection: () => <div>SideCenterStickySection</div>,
+  SideCenterStickySection: ({ children }: { children?: React.ReactNode }) => (
+    <div>SideCenterStickySection{children}</div>
+  ),
 }));
 vi.mock("../dev-integrated/SkillsToolsSection", () => ({
   SkillsToolsSection: () => <div>SkillsToolsSection</div>,
