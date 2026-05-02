@@ -3,8 +3,18 @@
   z-index: 6;
 }
 
-.track {
+.aboutTrack {
+  position: relative;
   min-height: 215dvh;
+  z-index: 2;
+}
+
+.centerSticky {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  pointer-events: none;
 }
 
 .stickyFrame {
@@ -12,6 +22,12 @@
   top: 0;
   height: 100dvh;
   overflow: hidden;
+  /* Remove from flow so the aboutTrack and children sections start at the top of .stage,
+     while this side-typing background stays pinned through the entire stage. */
+  margin-bottom: -100dvh;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
 }
 
 .centerArea {
@@ -106,7 +122,7 @@
 }
 
 @media (max-width: 900px) {
-  .track {
+  .aboutTrack {
     min-height: 170dvh;
   }
 
@@ -122,7 +138,7 @@
 }
 
 @media (max-width: 640px) {
-  .track {
+  .aboutTrack {
     min-height: 150dvh;
   }
 
@@ -152,7 +168,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .track {
+  .aboutTrack {
     min-height: 100dvh;
   }
 }

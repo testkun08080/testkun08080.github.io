@@ -1,4 +1,5 @@
 import { animate, createScope, onScroll } from "animejs";
+import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
@@ -11,6 +12,7 @@ type SideCenterStickySectionProps = {
   aboutHeading?: string;
   aboutText: string;
   sideWords?: readonly string[];
+  children?: ReactNode;
 };
 
 export function SideCenterStickySection({
@@ -24,17 +26,18 @@ export function SideCenterStickySection({
     "animejs motion",
     "visual crafting",
   ],
+  children,
 }: SideCenterStickySectionProps) {
   const reduceMotion = usePrefersReducedMotion();
   const rootRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLElement>(null);
+  const aboutTrackRef = useRef<HTMLDivElement>(null);
   const stickyFrameRef = useRef<HTMLDivElement>(null);
+  const centerAreaRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const aboutTextRef = useRef<HTMLParagraphElement>(null);
   const sideTypingSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
-  const aboutTypedCountRef = useRef(-1);
   const [isMobileViewport, setIsMobileViewport] = useState(
     () =>
       typeof window !== "undefined"
@@ -55,6 +58,7 @@ export function SideCenterStickySection({
 
   useEffect(() => {
     let rafId = 0;
+    let debounceId: ReturnType<typeof setTimeout> | null = null;
     const updateLineCount = () => {
       const stickyFrame = stickyFrameRef.current;
       const leftBlock = leftRef.current;
@@ -79,48 +83,47 @@ export function SideCenterStickySection({
       rafId = window.requestAnimationFrame(updateLineCount);
     };
 
+    const debouncedSchedule = () => {
+      if (debounceId) clearTimeout(debounceId);
+      debounceId = setTimeout(scheduleUpdate, 180);
+    };
+
     scheduleUpdate();
-    window.addEventListener("resize", scheduleUpdate);
-    window.addEventListener("orientationchange", scheduleUpdate);
+    window.addEventListener("resize", debouncedSchedule);
+    window.addEventListener("orientationchange", debouncedSchedule);
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", scheduleUpdate);
-      window.removeEventListener("orientationchange", scheduleUpdate);
+      if (debounceId) clearTimeout(debounceId);
+      window.removeEventListener("resize", debouncedSchedule);
+      window.removeEventListener("orientationchange", debouncedSchedule);
     };
   }, [isMobileViewport]);
 
   useEffect(() => {
     if (
       !rootRef.current ||
-      !trackRef.current ||
+      !aboutTrackRef.current ||
       !leftRef.current ||
       !rightRef.current ||
-      !aboutTextRef.current
+      !aboutTextRef.current ||
+      !centerAreaRef.current
     ) {
       return;
     }
 
-    const track = trackRef.current;
+    const aboutTrack = aboutTrackRef.current;
+    const stage = rootRef.current;
     const leftBlock = leftRef.current;
     const rightBlock = rightRef.current;
     const aboutEl = aboutTextRef.current;
-    aboutEl.textContent = "";
-    aboutTypedCountRef.current = -1;
+    const centerArea = centerAreaRef.current;
+    aboutEl.textContent = aboutText;
     sideTypingSpansRef.current = sideTypingSpansRef.current.slice(0, lineCount * 2);
-
-    const setAboutTypedByProgress = (progress: unknown) => {
-      if (typeof progress !== "number") return;
-      const clamped = Math.min(Math.max(progress, 0), 1);
-      const nextCount = Math.floor(clamped * aboutText.length);
-      if (nextCount === aboutTypedCountRef.current) return;
-      aboutTypedCountRef.current = nextCount;
-      aboutEl.textContent = aboutText.slice(0, nextCount);
-    };
 
     if (reduceMotion) {
       leftBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
       rightBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
-      aboutEl.textContent = aboutText;
+      centerArea.style.opacity = "1";
       sideTypingSpansRef.current.forEach((span) => {
         if (!span) return;
         span.style.width = "100%";
@@ -130,27 +133,36 @@ export function SideCenterStickySection({
     }
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
+      // About text: fade in / fade out (no typing)
       animate(aboutEl, {
-        opacity: [0.26, 1],
-        translateY: [18, 0],
+        opacity: [
+          { to: 0, duration: 0 },
+          { to: 1, duration: 25 },
+          { to: 1, duration: 50 },
+          { to: 0, duration: 25 },
+        ],
+        translateY: [
+          { to: 18, duration: 0 },
+          { to: 0, duration: 25 },
+          { to: 0, duration: 50 },
+          { to: -10, duration: 25 },
+        ],
         ease: "linear",
         autoplay: onScroll({
-          target: track,
-          enter: "top+=8% top",
-          leave: "bottom-=8% bottom",
+          target: aboutTrack,
+          enter: "top top",
+          leave: "bottom bottom",
           sync: true,
-          onUpdate: (self) => {
-            const observer = self as { progress?: number };
-            setAboutTypedByProgress(observer.progress);
-          },
         }),
       });
 
+      // Side typing blocks slide-in and stay visible across the entire stage
+      // (covers about, work, skills, contact, footer)
       animate(leftBlock, {
         translateX: [`${START_OFFSET_VW}vw`, "0vw"],
         ease: "linear",
         autoplay: onScroll({
-          target: track,
+          target: stage,
           enter: "top top",
           leave: "bottom bottom",
           sync: true,
@@ -162,7 +174,7 @@ export function SideCenterStickySection({
         scaleX: [-1, -1],
         ease: "linear",
         autoplay: onScroll({
-          target: track,
+          target: stage,
           enter: "top top",
           leave: "bottom bottom",
           sync: true,
@@ -211,7 +223,6 @@ export function SideCenterStickySection({
       scopeRef.current?.revert();
       scopeRef.current = null;
       typingAnimsRef.current = [];
-      aboutTypedCountRef.current = -1;
     };
   }, [aboutText, lineCount, reduceMotion]);
 
@@ -221,9 +232,49 @@ export function SideCenterStickySection({
       className={styles.stage}
       aria-label="Side center sticky"
     >
-      <section ref={trackRef} className={styles.track}>
-        <div ref={stickyFrameRef} className={styles.stickyFrame}>
-          <div className={styles.centerArea}>
+      {/* Side typing background: pinned through the whole stage (about + children) */}
+      <div ref={stickyFrameRef} className={styles.stickyFrame} aria-hidden="true">
+        <div
+          ref={leftRef}
+          className={`${styles.sideBlock} ${styles.leftBlock}`}
+        >
+          {Array.from({ length: lineCount }).map((_, i) => (
+            <p key={`l-${i}`} className={styles.sideText}>
+              <span
+                className={styles.sideTyping}
+                ref={(el) => {
+                  sideTypingSpansRef.current[i] = el;
+                }}
+              >
+                {sideWords[i % sideWords.length]}
+              </span>
+            </p>
+          ))}
+        </div>
+
+        <div
+          ref={rightRef}
+          className={`${styles.sideBlock} ${styles.rightBlock}`}
+        >
+          {Array.from({ length: lineCount }).map((_, i) => (
+            <p key={`r-${i}`} className={styles.sideText}>
+              <span
+                className={styles.sideTyping}
+                ref={(el) => {
+                  sideTypingSpansRef.current[lineCount + i] = el;
+                }}
+              >
+                {sideWords[i % sideWords.length]}
+              </span>
+            </p>
+          ))}
+        </div>
+      </div>
+
+      {/* About: pinned only during the aboutTrack span */}
+      <div ref={aboutTrackRef} className={styles.aboutTrack}>
+        <div className={styles.centerSticky}>
+          <div ref={centerAreaRef} className={styles.centerArea}>
             <ScrollTypingHeading
               text={aboutHeading}
               headingClassName={styles.centerHeading}
@@ -231,44 +282,10 @@ export function SideCenterStickySection({
             />
             <p ref={aboutTextRef} className={styles.aboutText} />
           </div>
-
-          <div
-            ref={leftRef}
-            className={`${styles.sideBlock} ${styles.leftBlock}`}
-          >
-            {Array.from({ length: lineCount }).map((_, i) => (
-              <p key={`l-${i}`} className={styles.sideText}>
-                <span
-                  className={styles.sideTyping}
-                  ref={(el) => {
-                    sideTypingSpansRef.current[i] = el;
-                  }}
-                >
-                  {sideWords[i % sideWords.length]}
-                </span>
-              </p>
-            ))}
-          </div>
-
-          <div
-            ref={rightRef}
-            className={`${styles.sideBlock} ${styles.rightBlock}`}
-          >
-            {Array.from({ length: lineCount }).map((_, i) => (
-              <p key={`r-${i}`} className={styles.sideText}>
-                <span
-                  className={styles.sideTyping}
-                  ref={(el) => {
-                    sideTypingSpansRef.current[lineCount + i] = el;
-                  }}
-                >
-                  {sideWords[i % sideWords.length]}
-                </span>
-              </p>
-            ))}
-          </div>
         </div>
-      </section>
+      </div>
+
+      {children}
     </section>
   );
 }
