@@ -45,7 +45,7 @@ export function ProductionHomePage() {
       <LoadingScreen visible={!heroReady} />
     <main className={styles.page}>
       <section id="hero" className={styles.section}>
-        <HeroBurstLogoSection onReady={handleHeroReady} />
+        <HeroBurstLogoSection onReady={handleHeroReady} bridgeRowText={copy.greetingBgRowText} />
       </section>
 
       <section id="greeting" className={styles.section}>

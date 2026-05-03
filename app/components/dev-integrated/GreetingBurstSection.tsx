@@ -79,9 +79,10 @@ export function GreetingBurstSection({
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
       rows.forEach((row, i) => {
         const direction = i % 2 === 0 ? -1 : 1;
+        // Start offset shortened (0.28 vs 0.45) so rows feel like continuation of hero bridge rows
         animate(row, {
-          translateX: [window.innerWidth * 0.45 * direction, 0],
-          opacity: [0.15, 0.82],
+          translateX: [window.innerWidth * 0.28 * direction, 0],
+          opacity: [0.32, 0.82],
           duration: 1000,
           delay: i * 100,
           ease: "linear",
@@ -122,6 +123,11 @@ export function GreetingBurstSection({
             </p>
           ))}
         </div>
+
+        {/* Top fade: softens entry from hero bridge */}
+        <div className={styles.fadeTop} aria-hidden />
+        {/* Bottom fade: rows dissolve into About section */}
+        <div className={styles.fadeBottom} aria-hidden />
 
         <div className={styles.frontLayer}>
           <ScrollTypingHeading

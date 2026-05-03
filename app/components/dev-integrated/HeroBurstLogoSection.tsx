@@ -7,6 +7,9 @@ import { PathBarcodeTemplate3D } from "../../components/portfolio/PathBarcodeTem
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import styles from "../shared-dev-assets/DevBurstOverlayAnimeLogo.module.css";
 
+const BRIDGE_ROW_COUNT = 12;
+const BRIDGE_ROW_TEXT_REPEAT = 10;
+
 const HERO_BARCODE = {
   fontSize: {
     min: "0.5rem",
@@ -25,13 +28,21 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
+export function HeroBurstLogoSection({
+  onReady,
+  bridgeRowText = "hi there hello oi",
+}: {
+  onReady?: () => void;
+  bridgeRowText?: string;
+}) {
   const reduceMotion = usePrefersReducedMotion();
   const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const stageRef = useRef<HTMLElement>(null);
   const barcodeFrameRef = useRef<HTMLDivElement>(null);
+  const bridgeLayerRef = useRef<HTMLDivElement>(null);
+  const bridgeRowsRef = useRef<HTMLParagraphElement[]>([]);
   const progressRef = useRef(0);
 
   // Detect mobile once on mount
@@ -67,6 +78,21 @@ export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
       const opacity = 1 - progressed;
       barcodeFrame.style.transform = `scale(${scale})`;
       barcodeFrame.style.opacity = String(opacity);
+
+      // Bridge: cream bg + rows emerge at end of hero scroll
+      const bridgeP = clamp01((progressed - 0.66) / 0.26);
+      if (bridgeLayerRef.current) {
+        bridgeLayerRef.current.style.opacity = String(bridgeP);
+      }
+      const rows = bridgeRowsRef.current;
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row) continue;
+        const dir = i % 2 === 0 ? -1 : 1;
+        const tx = dir * (1 - bridgeP) * 52;
+        row.style.transform = `translateX(${tx}vw)`;
+      }
+
       if (Math.abs(progressed - progressRef.current) < 0.01) return;
       progressRef.current = progressed;
       setScrollLogoBoost(progressed * 0.16);
@@ -139,6 +165,24 @@ export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
               Z
             "
           />
+        </div>
+
+        {/* Narrative bridge: cream bg + greeting-style rows emerge as hero ends */}
+        <div ref={bridgeLayerRef} className={styles.bridgeLayer} aria-hidden>
+          <div className={styles.bridgeBg} />
+          {Array.from({ length: BRIDGE_ROW_COUNT }).map((_, i) => (
+            <p
+              key={i}
+              ref={(el) => {
+                if (el) bridgeRowsRef.current[i] = el;
+              }}
+              className={styles.bridgeRow}
+            >
+              {Array.from({ length: BRIDGE_ROW_TEXT_REPEAT })
+                .map(() => bridgeRowText)
+                .join(" ")}
+            </p>
+          ))}
         </div>
       </div>
 

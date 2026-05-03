@@ -101,6 +101,37 @@
   transform-origin: 50% 50%;
 }
 
+/* Narrative fade overlays for seamless Hero→Greeting→About flow */
+.fadeTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 18vh;
+  background: linear-gradient(
+    to bottom,
+    var(--app-bg-color, #f7efe4) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+.fadeBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28vh;
+  background: linear-gradient(
+    to top,
+    var(--app-bg-color, #f7efe4) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
 @media (max-width: 640px) {
   .stage {
     min-height: 160dvh;
