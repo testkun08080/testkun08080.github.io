@@ -79,9 +79,9 @@ export function GreetingBurstSection({
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
       rows.forEach((row, i) => {
         const direction = i % 2 === 0 ? -1 : 1;
-        // Start offset shortened (0.28 vs 0.45) so rows feel like continuation of hero bridge rows
+        // Start offset shortened (0.28vw vs 0.45vw) so rows feel like continuation of hero bridge rows
         animate(row, {
-          translateX: [window.innerWidth * 0.28 * direction, 0],
+          translateX: [`${28 * direction}vw`, "0vw"],
           opacity: [0.32, 0.82],
           duration: 1000,
           delay: i * 100,
