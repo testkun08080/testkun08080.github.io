@@ -44,6 +44,7 @@ export function HeroBurstLogoSection({
   const bridgeLayerRef = useRef<HTMLDivElement>(null);
   const bridgeRowsRef = useRef<HTMLParagraphElement[]>([]);
   const progressRef = useRef(0);
+  const bridgePRef = useRef(-1);
 
   // Detect mobile once on mount
   useEffect(() => {
@@ -79,22 +80,34 @@ export function HeroBurstLogoSection({
       barcodeFrame.style.transform = `scale(${scale})`;
       barcodeFrame.style.opacity = String(opacity);
 
-      // Bridge: cream bg + rows emerge at end of hero scroll
-      const bridgeP = clamp01((progressed - 0.66) / 0.26);
-      if (bridgeLayerRef.current) {
-        bridgeLayerRef.current.style.opacity = String(bridgeP);
-      }
-      const rows = bridgeRowsRef.current;
-      for (let i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        if (!row) continue;
-        const dir = i % 2 === 0 ? -1 : 1;
-        const tx = dir * (1 - bridgeP) * 52;
-        row.style.transform = `translateX(${tx}vw)`;
-      }
-
       if (Math.abs(progressed - progressRef.current) < 0.01) return;
       progressRef.current = progressed;
+
+      // Bridge: cream bg + rows emerge at end of hero scroll
+      const bridgeP = clamp01((progressed - 0.66) / 0.26);
+      if (Math.abs(bridgeP - bridgePRef.current) >= 0.005) {
+        bridgePRef.current = bridgeP;
+        if (bridgeLayerRef.current) {
+          bridgeLayerRef.current.style.opacity = String(bridgeP);
+        }
+        // Skip row transforms when bridge is fully hidden or fully settled
+        if (bridgeP > 0 && bridgeP < 1) {
+          const rows = bridgeRowsRef.current;
+          for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row) continue;
+            const dir = i % 2 === 0 ? -1 : 1;
+            const tx = dir * (1 - bridgeP) * 52;
+            row.style.transform = `translateX(${tx}vw)`;
+          }
+        } else if (bridgeP >= 1) {
+          const rows = bridgeRowsRef.current;
+          for (let i = 0; i < rows.length; i++) {
+            if (rows[i]) rows[i].style.transform = "translateX(0vw)";
+          }
+        }
+      }
+
       setScrollLogoBoost(progressed * 0.16);
       setScrollProgress(progressed);
     };
@@ -119,6 +132,7 @@ export function HeroBurstLogoSection({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
       progressRef.current = 0;
+      bridgePRef.current = -1;
       setScrollLogoBoost(0);
       setScrollProgress(0);
     };
