@@ -35,7 +35,6 @@ export function SideCenterStickySection({
   const centerAreaRef = useRef<HTMLDivElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
-  const aboutTextRef = useRef<HTMLParagraphElement>(null);
   const sideTypingSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const [isMobileViewport, setIsMobileViewport] = useState(
@@ -100,24 +99,14 @@ export function SideCenterStickySection({
   }, [isMobileViewport]);
 
   useEffect(() => {
-    if (
-      !rootRef.current ||
-      !aboutTrackRef.current ||
-      !leftRef.current ||
-      !rightRef.current ||
-      !aboutTextRef.current ||
-      !centerAreaRef.current
-    ) {
+    if (!rootRef.current || !leftRef.current || !rightRef.current || !centerAreaRef.current) {
       return;
     }
 
-    const aboutTrack = aboutTrackRef.current;
     const stage = rootRef.current;
     const leftBlock = leftRef.current;
     const rightBlock = rightRef.current;
-    const aboutEl = aboutTextRef.current;
     const centerArea = centerAreaRef.current;
-    aboutEl.textContent = aboutText;
     sideTypingSpansRef.current = sideTypingSpansRef.current.slice(0, lineCount * 2);
 
     if (reduceMotion) {
@@ -133,29 +122,6 @@ export function SideCenterStickySection({
     }
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
-      // About text: fade in / fade out (no typing)
-      animate(aboutEl, {
-        opacity: [
-          { to: 0, duration: 0 },
-          { to: 1, duration: 25 },
-          { to: 1, duration: 50 },
-          { to: 0, duration: 25 },
-        ],
-        translateY: [
-          { to: 18, duration: 0 },
-          { to: 0, duration: 25 },
-          { to: 0, duration: 50 },
-          { to: -10, duration: 25 },
-        ],
-        ease: "linear",
-        autoplay: onScroll({
-          target: aboutTrack,
-          enter: "top top",
-          leave: "bottom bottom",
-          sync: true,
-        }),
-      });
-
       // Side typing blocks slide-in and stay visible across the entire stage
       // (covers about, work, skills, contact, footer)
       animate(leftBlock, {
@@ -224,7 +190,7 @@ export function SideCenterStickySection({
       scopeRef.current = null;
       typingAnimsRef.current = [];
     };
-  }, [aboutText, lineCount, reduceMotion]);
+  }, [lineCount, reduceMotion]);
 
   return (
     <section
@@ -280,7 +246,7 @@ export function SideCenterStickySection({
               headingClassName={styles.centerHeading}
               underlineClassName={styles.centerLine}
             />
-            <p ref={aboutTextRef} className={styles.aboutText} />
+            <p className={styles.aboutText}>{aboutText}</p>
           </div>
         </div>
       </div>
