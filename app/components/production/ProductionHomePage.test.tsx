@@ -6,11 +6,8 @@ import { ProductionHomePage } from "./ProductionHomePage";
 vi.mock("../dev-integrated/ContactCardSection", () => ({
   ContactCardSection: () => <div>ContactCardSection</div>,
 }));
-vi.mock("../dev-integrated/GreetingBurstSection", () => ({
-  GreetingBurstSection: () => <div>GreetingBurstSection</div>,
-}));
-vi.mock("../dev-integrated/HeroBurstLogoSection", () => ({
-  HeroBurstLogoSection: () => <div>HeroBurstLogoSection</div>,
+vi.mock("../dev-integrated/HeroGreetingNarrative", () => ({
+  HeroGreetingNarrative: () => <div>HeroGreetingNarrative</div>,
 }));
 vi.mock("../dev-integrated/ScrollTypingHeading", () => ({
   ScrollTypingHeading: ({ text }: { text: string }) => <h2>{text}</h2>,

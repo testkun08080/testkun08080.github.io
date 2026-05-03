@@ -1,0 +1,65 @@
+/* Wrapper that spans Hero + Greeting sections so they share one continuous scroll background. */
+.wrapper {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Single sticky text-row layer shared across the whole Hero→Greeting scroll.
+   Pins to viewport top throughout the wrapper, controlled by JS scroll progress. */
+.rowsLayer {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  margin-bottom: -100dvh;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  will-change: opacity;
+}
+
+.rowsBg {
+  position: absolute;
+  inset: 0;
+  background: var(--app-bg-color, #f7efe4);
+  z-index: 0;
+}
+
+.row {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  min-width: 160vw;
+  margin-left: -30vw;
+  text-align: center;
+  font-size: clamp(1.05rem, 2.2vw, 2rem);
+  font-weight: 800;
+  font-style: italic;
+  color: var(--color-anime-bg-row, #ffc5c5);
+  line-height: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+/* Hero stays at z-index 0 so the rows layer can sit above its WebGL during the bridge phase. */
+.heroSection {
+  position: relative;
+  z-index: 0;
+}
+
+/* Greeting at z-index 2 so its konnichiwa front layer renders above the shared rows. */
+.greetingSection {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 640px) {
+  .row {
+    font-size: clamp(1rem, 4.5vw, 1.5rem);
+  }
+}

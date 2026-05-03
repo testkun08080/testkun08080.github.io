@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { ContactCardSection } from "../dev-integrated/ContactCardSection";
-import { GreetingBurstSection } from "../dev-integrated/GreetingBurstSection";
-import { HeroBurstLogoSection } from "../dev-integrated/HeroBurstLogoSection";
+import { HeroGreetingNarrative } from "../dev-integrated/HeroGreetingNarrative";
 import { ScrollTypingHeading } from "../dev-integrated/ScrollTypingHeading";
 import { SideCenterStickySection } from "../dev-integrated/SideCenterStickySection";
 import { SkillsToolsSection } from "../dev-integrated/SkillsToolsSection";
@@ -44,16 +43,11 @@ export function ProductionHomePage() {
     <>
       <LoadingScreen visible={!heroReady} />
     <main className={styles.page}>
-      <section id="hero" className={styles.section}>
-        <HeroBurstLogoSection onReady={handleHeroReady} bridgeRowText={copy.greetingBgRowText} />
-      </section>
-
-      <section id="greeting" className={styles.section}>
-        <GreetingBurstSection
-          frontWord={copy.greetingFrontWord}
-          bgRowText={copy.greetingBgRowText}
-        />
-      </section>
+      <HeroGreetingNarrative
+        onHeroReady={handleHeroReady}
+        greetingFrontWord={copy.greetingFrontWord}
+        greetingBgRowText={copy.greetingBgRowText}
+      />
 
       <section id="sticky-side" className={styles.section}>
         <SideCenterStickySection
