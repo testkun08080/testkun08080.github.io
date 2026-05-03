@@ -78,13 +78,14 @@ export function GreetingBurstSection({
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
       rows.forEach((row, i) => {
-        const direction = i % 2 === 0 ? -1 : 1;
-        // Start offset shortened (0.28vw vs 0.45vw) so rows feel like continuation of hero bridge rows
+        // Rows arrive from hero bridge already at tx=0; just vary opacity with scroll.
+        // No translateX so there's no visual reset at the hero→greeting seam.
+        // Start at 0.68 (close to bridge's full brightness) to avoid a brightness drop.
+        row.style.transform = "translateX(0)";
         animate(row, {
-          translateX: [`${28 * direction}vw`, "0vw"],
-          opacity: [0.32, 0.82],
+          opacity: [0.68, 0.86],
           duration: 1000,
-          delay: i * 100,
+          delay: i * 40,
           ease: "linear",
           autoplay: onScroll({
             enter: "bottom top",

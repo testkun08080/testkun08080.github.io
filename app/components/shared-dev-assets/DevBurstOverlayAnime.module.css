@@ -107,10 +107,11 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 18vh;
+  height: 28vh;
   background: linear-gradient(
     to bottom,
     var(--app-bg-color, #f7efe4) 0%,
+    var(--app-bg-color, #f7efe4) 30%,
     transparent 100%
   );
   pointer-events: none;
