@@ -1,0 +1,226 @@
+.page {
+  position: relative;
+  width: 100%;
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  height: 320vh;
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  text-align: center;
+}
+
+.layerA {
+  z-index: 1;
+  background: linear-gradient(165deg, #f4f1ea 0%, #e8e4dc 45%, #dfe8f2 100%);
+  color: #0f172a;
+}
+
+.layerB {
+  z-index: 1;
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%);
+  color: #ecfeff;
+}
+
+.layerOn {
+  z-index: 2;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.layerOff {
+  z-index: 1;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  opacity: 0.88;
+}
+
+.hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.8rem;
+  opacity: 0.65;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btnGhost {
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.layerA .btnGhost {
+  color: #334155;
+}
+
+.layerB .btnGhost {
+  color: #a5f3fc;
+}
+
+.curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.measureRow {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+}
+
+.row {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.half {
+  flex: 1 1 50%;
+  min-width: 0;
+  height: 100%;
+  will-change: transform;
+}
+
+.halfClip {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  contain: layout paint;
+}
+
+/* 本番 greeting の bg 行に寄せたタイポ（帯の高さに合わせて clamp） */
+.curtainLine {
+  margin: 0;
+  max-width: none;
+  text-align: center;
+  font-size: clamp(0.55rem, min(1.8vh, 1.35vw), 1.05rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-anime-bg-row, #ffc5c5);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  white-space: nowrap;
+  opacity: 0.92;
+}
+
+.curtainLineAlt {
+  margin: 0;
+  max-width: none;
+  text-align: center;
+  font-size: clamp(0.55rem, min(1.8vh, 1.35vw), 1.05rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-anime-bg-row, #ffc5c5);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  white-space: nowrap;
+  opacity: 0.48;
+}
+
+.row > .half:first-child {
+  transform: translate3d(-105%, 0, 0);
+}
+
+.row > .half:last-child {
+  transform: translate3d(105%, 0, 0);
+}
+
+.tail {
+  height: 40vh;
+}
+
+.reduceStack {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.reduceSection {
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.reduceA {
+  background: linear-gradient(165deg, #f4f1ea 0%, #e8e4dc 100%);
+  color: #0f172a;
+}
+
+.reduceB {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+  color: #ecfeff;
+}
+
+.reduceStack .btnGhost {
+  color: #0f172a;
+}

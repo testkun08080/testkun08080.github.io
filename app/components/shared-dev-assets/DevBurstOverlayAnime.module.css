@@ -35,6 +35,22 @@
   overflow-y: hidden;
 }
 
+.viewportShell {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.tailShell {
+  position: relative;
+  min-height: 80dvh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 .bgLayer {
   position: absolute;
   inset: 0;
@@ -104,6 +120,10 @@
 @media (max-width: 640px) {
   .stage {
     min-height: 160dvh;
+  }
+
+  .tailShell {
+    min-height: 60dvh;
   }
 
   .word {

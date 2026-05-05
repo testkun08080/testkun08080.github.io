@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MutableRefObject } from "react";
 import {
   FlowMode,
   HeroLogoInkWebGL,
@@ -25,7 +25,16 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
+export type HeroBurstLogoSectionProps = {
+  onReady?: () => void;
+  /**
+   * Full bridge scroll progress in [0, 1] (curtain close 0→0.5, open 0.5→1).
+   * When set, barcode zoom-out / logo fade follow `clamp(p / 0.5)` so they match the pre-bridge hero timing while the curtain runs.
+   */
+  bridgeScrollProgressRef?: MutableRefObject<number>;
+};
+
+export function HeroBurstLogoSection({ onReady, bridgeScrollProgressRef }: HeroBurstLogoSectionProps) {
   const reduceMotion = usePrefersReducedMotion();
   const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -60,9 +69,13 @@ export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
     let rafId = 0;
     const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
     const updateByScroll = () => {
-      const rect = stage.getBoundingClientRect();
-      const scrollable = Math.max(rect.height - window.innerHeight, 1);
-      const progressed = clamp01(-rect.top / scrollable);
+      const progressed = bridgeScrollProgressRef
+        ? clamp01(bridgeScrollProgressRef.current / 0.5)
+        : (() => {
+            const rect = stage.getBoundingClientRect();
+            const scrollable = Math.max(rect.height - window.innerHeight, 1);
+            return clamp01(-rect.top / scrollable);
+          })();
       const scale = 1 + progressed * 0.9;
       const opacity = 1 - progressed;
       barcodeFrame.style.transform = `scale(${scale})`;
@@ -96,7 +109,7 @@ export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
       setScrollLogoBoost(0);
       setScrollProgress(0);
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, bridgeScrollProgressRef]);
 
   const fs = HERO_BARCODE.fontSize;
   const shaderInkScale = lerp(4.0, 4.0 * 2.8, scrollProgress);

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ContactCardSection } from "../../components/dev-integrated/ContactCardSection";
-import { GreetingBurstSection } from "../../components/dev-integrated/GreetingBurstSection";
+import { GreetingWithBarcodeBridge } from "../../components/dev-integrated/GreetingWithBarcodeBridge";
 import { HeroBurstLogoSection } from "../../components/dev-integrated/HeroBurstLogoSection";
 import { SideCenterStickySection } from "../../components/dev-integrated/SideCenterStickySection";
 import { ScrollTypingHeading } from "../../components/dev-integrated/ScrollTypingHeading";
@@ -36,13 +36,9 @@ export default function Page() {
 
   return (
     <main className={styles.page}>
-      <section id="hero" className={styles.section}>
-        <HeroBurstLogoSection />
-      </section>
-
-      <section id="greeting" className={styles.section}>
-        <GreetingBurstSection />
-      </section>
+      <div className={styles.section}>
+        <GreetingWithBarcodeBridge language={language} hero={<HeroBurstLogoSection />} />
+      </div>
 
       <section id="sticky-side" className={styles.section}>
         <SideCenterStickySection aboutText={ABOUT_TEXT} />
