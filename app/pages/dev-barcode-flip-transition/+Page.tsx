@@ -1,7 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import styles from "./DevBarcodeFlipTransition.module.css";
 
 const LINE_COUNT = 28;
+const CLOSE_BASE = 6;
+const CLOSE_STEP = 2.2;
+const OPEN_BASE = 36;
+const OPEN_STEP = 1.1;
+const PHASE_SPAN = 14;
 
 const SCREENS = [
   {
@@ -15,32 +20,6 @@ const SCREENS = [
     body: "さらにスクロールすると同じラインが開いて B が見えます。上に戻すと逆に再生されます。",
   },
 ] as const;
-
-/** ストライプが閉じる／開く波の幅（0〜1 の位相内） */
-const WAVE = 0.26;
-
-function clamp01(v: number) {
-  return Math.min(1, Math.max(0, v));
-}
-
-function easeOutCubic(t: number) {
-  return 1 - (1 - t) ** 3;
-}
-
-/** 閉じる位相 t ∈ [0,1] — 上の行から順に中央へ */
-function rowCloseLocal(t: number, index: number, n: number) {
-  if (n <= 1) return clamp01(t);
-  const start = (index / (n - 1)) * (1 - WAVE);
-  return clamp01((t - start) / WAVE);
-}
-
-/** 開く位相 t ∈ [0,1] — 閉じた逆順（下の行から開く） */
-function rowOpenLocal(t: number, index: number, n: number) {
-  if (n <= 1) return clamp01(t);
-  const reverseIndex = n - 1 - index;
-  const start = (reverseIndex / (n - 1)) * (1 - WAVE);
-  return clamp01((t - start) / WAVE);
-}
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -59,77 +38,6 @@ function usePrefersReducedMotion() {
 
 export default function Page() {
   const reduceMotion = usePrefersReducedMotion();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const layerARef = useRef<HTMLElement>(null);
-  const layerBRef = useRef<HTMLElement>(null);
-  const leftRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const rightRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const rafRef = useRef<number>(0);
-
-  useEffect(() => {
-    if (reduceMotion) return;
-
-    const track = trackRef.current;
-    if (!track) return;
-
-    const update = () => {
-      const scrollY = window.scrollY;
-      const trackTop = track.getBoundingClientRect().top + scrollY;
-      const range = track.offsetHeight - window.innerHeight;
-      const p = range > 0 ? clamp01((scrollY - trackTop) / range) : 0;
-
-      const showA = p < 0.5;
-      const layerA = layerARef.current;
-      const layerB = layerBRef.current;
-      if (layerA) {
-        layerA.classList.toggle(styles.layerOn, showA);
-        layerA.classList.toggle(styles.layerOff, !showA);
-        layerA.setAttribute("aria-hidden", String(!showA));
-      }
-      if (layerB) {
-        layerB.classList.toggle(styles.layerOn, !showA);
-        layerB.classList.toggle(styles.layerOff, showA);
-        layerB.setAttribute("aria-hidden", String(showA));
-      }
-
-      if (p < 0.5) {
-        const t = p / 0.5;
-        for (let i = 0; i < LINE_COUNT; i += 1) {
-          const left = leftRefs.current[i];
-          const right = rightRefs.current[i];
-          if (!left || !right) continue;
-          const lp = easeOutCubic(rowCloseLocal(t, i, LINE_COUNT));
-          left.style.transform = `translate3d(${-105 + lp * 105}%, 0, 0)`;
-          right.style.transform = `translate3d(${105 - lp * 105}%, 0, 0)`;
-        }
-      } else {
-        const t = (p - 0.5) / 0.5;
-        for (let i = 0; i < LINE_COUNT; i += 1) {
-          const left = leftRefs.current[i];
-          const right = rightRefs.current[i];
-          if (!left || !right) continue;
-          const lp = easeOutCubic(rowOpenLocal(t, i, LINE_COUNT));
-          left.style.transform = `translate3d(${-lp * 105}%, 0, 0)`;
-          right.style.transform = `translate3d(${lp * 105}%, 0, 0)`;
-        }
-      }
-    };
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [reduceMotion]);
 
   if (reduceMotion) {
     return (
@@ -153,12 +61,11 @@ export default function Page() {
 
   return (
     <div className={styles.page}>
-      <div ref={trackRef} className={styles.track}>
+      <div className={styles.track}>
         <div className={styles.pin}>
           <div className={styles.scene}>
             <section
-              ref={layerARef}
-              className={`${styles.layer} ${styles.layerA} ${styles.layerOn}`}
+              className={`${styles.layer} ${styles.layerA}`}
               aria-hidden={false}
             >
               <h1 className={styles.title}>{SCREENS[0].title}</h1>
@@ -171,11 +78,7 @@ export default function Page() {
               </div>
             </section>
 
-            <section
-              ref={layerBRef}
-              className={`${styles.layer} ${styles.layerB} ${styles.layerOff}`}
-              aria-hidden={true}
-            >
+            <section className={`${styles.layer} ${styles.layerB}`} aria-hidden={true}>
               <h1 className={styles.title}>{SCREENS[1].title}</h1>
               <p className={styles.body}>{SCREENS[1].body}</p>
               <p className={styles.hint}>上にスクロールすると A に戻ります。</p>
@@ -188,21 +91,41 @@ export default function Page() {
 
             <div className={styles.curtain} aria-hidden="true">
               {Array.from({ length: LINE_COUNT }, (_, i) => {
+                const edgeDistance = Math.min(i, LINE_COUNT - 1 - i);
+                const reverseDistance = Math.max(i, LINE_COUNT - 1 - i);
+                const closeStart = CLOSE_BASE + edgeDistance * CLOSE_STEP;
+                const closeEnd = closeStart + PHASE_SPAN;
+                const openStart = OPEN_BASE + reverseDistance * OPEN_STEP;
+                const openEnd = openStart + PHASE_SPAN;
                 const darkLeft = i % 2 === 0;
                 return (
                   <div key={i} className={styles.row}>
                     <div
-                      ref={(el) => {
-                        leftRefs.current[i] = el;
-                      }}
-                      className={`${styles.half} ${darkLeft ? styles.halfDark : styles.halfLight}`}
-                    />
+                      className={`${styles.half} ${styles.halfLeft}`}
+                      style={
+                        {
+                          "--close-start": `${closeStart}%`,
+                          "--close-end": `${closeEnd}%`,
+                          "--open-start": `${openStart}%`,
+                          "--open-end": `${openEnd}%`,
+                        } as CSSProperties
+                      }
+                    >
+                      <div className={`${styles.panel} ${darkLeft ? styles.halfDark : styles.halfLight}`} />
+                    </div>
                     <div
-                      ref={(el) => {
-                        rightRefs.current[i] = el;
-                      }}
-                      className={`${styles.half} ${darkLeft ? styles.halfLight : styles.halfDark}`}
-                    />
+                      className={`${styles.half} ${styles.halfRight}`}
+                      style={
+                        {
+                          "--close-start": `${closeStart}%`,
+                          "--close-end": `${closeEnd}%`,
+                          "--open-start": `${openStart}%`,
+                          "--open-end": `${openEnd}%`,
+                        } as CSSProperties
+                      }
+                    >
+                      <div className={`${styles.panel} ${darkLeft ? styles.halfLight : styles.halfDark}`} />
+                    </div>
                   </div>
                 );
               })}

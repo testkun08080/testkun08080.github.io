@@ -1,40 +1,31 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import { ContactCardSection } from "../../components/dev-integrated/ContactCardSection";
 import { HeroBurstLogoSection } from "../../components/dev-integrated/HeroBurstLogoSection";
 import { SideCenterStickySection } from "../../components/dev-integrated/SideCenterStickySection";
 import { ScrollTypingHeading } from "../../components/dev-integrated/ScrollTypingHeading";
-import { StickyQuickMenu } from "../../components/portfolio/StickyQuickMenu";
-import { SkillsToolsSection } from "../../components/dev-integrated/SkillsToolsSection";
-import { WorkReelsSection } from "../../components/dev-integrated/WorkReelsSection";
 import { productionHomeCopy } from "../../lib/translations";
-import styles from "./DevIntegrated.module.css";
-import curtainStyles from "../dev-hero-typing-curtain/DevHeroTypingCurtain.module.css";
+import styles from "./DevHeroTypingCurtain.module.css";
 
 const INITIAL_LINE_COUNT = 16;
 const REPEAT_N = 15;
 const CLOSE_BASE = 6;
-const CLOSE_STEP = 2.2;
+const CLOSE_STEP = 1.9;
 const OPEN_BASE = 36;
 const OPEN_STEP = 0.9;
 const PHASE_SPAN = 14;
-const BRIDGE_TYPING_START = 0.15;
+const BRIDGE_TYPING_START = 0.35;
 const BRIDGE_TYPING_END = 0.75;
+
+const ja = productionHomeCopy.ja;
+const CURTAIN_LINE = Array.from(
+  { length: REPEAT_N },
+  () => ja.greetingBgRowText,
+).join(" ");
 
 export default function Page() {
   const measureRowRef = useRef<HTMLParagraphElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const bridgeScrollProgressRef = useRef(0);
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
-  const [language, setLanguage] = useState<"ja" | "en">("ja");
-  const copy = productionHomeCopy[language];
-  const curtainLineText = Array.from(
-    { length: REPEAT_N },
-    () => copy.greetingBgRowText,
-  ).join(" ");
-
-  useEffect(() => {
-    document.documentElement.lang = language;
-  }, [language]);
 
   useEffect(() => {
     const measure = measureRowRef.current;
@@ -100,33 +91,22 @@ export default function Page() {
     };
   }, []);
 
-  const menuItems = [
-    { href: "#hero", label: "hero" },
-    { href: "#greeting", label: "greeting" },
-    { href: "#sticky-side", label: "sticky" },
-    { href: "#work", label: "work" },
-    { href: "#skills", label: "skills" },
-    { href: "#contact", label: "contact" },
-    { href: "#footer", label: "footer" },
-  ];
-
   return (
-    <main className={styles.page}>
-      <div className={`${styles.section} ${curtainStyles.page}`}>
-        <div ref={trackRef} className={curtainStyles.track}>
-          <div className={curtainStyles.pin}>
-            <div className={curtainStyles.scene}>
+    <main>
+      <div className={styles.page}>
+        <div ref={trackRef} className={styles.track}>
+          <div className={styles.pin}>
+            <div className={styles.scene}>
               <p
                 ref={measureRowRef}
-                className={`${curtainStyles.curtainLine} ${curtainStyles.measureRow}`}
+                className={`${styles.curtainLine} ${styles.measureRow}`}
                 aria-hidden
               >
-                {copy.greetingBgRowText}
+                {ja.greetingBgRowText}
               </p>
 
               <section
-                id="hero"
-                className={`${curtainStyles.layer} ${curtainStyles.layerA}`}
+                className={`${styles.layer} ${styles.layerA}`}
                 aria-hidden={false}
               >
                 <HeroBurstLogoSection
@@ -135,21 +115,20 @@ export default function Page() {
               </section>
 
               <section
-                id="greeting"
-                className={`${curtainStyles.layer} ${curtainStyles.layerB}`}
+                className={`${styles.layer} ${styles.layerB}`}
                 aria-hidden={true}
               >
                 <ScrollTypingHeading
-                  text={copy.greetingFrontWord}
-                  headingClassName={curtainStyles.typingWord}
-                  underlineClassName={curtainStyles.typingUnderline}
+                  text="こんにちわ"
+                  headingClassName={styles.typingWord}
+                  underlineClassName={styles.typingUnderline}
                   bridgeScrollProgressRef={bridgeScrollProgressRef}
                   bridgeTypingRevealStart={BRIDGE_TYPING_START}
                   bridgeTypingRevealEnd={BRIDGE_TYPING_END}
                 />
               </section>
 
-              <div className={curtainStyles.curtain} aria-hidden="true">
+              <div className={styles.curtain} aria-hidden="true">
                 {Array.from({ length: lineCount }, (_, i) => {
                   const edgeDistance = Math.min(i, lineCount - 1 - i);
                   const reverseDistance = Math.max(i, lineCount - 1 - i);
@@ -158,26 +137,24 @@ export default function Page() {
                   const openStart = OPEN_BASE + reverseDistance * OPEN_STEP;
                   const openEnd = openStart + PHASE_SPAN;
                   const lineClass =
-                    i % 2 === 0
-                      ? curtainStyles.curtainLine
-                      : curtainStyles.curtainLineAlt;
-                  const base = curtainStyles.marqueeTrack;
+                    i % 2 === 0 ? styles.curtainLine : styles.curtainLineAlt;
+                  const base = styles.marqueeTrack;
                   const trackLeft =
                     i % 2 === 0
-                      ? `${base} ${curtainStyles.marqueeLeft}`
-                      : `${base} ${curtainStyles.marqueeRight}`;
+                      ? `${base} ${styles.marqueeLeft}`
+                      : `${base} ${styles.marqueeRight}`;
                   const trackRight =
                     i % 2 === 0
-                      ? `${base} ${curtainStyles.marqueeRight}`
-                      : `${base} ${curtainStyles.marqueeLeft}`;
+                      ? `${base} ${styles.marqueeRight}`
+                      : `${base} ${styles.marqueeLeft}`;
                   const durationSec = 124 + ((i * 7) % 6) * 8;
                   const marqueeStyle = {
                     ["--marquee-duration" as string]: `${durationSec}s`,
                   } as CSSProperties;
                   return (
-                    <div key={i} className={curtainStyles.row}>
+                    <div key={i} className={styles.row}>
                       <div
-                        className={`${curtainStyles.half} ${curtainStyles.halfLeft}`}
+                        className={`${styles.half} ${styles.halfLeft}`}
                         style={
                           {
                             "--close-start": `${closeStart}%`,
@@ -187,19 +164,19 @@ export default function Page() {
                           } as CSSProperties
                         }
                       >
-                        <div className={curtainStyles.halfClip}>
+                        <div className={styles.halfClip}>
                           <div className={trackLeft} style={marqueeStyle}>
                             <p className={lineClass} aria-hidden>
-                              {curtainLineText}
+                              {CURTAIN_LINE}
                             </p>
                             <p className={lineClass} aria-hidden>
-                              {curtainLineText}
+                              {CURTAIN_LINE}
                             </p>
                           </div>
                         </div>
                       </div>
                       <div
-                        className={`${curtainStyles.half} ${curtainStyles.halfRight}`}
+                        className={`${styles.half} ${styles.halfRight}`}
                         style={
                           {
                             "--close-start": `${closeStart}%`,
@@ -209,13 +186,13 @@ export default function Page() {
                           } as CSSProperties
                         }
                       >
-                        <div className={curtainStyles.halfClip}>
+                        <div className={styles.halfClip}>
                           <div className={trackRight} style={marqueeStyle}>
                             <p className={lineClass} aria-hidden>
-                              {curtainLineText}
+                              {CURTAIN_LINE}
                             </p>
                             <p className={lineClass} aria-hidden>
-                              {curtainLineText}
+                              {CURTAIN_LINE}
                             </p>
                           </div>
                         </div>
@@ -227,83 +204,15 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className={curtainStyles.tail} aria-hidden="true" />
+
+        {/* <div className={styles.tail} aria-hidden="true" /> */}
       </div>
 
-      <section id="sticky-side" className={styles.section}>
-        <SideCenterStickySection
-          aboutHeading={copy.aboutHeading}
-          aboutText={copy.aboutText}
-          sideWords={copy.sideWords}
-        >
-          <section id="work" className={`${styles.section} ${styles.workSection}`}>
-            <header className={styles.sectionHead}>
-              <ScrollTypingHeading
-                text={copy.workHeading}
-                headingClassName={styles.sectionHeadingWord}
-                underlineClassName={styles.sectionHeadingLine}
-              />
-            </header>
-            <WorkReelsSection />
-          </section>
-
-          <section id="skills" className={`${styles.section} ${styles.skillsSection}`}>
-            <header className={styles.sectionHead}>
-              <ScrollTypingHeading
-                text={copy.skillsHeading}
-                headingClassName={styles.sectionHeadingWord}
-                underlineClassName={styles.sectionHeadingLine}
-              />
-            </header>
-            <SkillsToolsSection />
-          </section>
-
-          <section id="contact" className={`${styles.section} ${styles.contactSection}`}>
-            <header className={styles.sectionHead}>
-              <ScrollTypingHeading
-                text={copy.contactHeading}
-                headingClassName={styles.sectionHeadingWord}
-                underlineClassName={styles.sectionHeadingLine}
-              />
-            </header>
-            <ContactCardSection />
-          </section>
-
-          <footer id="footer" className={styles.footer}>
-            <button
-              type="button"
-              className={styles.languageToggle}
-              onClick={() => setLanguage((prev) => (prev === "ja" ? "en" : "ja"))}
-              aria-label={copy.footerLanguageAriaLabel}
-            >
-              <span
-                className={
-                  language === "ja"
-                    ? styles.languageActiveRed
-                    : styles.languageInactive
-                }
-              >
-                日本語
-              </span>
-              <span className={styles.languageSeparator}> / </span>
-              <span
-                className={
-                  language === "en"
-                    ? styles.languageActiveBlue
-                    : styles.languageInactive
-                }
-              >
-                English
-              </span>
-            </button>
-            <p className={styles.copyright}>
-              © {new Date().getFullYear()} Shoichi Hasegawa
-            </p>
-          </footer>
-        </SideCenterStickySection>
-      </section>
-
-      <StickyQuickMenu items={menuItems} />
+      <SideCenterStickySection
+        aboutHeading={ja.aboutHeading}
+        aboutText={ja.aboutText}
+        sideWords={ja.sideWords}
+      />
     </main>
   );
 }

@@ -5,6 +5,7 @@ import {
 } from "../../components/portfolio/HeroLogoInkWebGL";
 import { PathBarcodeTemplate3D } from "../../components/portfolio/PathBarcodeTemplate3D";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
+import { P_HERO_CURTAIN_CLOSE_END } from "./bridgeScrollPhases";
 import styles from "../shared-dev-assets/DevBurstOverlayAnimeLogo.module.css";
 
 const HERO_BARCODE = {
@@ -28,8 +29,8 @@ function lerp(a: number, b: number, t: number) {
 export type HeroBurstLogoSectionProps = {
   onReady?: () => void;
   /**
-   * Full bridge scroll progress in [0, 1] (curtain close 0→0.5, open 0.5→1).
-   * When set, barcode zoom-out / logo fade follow `clamp(p / 0.5)` so they match the pre-bridge hero timing while the curtain runs.
+   * Full bridge scroll progress in [0, 1]. When set, barcode zoom-out / logo fade
+   * follow `clamp(p / P_HERO_CURTAIN_CLOSE_END)` so they match hero fade and curtain close.
    */
   bridgeScrollProgressRef?: MutableRefObject<number>;
 };
@@ -71,9 +72,10 @@ export function HeroBurstLogoSection({
 
     let rafId = 0;
     const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
+    const p1 = P_HERO_CURTAIN_CLOSE_END;
     const updateByScroll = () => {
       const progressed = bridgeScrollProgressRef
-        ? clamp01(bridgeScrollProgressRef.current / 0.5)
+        ? clamp01(bridgeScrollProgressRef.current / p1)
         : (() => {
             const rect = stage.getBoundingClientRect();
             const scrollable = Math.max(rect.height - window.innerHeight, 1);

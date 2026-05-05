@@ -28,19 +28,10 @@
 .layer {
   position: absolute;
   inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: clamp(1.25rem, 4vw, 2.5rem);
-  text-align: center;
 }
 
 .layerA {
   z-index: 2;
-  background: linear-gradient(165deg, #f4f1ea 0%, #e8e4dc 45%, #dfe8f2 100%);
-  color: #0f172a;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
@@ -48,61 +39,34 @@
 
 .layerB {
   z-index: 1;
-  background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%);
-  color: #ecfeff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  /* background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%); */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-.title {
+.typingWord {
   margin: 0;
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(2.2rem, 10vw, 6rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 0.98;
+  color: #f8fafc;
 }
 
-.body {
-  margin: 0;
-  max-width: 28rem;
-  font-size: 0.95rem;
-  line-height: 1.65;
-  opacity: 0.88;
-}
-
-.hint {
-  margin: 0.75rem 0 0;
-  font-size: 0.8rem;
-  opacity: 0.65;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.btnGhost {
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-  border-radius: 999px;
-  padding: 0.65rem 1.35rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  background: transparent;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-.layerA .btnGhost {
-  color: #334155;
-}
-
-.layerB .btnGhost {
-  color: #a5f3fc;
+.typingUnderline {
+  justify-self: center;
+  width: clamp(180px, 46vw, 520px);
+  height: 6px;
+  /* background: #a5f3fc; */
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
 }
 
 .curtain {
@@ -149,7 +113,29 @@
   contain: layout paint;
 }
 
-/* 本番 greeting の bg 行に寄せたタイポ（帯の高さに合わせて clamp） */
+.marqueeTrack {
+  display: flex;
+  flex: none;
+  width: max-content;
+  align-items: center;
+  height: 100%;
+  will-change: transform;
+}
+
+.marqueeLeft {
+  animation: marqueeLeft var(--marquee-duration, 22s) linear infinite;
+}
+
+.marqueeRight {
+  animation: marqueeRight var(--marquee-duration, 22s) linear infinite;
+}
+
+.marqueeTrack > p {
+  flex: none;
+  margin: 0;
+  padding-right: 0.6em;
+}
+
 .curtainLine {
   margin: 0;
   max-width: none;
@@ -202,38 +188,11 @@
   height: 40vh;
 }
 
-.reduceStack {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: clamp(1.25rem, 4vw, 2.5rem);
-  max-width: 36rem;
-  margin: 0 auto;
-}
-
-.reduceSection {
-  padding: 2rem;
-  border-radius: 1rem;
-}
-
-.reduceA {
-  background: linear-gradient(165deg, #f4f1ea 0%, #e8e4dc 100%);
-  color: #0f172a;
-}
-
-.reduceB {
-  background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
-  color: #ecfeff;
-}
-
-.reduceStack .btnGhost {
-  color: #0f172a;
-}
-
 @keyframes halfCloseFromLeft {
   from {
     transform: translate3d(-105%, 0, 0);
   }
+
   to {
     transform: translate3d(0, 0, 0);
   }
@@ -243,6 +202,7 @@
   from {
     transform: translate3d(0, 0, 0);
   }
+
   to {
     transform: translate3d(-105%, 0, 0);
   }
@@ -252,6 +212,7 @@
   from {
     transform: translate3d(105%, 0, 0);
   }
+
   to {
     transform: translate3d(0, 0, 0);
   }
@@ -261,12 +222,34 @@
   from {
     transform: translate3d(0, 0, 0);
   }
+
   to {
     transform: translate3d(105%, 0, 0);
   }
 }
 
+@keyframes marqueeLeft {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marqueeRight {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @supports (animation-timeline: view()) {
+
   .half,
   .halfClip {
     animation-fill-mode: both;
@@ -286,6 +269,7 @@
 }
 
 @supports (animation-timeline: scroll(root block)) {
+
   .half,
   .halfClip {
     animation-fill-mode: both;
@@ -323,6 +307,7 @@
 }
 
 @keyframes layerAVisibility {
+
   0%,
   49% {
     opacity: 1;
@@ -330,6 +315,7 @@
     z-index: 2;
     pointer-events: auto;
   }
+
   50%,
   100% {
     opacity: 0;
@@ -340,6 +326,7 @@
 }
 
 @keyframes layerBVisibility {
+
   0%,
   49% {
     opacity: 0;
@@ -347,11 +334,19 @@
     z-index: 1;
     pointer-events: none;
   }
+
   50%,
   100% {
     opacity: 1;
     visibility: visible;
     z-index: 2;
     pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marqueeLeft,
+  .marqueeRight {
+    animation: none;
   }
 }

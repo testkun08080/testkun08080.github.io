@@ -1,15 +1,14 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  clamp01,
-  easeOutCubic,
-  rowCloseLocal,
-  rowOpenLocal,
-} from "../../lib/barcodeTextBridgeMath";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { productionHomeCopy } from "../../lib/translations";
 import styles from "./DevBarcodeFlipTransitionText.module.css";
 
 const INITIAL_LINE_COUNT = 16;
 const REPEAT_N = 15;
+const CLOSE_BASE = 6;
+const CLOSE_STEP = 2.2;
+const OPEN_BASE = 36;
+const OPEN_STEP = 1.1;
+const PHASE_SPAN = 14;
 
 const SCREENS = [
   {
@@ -25,7 +24,10 @@ const SCREENS = [
 ] as const;
 
 const ja = productionHomeCopy.ja;
-const CURTAIN_LINE = Array.from({ length: REPEAT_N }, () => ja.greetingBgRowText).join(" ");
+const CURTAIN_LINE = Array.from(
+  { length: REPEAT_N },
+  () => ja.greetingBgRowText,
+).join(" ");
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -44,13 +46,7 @@ function usePrefersReducedMotion() {
 
 export default function Page() {
   const reduceMotion = usePrefersReducedMotion();
-  const trackRef = useRef<HTMLDivElement>(null);
   const measureRowRef = useRef<HTMLParagraphElement>(null);
-  const layerARef = useRef<HTMLElement>(null);
-  const layerBRef = useRef<HTMLElement>(null);
-  const leftRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const rightRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const rafRef = useRef(0);
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
 
   useEffect(() => {
@@ -87,73 +83,6 @@ export default function Page() {
     };
   }, []);
 
-  useEffect(() => {
-    if (reduceMotion) return;
-
-    const track = trackRef.current;
-    if (!track) return;
-
-    const update = () => {
-      const scrollY = window.scrollY;
-      const trackTop = track.getBoundingClientRect().top + scrollY;
-      const range = track.offsetHeight - window.innerHeight;
-      const p = range > 0 ? clamp01((scrollY - trackTop) / range) : 0;
-
-      const showA = p < 0.5;
-      const layerA = layerARef.current;
-      const layerB = layerBRef.current;
-      if (layerA) {
-        layerA.classList.toggle(styles.layerOn, showA);
-        layerA.classList.toggle(styles.layerOff, !showA);
-        layerA.setAttribute("aria-hidden", String(!showA));
-      }
-      if (layerB) {
-        layerB.classList.toggle(styles.layerOn, !showA);
-        layerB.classList.toggle(styles.layerOff, showA);
-        layerB.setAttribute("aria-hidden", String(showA));
-      }
-
-      const n = lineCount;
-
-      if (p < 0.5) {
-        const t = p / 0.5;
-        for (let i = 0; i < n; i += 1) {
-          const left = leftRefs.current[i];
-          const right = rightRefs.current[i];
-          if (!left || !right) continue;
-          const lp = easeOutCubic(rowCloseLocal(t, i, n));
-          left.style.transform = `translate3d(${-105 + lp * 105}%, 0, 0)`;
-          right.style.transform = `translate3d(${105 - lp * 105}%, 0, 0)`;
-        }
-      } else {
-        const t = (p - 0.5) / 0.5;
-        for (let i = 0; i < n; i += 1) {
-          const left = leftRefs.current[i];
-          const right = rightRefs.current[i];
-          if (!left || !right) continue;
-          const lp = easeOutCubic(rowOpenLocal(t, i, n));
-          left.style.transform = `translate3d(${-lp * 105}%, 0, 0)`;
-          right.style.transform = `translate3d(${lp * 105}%, 0, 0)`;
-        }
-      }
-    };
-
-    const onScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, [reduceMotion, lineCount]);
-
   if (reduceMotion) {
     return (
       <main className={styles.page}>
@@ -176,7 +105,7 @@ export default function Page() {
 
   return (
     <div className={styles.page}>
-      <div ref={trackRef} className={styles.track}>
+      <div className={styles.track}>
         <div className={styles.pin}>
           <div className={styles.scene}>
             <p
@@ -188,15 +117,19 @@ export default function Page() {
             </p>
 
             <section
-              ref={layerARef}
-              className={`${styles.layer} ${styles.layerA} ${styles.layerOn}`}
+              className={`${styles.layer} ${styles.layerA}`}
               aria-hidden={false}
             >
               <h1 className={styles.title}>{SCREENS[0].title}</h1>
               <p className={styles.body}>{SCREENS[0].body}</p>
-              <p className={styles.hint}>ゆっくり下へスクロールしてください。</p>
+              <p className={styles.hint}>
+                ゆっくり下へスクロールしてください。
+              </p>
               <div className={styles.actions}>
-                <a className={styles.btnGhost} href="/dev-barcode-flip-transition">
+                <a
+                  className={styles.btnGhost}
+                  href="/dev-barcode-flip-transition"
+                >
                   単色バンド版
                 </a>
                 <a className={styles.btnGhost} href="/dev">
@@ -206,15 +139,17 @@ export default function Page() {
             </section>
 
             <section
-              ref={layerBRef}
-              className={`${styles.layer} ${styles.layerB} ${styles.layerOff}`}
+              className={`${styles.layer} ${styles.layerB}`}
               aria-hidden={true}
             >
               <h1 className={styles.title}>{SCREENS[1].title}</h1>
               <p className={styles.body}>{SCREENS[1].body}</p>
               <p className={styles.hint}>上にスクロールすると A に戻ります。</p>
               <div className={styles.actions}>
-                <a className={styles.btnGhost} href="/dev-barcode-flip-transition">
+                <a
+                  className={styles.btnGhost}
+                  href="/dev-barcode-flip-transition"
+                >
                   単色バンド版
                 </a>
                 <a className={styles.btnGhost} href="/dev">
@@ -225,24 +160,41 @@ export default function Page() {
 
             <div className={styles.curtain} aria-hidden="true">
               {Array.from({ length: lineCount }, (_, i) => {
-                const lineClass = i % 2 === 0 ? styles.curtainLine : styles.curtainLineAlt;
+                const edgeDistance = Math.min(i, lineCount - 1 - i);
+                const reverseDistance = Math.max(i, lineCount - 1 - i);
+                const closeStart = CLOSE_BASE + edgeDistance * CLOSE_STEP;
+                const closeEnd = closeStart + PHASE_SPAN;
+                const openStart = OPEN_BASE + reverseDistance * OPEN_STEP;
+                const openEnd = openStart + PHASE_SPAN;
+                const lineClass =
+                  i % 2 === 0 ? styles.curtainLine : styles.curtainLineAlt;
                 return (
                   <div key={i} className={styles.row}>
                     <div
-                      ref={(el) => {
-                        leftRefs.current[i] = el;
-                      }}
-                      className={styles.half}
+                      className={`${styles.half} ${styles.halfLeft}`}
+                      style={
+                        {
+                          "--close-start": `${closeStart}%`,
+                          "--close-end": `${closeEnd}%`,
+                          "--open-start": `${openStart}%`,
+                          "--open-end": `${openEnd}%`,
+                        } as CSSProperties
+                      }
                     >
                       <div className={styles.halfClip}>
                         <p className={lineClass}>{CURTAIN_LINE}</p>
                       </div>
                     </div>
                     <div
-                      ref={(el) => {
-                        rightRefs.current[i] = el;
-                      }}
-                      className={styles.half}
+                      className={`${styles.half} ${styles.halfRight}`}
+                      style={
+                        {
+                          "--close-start": `${closeStart}%`,
+                          "--close-end": `${closeEnd}%`,
+                          "--open-start": `${openStart}%`,
+                          "--open-end": `${openEnd}%`,
+                        } as CSSProperties
+                      }
                     >
                       <div className={styles.halfClip}>
                         <p className={lineClass}>{CURTAIN_LINE}</p>

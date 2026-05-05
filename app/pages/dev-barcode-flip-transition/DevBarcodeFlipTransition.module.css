@@ -6,8 +6,9 @@
 .track {
   position: relative;
   width: 100%;
-  /* スクロールレンジ — JS と合わせて調整 */
-  height: 320vh;
+  height: 520vh;
+  view-timeline-name: --barcode-track;
+  view-timeline-axis: block;
 }
 
 .pin {
@@ -37,26 +38,18 @@
 }
 
 .layerA {
-  z-index: 1;
+  z-index: 2;
   background: linear-gradient(165deg, #f4f1ea 0%, #e8e4dc 45%, #dfe8f2 100%);
   color: #0f172a;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .layerB {
   z-index: 1;
   background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%);
   color: #ecfeff;
-}
-
-.layerOn {
-  z-index: 2;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.layerOff {
-  z-index: 1;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -134,16 +127,33 @@
   flex: 1 1 50%;
   min-width: 0;
   height: 100%;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.panel {
+  width: 100%;
+  height: 100%;
   will-change: transform;
 }
 
 /* p=0 と同等 — JS 実行前も画面全体がストライプで塞がらない */
-.row>.half:first-child {
+.halfLeft {
   transform: translate3d(-105%, 0, 0);
+  animation-name: halfCloseFromLeft;
 }
 
-.row>.half:last-child {
+.halfRight {
   transform: translate3d(105%, 0, 0);
+  animation-name: halfCloseFromRight;
+}
+
+.halfLeft .panel {
+  animation-name: halfOpenToLeft;
+}
+
+.halfRight .panel {
+  animation-name: halfOpenToRight;
 }
 
 .halfDark {
@@ -180,4 +190,137 @@
 .reduceB {
   background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
   color: #ecfeff;
+}
+
+@keyframes halfCloseFromLeft {
+  from {
+    transform: translate3d(-105%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes halfOpenToLeft {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-105%, 0, 0);
+  }
+}
+
+@keyframes halfCloseFromRight {
+  from {
+    transform: translate3d(105%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes halfOpenToRight {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(105%, 0, 0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .half,
+  .panel {
+    animation-fill-mode: both;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .half {
+    animation-timeline: --barcode-track;
+    animation-range: entry var(--close-start) entry var(--close-end);
+  }
+
+  .panel {
+    animation-timeline: --barcode-track;
+    animation-range: entry var(--open-start) entry var(--open-end);
+  }
+
+}
+
+@supports (animation-timeline: scroll(root block)) {
+  .half,
+  .panel {
+    animation-fill-mode: both;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .half {
+    animation-timeline: scroll(root block);
+    animation-range: var(--close-start) var(--close-end);
+  }
+
+  .panel {
+    animation-timeline: scroll(root block);
+    animation-range: var(--open-start) var(--open-end);
+  }
+
+  .layerA {
+    animation-name: layerAVisibility;
+    animation-timeline: scroll(root block);
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-range: 36% 86%;
+    animation-timing-function: linear;
+  }
+
+  .layerB {
+    animation-name: layerBVisibility;
+    animation-timeline: scroll(root block);
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-range: 36% 86%;
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes layerAVisibility {
+  0%,
+  49% {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+@keyframes layerBVisibility {
+  0%,
+  49% {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+    pointer-events: auto;
+  }
 }

@@ -18,6 +18,10 @@ import { productionHomeCopy } from "../../lib/translations";
 import type { Language } from "../../lib/translations";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import burstStyles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
+import {
+  P_CURTAIN_OPEN_END,
+  P_HERO_CURTAIN_CLOSE_END,
+} from "./bridgeScrollPhases";
 import { GreetingBurstSection } from "./GreetingBurstSection";
 import type { HeroBurstLogoSectionProps } from "./HeroBurstLogoSection";
 import bridgeStyles from "./GreetingWithBarcodeBridge.module.css";
@@ -51,6 +55,9 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
   const [curtainLineCount, setCurtainLineCount] = useState(
     INITIAL_CURTAIN_LINES,
   );
+
+  const p1 = P_HERO_CURTAIN_CLOSE_END;
+  const p2 = P_CURTAIN_OPEN_END;
 
   useEffect(() => {
     const measure = measureCurtainRef.current;
@@ -99,20 +106,17 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
       const p = range > 0 ? clamp01((scrollY - trackTop) / range) : 0;
       bridgeScrollProgressRef.current = p;
 
-      // ヒーローはカーテンが閉じきる p=0.5 までに 0 へフェード。
-      // カーテンと同じ RAF でセットすることで、フェードと幕引きの拍を完全に揃える。
-      const heroOpacity = clamp01(1 - p / 0.5);
+      const heroOpacity = clamp01(1 - p / p1);
       const heroEl = heroUnderlayRef.current;
       if (heroEl) {
         heroEl.style.setProperty("--hero-opacity", heroOpacity.toFixed(3));
-        // 完全に消えたあとはレンダリング負荷を切り、後段のレイアウト/合成から外す
         heroEl.style.visibility = heroOpacity <= 0.001 ? "hidden" : "visible";
       }
 
       const n = curtainLineCount;
 
-      if (p < 0.5) {
-        const t = p / 0.5;
+      if (p < p1) {
+        const t = p / p1;
         for (let i = 0; i < n; i += 1) {
           const left = leftRefs.current[i];
           const right = rightRefs.current[i];
@@ -121,8 +125,9 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
           left.style.transform = `translate3d(${-105 + lp * 105}%, 0, 0)`;
           right.style.transform = `translate3d(${105 - lp * 105}%, 0, 0)`;
         }
-      } else {
-        const t = (p - 0.5) / 0.5;
+      } else if (p < p2) {
+        const span = p2 - p1;
+        const t = span > 1e-6 ? (p - p1) / span : 1;
         for (let i = 0; i < n; i += 1) {
           const left = leftRefs.current[i];
           const right = rightRefs.current[i];
@@ -130,6 +135,14 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
           const lp = easeOutCubic(rowOpenLocal(t, i, n));
           left.style.transform = `translate3d(${-lp * 105}%, 0, 0)`;
           right.style.transform = `translate3d(${lp * 105}%, 0, 0)`;
+        }
+      } else {
+        for (let i = 0; i < n; i += 1) {
+          const left = leftRefs.current[i];
+          const right = rightRefs.current[i];
+          if (!left || !right) continue;
+          left.style.transform = "translate3d(-105%, 0, 0)";
+          right.style.transform = "translate3d(105%, 0, 0)";
         }
       }
     };
@@ -148,7 +161,7 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
       window.removeEventListener("resize", onScroll);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [curtainLineCount, reduceMotion]);
+  }, [curtainLineCount, reduceMotion, p1, p2]);
 
   if (reduceMotion) {
     return (
@@ -202,8 +215,8 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
               animationsEnabled={false}
               hideBgRows
               bridgeScrollProgressRef={bridgeScrollProgressRef}
-              bridgeTypingRevealStart={0.3}
-              bridgeTypingRevealEnd={0.5}
+              bridgeTypingRevealStart={p1}
+              bridgeTypingRevealEnd={p2}
             />
 
             <div className={bridgeStyles.curtain} aria-hidden="true">

@@ -1,7 +1,7 @@
 .bridgeTrack {
   position: relative;
   width: 100%;
-  height: 320vh;
+  height: 200vh;
 }
 
 .stickyPin {
@@ -29,7 +29,7 @@
 .stageStack {
   position: relative;
   z-index: 1;
-  min-height: 180dvh;
+  min-height: 100dvh;
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
@@ -57,6 +57,7 @@
   flex: 1 1 50%;
   min-width: 0;
   height: 100%;
+  overflow: hidden;
   will-change: transform;
 }
 
@@ -70,7 +71,16 @@
   contain: layout paint;
 }
 
-/* 横方向に流れ続けるマーキー。half 自体のスクロール連動 transform とは別レイヤー。 */
+/* JS 実行前も端に退避（初回 update と同じ見た目） */
+.row > .half:first-child {
+  transform: translate3d(-105%, 0, 0);
+}
+
+.row > .half:last-child {
+  transform: translate3d(105%, 0, 0);
+}
+
+/* 横方向に流れ続けるマーキー。half のスクロール連動 transform とは別レイヤー。 */
 .marqueeTrack {
   display: flex;
   flex: none;
@@ -88,7 +98,7 @@
   animation: marqueeRight var(--marquee-duration, 22s) linear infinite;
 }
 
-.marqueeTrack>p {
+.marqueeTrack > p {
   flex: none;
   margin: 0;
   padding-right: 0.6em;
@@ -119,7 +129,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .marqueeLeft,
   .marqueeRight {
     animation: none;
@@ -164,17 +173,9 @@
   top: 0;
 }
 
-.row>.half:first-child {
-  transform: translate3d(-105%, 0, 0);
-}
-
-.row>.half:last-child {
-  transform: translate3d(105%, 0, 0);
-}
-
 @media (max-width: 640px) {
   .stageStack {
-    min-height: 160dvh;
+    min-height: 100dvh;
   }
 }
 
