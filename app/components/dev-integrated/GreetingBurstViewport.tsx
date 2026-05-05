@@ -21,6 +21,8 @@ export type GreetingBurstViewportProps = {
   bridgeScrollProgressRef?: MutableRefObject<number>;
   bridgeTypingRevealStart?: number;
   bridgeTypingRevealEnd?: number;
+  /** true のとき front word は透明塗りで背面のカーテン文字を見せる */
+  wordUsesBackdrop?: boolean;
 };
 
 export function GreetingBurstViewport({
@@ -35,6 +37,7 @@ export function GreetingBurstViewport({
   bridgeScrollProgressRef,
   bridgeTypingRevealStart,
   bridgeTypingRevealEnd,
+  wordUsesBackdrop = false,
 }: GreetingBurstViewportProps) {
   const lineText = Array.from({ length: ROW_REPEAT }, () => bgRowText).join(" ");
 
@@ -65,7 +68,7 @@ export function GreetingBurstViewport({
       <div className={styles.frontLayer}>
         <ScrollTypingHeading
           text={frontWord}
-          headingClassName={styles.word}
+          headingClassName={`${styles.word} ${wordUsesBackdrop ? styles.wordBackdropFill : ""}`}
           underlineClassName={styles.underline}
           {...(bridgeScrollProgressRef
             ? {

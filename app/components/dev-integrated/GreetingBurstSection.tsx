@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { GreetingBurstTail } from "./GreetingBurstTail";
 import { GreetingBurstViewport } from "./GreetingBurstViewport";
@@ -11,12 +11,25 @@ export type GreetingBurstSectionProps = {
   bgRowText?: string;
   /** false のとき背景行のスクロール連動アニメを開始しない（ブリッジ進行中など） */
   animationsEnabled?: boolean;
+  /** true のとき viewport/tail の背景行レイヤーを描画しない（外部レイヤー使用時） */
+  hideBgRows?: boolean;
+  /** Bridge: front-word typing を外部スクロール位相で制御する。 */
+  bridgeScrollProgressRef?: MutableRefObject<number>;
+  bridgeTypingRevealStart?: number;
+  bridgeTypingRevealEnd?: number;
+  /** true のとき front word の塗りを透明にし、背面レイヤーを文字内部に見せる */
+  wordUsesBackdrop?: boolean;
 };
 
 export function GreetingBurstSection({
   frontWord = "konchiwa",
   bgRowText = "hi there hello oi",
   animationsEnabled = true,
+  hideBgRows = false,
+  bridgeScrollProgressRef,
+  bridgeTypingRevealStart,
+  bridgeTypingRevealEnd,
+  wordUsesBackdrop = false,
 }: GreetingBurstSectionProps) {
   const reduceMotion = usePrefersReducedMotion();
   const rootRef = useRef<HTMLElement>(null);
@@ -53,17 +66,26 @@ export function GreetingBurstSection({
 
   return (
     <section ref={rootRef} className={styles.page} aria-label="Greeting">
-      <section ref={triggerRef} className={styles.stage}>
+      <section
+        ref={triggerRef}
+        className={`${styles.stage} ${hideBgRows ? styles.stageCompact : ""}`}
+      >
         <GreetingBurstViewport
           frontWord={frontWord}
           bgRowText={bgRowText}
+          hideBgRows={hideBgRows}
           rowCount={viewportRows}
           rowOffset={0}
           bgLayerRef={viewportBgLayerRef}
           measureRowRef={measureRowRef}
           bgRowsRef={bgRowsRef}
+          bridgeScrollProgressRef={bridgeScrollProgressRef}
+          bridgeTypingRevealStart={bridgeTypingRevealStart}
+          bridgeTypingRevealEnd={bridgeTypingRevealEnd}
+          wordUsesBackdrop={wordUsesBackdrop}
         />
         <GreetingBurstTail
+          hideBgRows={hideBgRows}
           bgRowText={bgRowText}
           rowCount={tailRows}
           rowOffset={viewportRows}

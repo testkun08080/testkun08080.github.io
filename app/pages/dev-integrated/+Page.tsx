@@ -37,7 +37,10 @@ export default function Page() {
   return (
     <main className={styles.page}>
       <div className={styles.section}>
-        <GreetingWithBarcodeBridge language={language} hero={<HeroBurstLogoSection />} />
+        <GreetingWithBarcodeBridge
+          language={language}
+          hero={<HeroBurstLogoSection />}
+        />
       </div>
 
       <section id="sticky-side" className={styles.section}>
@@ -97,18 +100,28 @@ export default function Page() {
           aria-label="Switch language between Japanese and English"
         >
           <span
-            className={language === "ja" ? styles.languageActiveRed : styles.languageInactive}
+            className={
+              language === "ja"
+                ? styles.languageActiveRed
+                : styles.languageInactive
+            }
           >
             日本語
           </span>
           <span className={styles.languageSeparator}> / </span>
           <span
-            className={language === "en" ? styles.languageActiveBlue : styles.languageInactive}
+            className={
+              language === "en"
+                ? styles.languageActiveBlue
+                : styles.languageInactive
+            }
           >
             English
           </span>
         </button>
-        <p className={styles.copyright}>© {new Date().getFullYear()} Shoichi Hasegawa</p>
+        <p className={styles.copyright}>
+          © {new Date().getFullYear()} Shoichi Hasegawa
+        </p>
       </footer>
 
       <StickyQuickMenu items={menuItems} />

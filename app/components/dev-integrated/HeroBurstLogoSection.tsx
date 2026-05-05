@@ -34,7 +34,10 @@ export type HeroBurstLogoSectionProps = {
   bridgeScrollProgressRef?: MutableRefObject<number>;
 };
 
-export function HeroBurstLogoSection({ onReady, bridgeScrollProgressRef }: HeroBurstLogoSectionProps) {
+export function HeroBurstLogoSection({
+  onReady,
+  bridgeScrollProgressRef,
+}: HeroBurstLogoSectionProps) {
   const reduceMotion = usePrefersReducedMotion();
   const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);

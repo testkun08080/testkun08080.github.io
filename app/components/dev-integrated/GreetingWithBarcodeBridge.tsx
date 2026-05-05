@@ -19,8 +19,6 @@ import type { Language } from "../../lib/translations";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import burstStyles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
 import { GreetingBurstSection } from "./GreetingBurstSection";
-import { GreetingBurstTail } from "./GreetingBurstTail";
-import { GreetingBurstViewport } from "./GreetingBurstViewport";
 import type { HeroBurstLogoSectionProps } from "./HeroBurstLogoSection";
 import bridgeStyles from "./GreetingWithBarcodeBridge.module.css";
 
@@ -36,9 +34,10 @@ type Props = {
 export function GreetingWithBarcodeBridge({ language, hero }: Props) {
   const reduceMotion = usePrefersReducedMotion();
   const copy = productionHomeCopy[language];
-  const curtainLineText = Array.from({ length: CURTAIN_REPEAT }, () => copy.greetingBgRowText).join(
-    " ",
-  );
+  const curtainLineText = Array.from(
+    { length: CURTAIN_REPEAT },
+    () => copy.greetingBgRowText,
+  ).join(" ");
 
   const rootRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -49,7 +48,9 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
   const rafRef = useRef(0);
   const bridgeScrollProgressRef = useRef(0);
 
-  const [curtainLineCount, setCurtainLineCount] = useState(INITIAL_CURTAIN_LINES);
+  const [curtainLineCount, setCurtainLineCount] = useState(
+    INITIAL_CURTAIN_LINES,
+  );
 
   useEffect(() => {
     const measure = measureCurtainRef.current;
@@ -168,25 +169,42 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
   }
 
   return (
-    <section ref={rootRef} id="greeting" className={burstStyles.page} aria-label="Greeting">
+    <section
+      ref={rootRef}
+      id="greeting"
+      className={burstStyles.page}
+      aria-label="Greeting"
+    >
       <div ref={trackRef} className={bridgeStyles.bridgeTrack}>
         <div className={bridgeStyles.stickyPin}>
           {hero ? (
-            <div ref={heroUnderlayRef} id="hero" className={bridgeStyles.heroUnderlay}>
+            <div
+              ref={heroUnderlayRef}
+              id="hero"
+              className={bridgeStyles.heroUnderlay}
+            >
               {hero && isValidElement(hero)
-                ? cloneElement(hero as ReactElement<HeroBurstLogoSectionProps>, {
-                    bridgeScrollProgressRef,
-                  })
+                ? cloneElement(
+                    hero as ReactElement<HeroBurstLogoSectionProps>,
+                    {
+                      bridgeScrollProgressRef,
+                    },
+                  )
                 : hero}
             </div>
           ) : null}
-          <section className={`${burstStyles.stage} ${bridgeStyles.stageStack}`}>
-            <GreetingBurstViewport
+          <section
+            className={`${burstStyles.stage} ${bridgeStyles.stageStack}`}
+          >
+            <GreetingBurstSection
               frontWord={copy.greetingFrontWord}
+              bgRowText={copy.greetingBgRowText}
+              animationsEnabled={false}
               hideBgRows
               bridgeScrollProgressRef={bridgeScrollProgressRef}
+              bridgeTypingRevealStart={0.3}
+              bridgeTypingRevealEnd={0.5}
             />
-            <GreetingBurstTail hideBgRows />
 
             <div className={bridgeStyles.curtain} aria-hidden="true">
               <p
@@ -198,7 +216,9 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
               </p>
               {Array.from({ length: curtainLineCount }, (_, i) => {
                 const lineClass =
-                  i % 2 === 0 ? bridgeStyles.curtainLine : bridgeStyles.curtainLineAlt;
+                  i % 2 === 0
+                    ? bridgeStyles.curtainLine
+                    : bridgeStyles.curtainLineAlt;
                 const base = bridgeStyles.marqueeTrack;
                 const trackLeft =
                   i % 2 === 0

@@ -1,5 +1,5 @@
 /** ストライプが閉じる／開く波の幅（0〜1 の位相内） */
-export const BRIDGE_WAVE = 0.26;
+export const BRIDGE_WAVE = 0.1;
 
 export function clamp01(v: number) {
   return Math.min(1, Math.max(0, v));

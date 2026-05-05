@@ -19,7 +19,7 @@
   left: 0;
   right: 0;
   height: 100dvh;
-  z-index: 0;
+  z-index: auto;
   overflow: hidden;
   pointer-events: none;
   opacity: var(--hero-opacity, 1);
@@ -38,7 +38,7 @@
 .curtain {
   position: absolute;
   inset: 0;
-  z-index: 10;
+  z-index: auto;
   display: flex;
   flex-direction: column;
   pointer-events: none;
@@ -88,20 +88,21 @@
   animation: marqueeRight var(--marquee-duration, 22s) linear infinite;
 }
 
-.marqueeTrack > p {
+.marqueeTrack>p {
   flex: none;
   margin: 0;
   padding-right: 0.6em;
 }
 
 .marqueeSlow {
-  --marquee-duration: 32s;
+  --marquee-duration: 0.001s;
 }
 
 @keyframes marqueeLeft {
   from {
     transform: translate3d(0, 0, 0);
   }
+
   to {
     transform: translate3d(-50%, 0, 0);
   }
@@ -111,12 +112,14 @@
   from {
     transform: translate3d(-50%, 0, 0);
   }
+
   to {
     transform: translate3d(0, 0, 0);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .marqueeLeft,
   .marqueeRight {
     animation: none;
@@ -161,11 +164,11 @@
   top: 0;
 }
 
-.row > .half:first-child {
+.row>.half:first-child {
   transform: translate3d(-105%, 0, 0);
 }
 
-.row > .half:last-child {
+.row>.half:last-child {
   transform: translate3d(105%, 0, 0);
 }
 
