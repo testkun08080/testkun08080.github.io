@@ -138,11 +138,11 @@
 }
 
 /* p=0 と同等 — JS 実行前も画面全体がストライプで塞がらない */
-.row > .half:first-child {
+.row>.half:first-child {
   transform: translate3d(-105%, 0, 0);
 }
 
-.row > .half:last-child {
+.row>.half:last-child {
   transform: translate3d(105%, 0, 0);
 }
 

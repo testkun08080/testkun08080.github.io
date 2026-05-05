@@ -185,11 +185,11 @@
   opacity: 0.48;
 }
 
-.row > .half:first-child {
+.row>.half:first-child {
   transform: translate3d(-105%, 0, 0);
 }
 
-.row > .half:last-child {
+.row>.half:last-child {
   transform: translate3d(105%, 0, 0);
 }
 
