@@ -12,6 +12,7 @@ import { StickyQuickMenu } from "../portfolio/StickyQuickMenu";
 import { ProductionFooter } from "./ProductionFooter";
 import { ProductionResumeDownload } from "./ProductionResumeDownload";
 import { productionHomeCopy } from "../../lib/translations";
+import { useLanguage } from "../../lib/LanguageContext";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import styles from "./ProductionHomePage.module.css";
 
@@ -40,6 +41,7 @@ function easeOutExpo(progress: number) {
 
 export function ProductionHomePage() {
   const reduceMotion = usePrefersReducedMotion();
+  const { language, toggleLanguage } = useLanguage();
   const trackRef = useRef<HTMLDivElement>(null);
   const layerARef = useRef<HTMLElement>(null);
   const layerBRef = useRef<HTMLElement>(null);
@@ -54,6 +56,14 @@ export function ProductionHomePage() {
     () => Array.from({ length: REPEAT_N }, () => curtainSingleLine).join(" "),
     [curtainSingleLine],
   );
+
+  useEffect(() => {
+    const previousLang = document.documentElement.lang;
+    document.documentElement.lang = language;
+    return () => {
+      document.documentElement.lang = previousLang;
+    };
+  }, [language]);
 
   useEffect(() => {
     const measure = measureRowRef.current;
@@ -295,6 +305,9 @@ export function ProductionHomePage() {
         items={copy.menuItems}
         menuLabel={copy.menuButton}
         languageLabel={copy.menuLanguageLabel}
+        languageAriaLabel={copy.footerLanguageAriaLabel}
+        language={language}
+        onToggleLanguage={toggleLanguage}
       />
 
       <ProductionFooter />
