@@ -29,8 +29,170 @@
   min-height: 100dvh;
 }
 
+.layer {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.12s linear;
+}
+
+.layerA {
+  z-index: 2;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.layerB {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .heroLayer {
   background: transparent;
+}
+
+.heroCurtain {
+  z-index: 6;
+}
+
+.typingWord {
+  margin: 0;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(2.2rem, 10vw, 6rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 0.98;
+  color: var(--color-anime-about-text);
+}
+
+.typingUnderline {
+  justify-self: center;
+  width: clamp(180px, 46vw, 520px);
+  height: 6px;
+  background: var(--color-anime-about-text);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}
+
+.curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.measureRow {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+}
+
+.row {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.half {
+  flex: 1 1 50%;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.halfClip {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  contain: layout paint;
+}
+
+.marqueeTrack {
+  display: flex;
+  flex: none;
+  width: max-content;
+  align-items: center;
+  height: 100%;
+  will-change: transform;
+}
+
+.marqueeLeft {
+  animation: marqueeLeft var(--marquee-duration, 22s) linear infinite;
+}
+
+.marqueeRight {
+  animation: marqueeRight var(--marquee-duration, 22s) linear infinite;
+}
+
+.marqueeTrack > p {
+  flex: none;
+  margin: 0;
+  padding-right: 0.6em;
+}
+
+.curtainLine {
+  margin: 0;
+  max-width: none;
+  text-align: center;
+  font-size: clamp(0.55rem, min(1.8vh, 1.35vw), 1.05rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-anime-bg-row, #ffc5c5);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  white-space: nowrap;
+  opacity: 0.92;
+}
+
+.curtainLineAlt {
+  margin: 0;
+  max-width: none;
+  text-align: center;
+  font-size: clamp(0.55rem, min(1.8vh, 1.35vw), 1.05rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-anime-bg-row, #ffc5c5);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  white-space: nowrap;
+  opacity: 0.48;
+}
+
+.halfLeft {
+  transform: translate3d(-105%, 0, 0);
+}
+
+.halfRight {
+  transform: translate3d(105%, 0, 0);
+}
+
+.heroMenuShell {
+  position: relative;
+  z-index: 7;
+  opacity: 0;
+  transform: translate3d(0, -14px, 0);
+  pointer-events: none;
+  will-change: opacity, transform;
 }
 
 .greetingLayer {
@@ -121,8 +283,39 @@
   color: color-mix(in srgb, var(--color-anime-center-heading) 58%, var(--color-anime-side-text) 42%);
 }
 
+@keyframes marqueeLeft {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marqueeRight {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .page {
     scroll-behavior: auto;
+  }
+
+  .heroMenuShell {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .marqueeLeft,
+  .marqueeRight {
+    animation: none;
   }
 }

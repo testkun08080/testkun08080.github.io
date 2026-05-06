@@ -1,4 +1,4 @@
-import { animate, stagger } from "animejs";
+import { animate, onScroll, stagger } from "animejs";
 import { useEffect, useRef } from "react";
 import styles from "../shared-dev-assets/DevHogehoge.module.css";
 
@@ -51,9 +51,34 @@ export function WorkReelsSection({
       duration: 520,
       delay: stagger(90),
       ease: "out(3)",
+      autoplay: false,
+    });
+
+    let hasPlayed = false;
+    const scrollTriggerProxy = { progress: 0 };
+    const scrollTrigger = animate(scrollTriggerProxy, {
+      progress: 1,
+      duration: 1,
+      ease: "linear",
+      autoplay: onScroll({
+        target: root,
+        container: window,
+        enter: "top 90%",
+        leave: "bottom top",
+        sync: true,
+        onUpdate: (self) => {
+          const observer = self as { progress?: number };
+          if (typeof observer.progress !== "number") return;
+          if (!hasPlayed && observer.progress > 0.02) {
+            hasPlayed = true;
+            entrance.play();
+          }
+        },
+      }),
     });
 
     return () => {
+      scrollTrigger.revert();
       entrance.revert();
     };
   }, []);

@@ -1,4 +1,4 @@
-import { animate, stagger } from "animejs";
+import { animate, onScroll, stagger } from "animejs";
 import { useEffect, useRef, useState } from "react";
 import styles from "../shared-dev-assets/DevSoftwareTools.module.css";
 import { TOOL_CATEGORIES } from "../shared-dev-assets/toolCategories";
@@ -56,20 +56,28 @@ export function SkillsToolsSection({
       alternate: true,
     });
 
-    // Pause drift animation when section scrolls out of view
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
+    const scrollSyncProxy = { progress: 0 };
+    const scrollSync = animate(scrollSyncProxy, {
+      progress: 1,
+      duration: 1,
+      ease: "linear",
+      autoplay: onScroll({
+        target: page,
+        container: window,
+        enter: "top bottom",
+        leave: "bottom top",
+        sync: true,
+        onUpdate: (self) => {
+          const observer = self as { progress?: number };
+          if (typeof observer.progress !== "number") return;
+          if (observer.progress > 0.01 && observer.progress < 0.99) {
             drift.play();
           } else {
             drift.pause();
           }
-        }
-      },
-      { threshold: 0 },
-    );
-    io.observe(page);
+        },
+      }),
+    });
 
     const pointerCleanups = cards.map((card) => {
       const handlePointerDown = () => {
@@ -85,7 +93,7 @@ export function SkillsToolsSection({
     });
 
     return () => {
-      io.disconnect();
+      scrollSync.revert();
       reveal.revert();
       drift.revert();
       pointerCleanups.forEach((cleanup) => cleanup());

@@ -1,5 +1,5 @@
 import { animate } from "animejs";
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
 import styles from "./StickyQuickMenu.module.css";
 
 type StickyQuickMenuItem = {
@@ -15,6 +15,9 @@ type StickyQuickMenuProps = {
   onToggleLanguage?: () => void;
   menuLabel?: string;
   languageLabel?: string;
+  visibleOverride?: boolean;
+  rootClassName?: string;
+  rootStyle?: CSSProperties;
 };
 
 export function StickyQuickMenu({
@@ -25,6 +28,9 @@ export function StickyQuickMenu({
   onToggleLanguage,
   menuLabel = "Menu",
   languageLabel = "Language",
+  visibleOverride,
+  rootClassName,
+  rootStyle,
 }: StickyQuickMenuProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -39,6 +45,7 @@ export function StickyQuickMenu({
 
   const menuItems = useMemo(() => items, [items]);
   const menuVisible = menuOpen || prefersReducedMotion;
+  const effectiveVisible = typeof visibleOverride === "boolean" ? visibleOverride : isVisible;
 
   useEffect(() => {
     if (typeof window === "undefined" || !("matchMedia" in window)) return;
@@ -90,6 +97,8 @@ export function StickyQuickMenu({
   }, [menuOpen, prefersReducedMotion]);
 
   useEffect(() => {
+    if (typeof visibleOverride === "boolean") return;
+
     const updateVisibility = () => {
       const currentScrollY = window.scrollY;
       const hero = document.querySelector<HTMLElement>(heroSelector);
@@ -141,12 +150,21 @@ export function StickyQuickMenu({
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [heroSelector, upwardThreshold]);
+  }, [heroSelector, upwardThreshold, visibleOverride]);
+
+  useEffect(() => {
+    if (visibleOverride === false) {
+      setMenuOpen(false);
+    }
+  }, [visibleOverride]);
 
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <nav className={`${styles.fabArea} ${isVisible ? styles.fabAreaVisible : styles.fabAreaHidden}`}>
+    <nav
+      className={`${styles.fabArea} ${effectiveVisible ? styles.fabAreaVisible : styles.fabAreaHidden} ${rootClassName ?? ""}`}
+      style={rootStyle}
+    >
       <button
         type="button"
         ref={buttonRef}

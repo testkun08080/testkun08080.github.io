@@ -1,17 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
 import { animate, onScroll } from "animejs";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CurtainMarquee } from "../../components/curtain/CurtainMarquee";
-import { HeroBurstLogoSection } from "../../components/dev-integrated/HeroBurstLogoSection";
-import { ScrollTypingHeading } from "../../components/dev-integrated/ScrollTypingHeading";
-import { StickyQuickMenu } from "../../components/portfolio/StickyQuickMenu";
-import { clamp01 } from "../../lib/barcodeTextBridgeMath";
 import { productionHomeCopy } from "../../lib/translations";
-import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
-import styles from "./DevIntegrated.module.css";
+import styles from "./DevBarcodeFlipTransitionTextAnime.module.css";
 
 const INITIAL_LINE_COUNT = 16;
 const REPEAT_N = 15;
 const MOTION_PRESETS = {
+  // 旧ページ寄せ
   legacy: {
     closeBase: 0.06,
     closeStep: 0.022,
@@ -19,12 +15,50 @@ const MOTION_PRESETS = {
     openStep: 0.011,
     phaseSpan: 0.14,
   },
+  // 少し均一寄り
+  soft: {
+    closeBase: 0.05,
+    closeStep: 0.016,
+    openBase: 0.34,
+    openStep: 0.008,
+    phaseSpan: 0.13,
+  },
+  // 遅延を強調
+  dramatic: {
+    closeBase: 0.07,
+    closeStep: 0.028,
+    openBase: 0.38,
+    openStep: 0.014,
+    phaseSpan: 0.16,
+  },
 } as const;
+
 const ACTIVE_PRESET = MOTION_PRESETS.legacy;
 
+const SCREENS = [
+  {
+    id: "a",
+    title: "テキスト帯 A",
+    body: "Anime.js の onScroll でカーテンを閉じ、A→B の切替を同期させています。",
+  },
+  {
+    id: "b",
+    title: "テキスト帯 B",
+    body: "カーテンの左右移動とレイヤー表示はすべて JS 駆動です。上スクロールで逆再生します。",
+  },
+] as const;
+
 const ja = productionHomeCopy.ja;
-const CURTAIN_SINGLE_LINE = ja.greetingBgRowText;
-const CURTAIN_LINE = Array.from({ length: REPEAT_N }, () => CURTAIN_SINGLE_LINE).join(" ");
+const CURTAIN_LINE = Array.from(
+  { length: REPEAT_N },
+  () => ja.greetingBgRowText,
+).join(" ");
+
+function clamp01(value: number) {
+  if (value < 0) return 0;
+  if (value > 1) return 1;
+  return value;
+}
 
 function lerp(from: number, to: number, progress: number) {
   return from + (to - from) * progress;
@@ -36,6 +70,21 @@ function easeOutExpo(progress: number) {
   return 1 - 2 ** (-10 * p);
 }
 
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !("matchMedia" in window)) return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  return reduced;
+}
+
 export default function Page() {
   const reduceMotion = usePrefersReducedMotion();
   const trackRef = useRef<HTMLDivElement>(null);
@@ -44,10 +93,6 @@ export default function Page() {
   const measureRowRef = useRef<HTMLParagraphElement>(null);
   const curtainLeftRefs = useRef<Array<HTMLDivElement | null>>([]);
   const curtainRightRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const bridgeScrollProgressRef = useRef(0);
-  const heroMenuVisibleRef = useRef(false);
-  const [isHeroMenuVisible, setIsHeroMenuVisible] = useState(false);
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
 
   useEffect(() => {
@@ -100,13 +145,13 @@ export default function Page() {
   );
 
   useEffect(() => {
+    if (reduceMotion) return;
     const track = trackRef.current;
     const layerA = layerARef.current;
     const layerB = layerBRef.current;
-    const menu = menuRef.current;
-    if (!track || !layerA || !layerB || !menu) return;
+    if (!track || !layerA || !layerB) return;
 
-    const applyBridgeProgress = (progress: number) => {
+    const applyProgress = (progress: number) => {
       rowTiming.forEach((timing, i) => {
         const left = curtainLeftRefs.current[i];
         const right = curtainRightRefs.current[i];
@@ -138,114 +183,124 @@ export default function Page() {
       layerB.style.visibility = bVisible ? "visible" : "hidden";
       layerA.style.zIndex = bVisible ? "1" : "2";
       layerB.style.zIndex = bVisible ? "2" : "1";
-
-      const menuProgress = clamp01((progress - 0.48) / 0.16);
-      const nextHeroMenuVisible = menuProgress > 0.6;
-      if (heroMenuVisibleRef.current !== nextHeroMenuVisible) {
-        heroMenuVisibleRef.current = nextHeroMenuVisible;
-        setIsHeroMenuVisible(nextHeroMenuVisible);
-      }
-      menu.style.opacity = String(menuProgress);
-      menu.style.transform = `translate3d(0, ${(1 - menuProgress) * -14}px, 0)`;
-      menu.style.pointerEvents = nextHeroMenuVisible ? "auto" : "none";
     };
 
-    if (reduceMotion) {
-      applyBridgeProgress(1);
-      return;
-    }
+    applyProgress(0);
 
-    applyBridgeProgress(0);
-
-    const progressSync = animate(track, {
-      opacity: [1, 1],
-      duration: 1,
+    const scrub = animate(track, {
+      // opacity: [1, 1],
+      // duration: 1,
       ease: "linear",
       autoplay: onScroll({
+        target: track,
         enter: "top top",
         leave: "bottom bottom",
         sync: true,
         onUpdate: (self) => {
           const observer = self as { progress?: number };
           if (typeof observer.progress !== "number") return;
-          const bridgeProgress = clamp01(observer.progress);
-          bridgeScrollProgressRef.current = bridgeProgress;
-          applyBridgeProgress(bridgeProgress);
+          applyProgress(clamp01(observer.progress));
         },
       }),
     });
 
     return () => {
-      progressSync.revert();
-      applyBridgeProgress(0);
+      scrub.revert();
+      applyProgress(0);
     };
   }, [reduceMotion, rowTiming]);
 
+  if (reduceMotion) {
+    return (
+      <main className={styles.page}>
+        <div className={styles.reduceStack}>
+          <section className={`${styles.reduceSection} ${styles.reduceA}`}>
+            <h1 className={styles.title}>{SCREENS[0].title}</h1>
+            <p className={styles.body}>{SCREENS[0].body}</p>
+          </section>
+          <section className={`${styles.reduceSection} ${styles.reduceB}`}>
+            <h1 className={styles.title}>{SCREENS[1].title}</h1>
+            <p className={styles.body}>{SCREENS[1].body}</p>
+          </section>
+          <a className={styles.btnGhost} href="/dev">
+            /dev に戻る
+          </a>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className={styles.page}>
-      <div className={styles.section}>
-        <div ref={trackRef} className={styles.bridgeTrack}>
-          <div className={styles.bridgePin}>
-            <div className={styles.bridgeScene}>
-              <p
-                ref={measureRowRef}
-                className={`${styles.curtainLine} ${styles.measureRow}`}
-                aria-hidden
-              >
-                {CURTAIN_SINGLE_LINE}
+    <div className={styles.page}>
+      <div ref={trackRef} className={styles.track}>
+        <div className={styles.pin}>
+          <div className={styles.scene}>
+            <p
+              ref={measureRowRef}
+              className={`${styles.curtainLine} ${styles.measureRow}`}
+              aria-hidden
+            >
+              {ja.greetingBgRowText}
+            </p>
+
+            <section
+              ref={layerARef}
+              className={`${styles.layer} ${styles.layerA}`}
+            >
+              <h1 className={styles.title}>{SCREENS[0].title}</h1>
+              <p className={styles.body}>{SCREENS[0].body}</p>
+              <p className={styles.hint}>
+                ゆっくり下へスクロールしてください。
               </p>
-              <section
-                id="hero"
-                ref={layerARef}
-                className={`${styles.layer} ${styles.layerA} ${styles.heroLayer}`}
-                aria-hidden={false}
-              >
-                <HeroBurstLogoSection
-                  bridgeScrollProgressRef={bridgeScrollProgressRef}
-                />
-              </section>
-              <section
-                ref={layerBRef}
-                className={`${styles.layer} ${styles.layerB} ${styles.greetingLayer}`}
-                aria-hidden
-              >
-                <ScrollTypingHeading
-                  text="こんにちわ"
-                  headingClassName={styles.typingWord}
-                  underlineClassName={styles.typingUnderline}
-                  bridgeScrollProgressRef={bridgeScrollProgressRef}
-                  bridgeTypingRevealStart={0.52}
-                  bridgeTypingRevealEnd={0.76}
-                />
-              </section>
-              <CurtainMarquee
-                styles={styles}
-                rootClassName={styles.heroCurtain}
-                lineCount={lineCount}
-                lineText={CURTAIN_LINE}
-                onLeftHalfRef={(i, el) => {
-                  curtainLeftRefs.current[i] = el;
-                }}
-                onRightHalfRef={(i, el) => {
-                  curtainRightRefs.current[i] = el;
-                }}
-              />
-              <div ref={menuRef} className={styles.heroMenuShell}>
-                <StickyQuickMenu
-                  items={[
-                    { href: "#hero", label: "Hero" },
-                    { href: "#work", label: "Work" },
-                    { href: "#skills", label: "Skills" },
-                    { href: "#contact", label: "Contact" },
-                  ]}
-                  visibleOverride={isHeroMenuVisible}
-                  menuLabel="Menu"
-                />
+              <div className={styles.actions}>
+                <a
+                  className={styles.btnGhost}
+                  href="/dev-barcode-flip-transition-text"
+                >
+                  元ページ
+                </a>
+                <a className={styles.btnGhost} href="/dev">
+                  /dev に戻る
+                </a>
               </div>
-            </div>
+            </section>
+
+            <section
+              ref={layerBRef}
+              className={`${styles.layer} ${styles.layerB}`}
+            >
+              <h1 className={styles.title}>{SCREENS[1].title}</h1>
+              <p className={styles.body}>{SCREENS[1].body}</p>
+              <p className={styles.hint}>上にスクロールすると A に戻ります。</p>
+              <div className={styles.actions}>
+                <a
+                  className={styles.btnGhost}
+                  href="/dev-barcode-flip-transition-text"
+                >
+                  元ページ
+                </a>
+                <a className={styles.btnGhost} href="/dev">
+                  /dev に戻る
+                </a>
+              </div>
+            </section>
+
+            <CurtainMarquee
+              styles={styles}
+              lineCount={lineCount}
+              lineText={CURTAIN_LINE}
+              onLeftHalfRef={(i, el) => {
+                curtainLeftRefs.current[i] = el;
+              }}
+              onRightHalfRef={(i, el) => {
+                curtainRightRefs.current[i] = el;
+              }}
+            />
           </div>
         </div>
       </div>
-    </main>
+
+      <div className={styles.tail} aria-hidden="true" />
+    </div>
   );
 }

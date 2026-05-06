@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type MutableRefObject } from "react";
+import { animate, onScroll } from "animejs";
 import {
   FlowMode,
   HeroLogoInkWebGL,
@@ -70,17 +71,10 @@ export function HeroBurstLogoSection({
       return;
     }
 
-    let rafId = 0;
     const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
     const p1 = P_HERO_CURTAIN_CLOSE_END;
-    const updateByScroll = () => {
-      const progressed = bridgeScrollProgressRef
-        ? clamp01(bridgeScrollProgressRef.current / p1)
-        : (() => {
-            const rect = stage.getBoundingClientRect();
-            const scrollable = Math.max(rect.height - window.innerHeight, 1);
-            return clamp01(-rect.top / scrollable);
-          })();
+    const applyProgress = (progress: number) => {
+      const progressed = clamp01(progress);
       const scale = 1 + progressed * 0.9;
       const opacity = 1 - progressed;
       barcodeFrame.style.transform = `scale(${scale})`;
@@ -91,25 +85,42 @@ export function HeroBurstLogoSection({
       setScrollProgress(progressed);
     };
 
-    let resizeTimer = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(rafId);
-      rafId = window.requestAnimationFrame(updateByScroll);
-    };
-    const onResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(onScroll, 150);
-    };
-
-    updateByScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize, { passive: true });
+    const syncFromBridge = bridgeScrollProgressRef
+      ? animate(stage, {
+          opacity: [1, 1],
+          duration: 1,
+          ease: "linear",
+          autoplay: onScroll({
+            // target: stage,
+            // container: window,
+            // enter: "top top",
+            // leave: "bottom bottom",
+            sync: true,
+            onUpdate: () => {
+              applyProgress(clamp01(bridgeScrollProgressRef.current / p1));
+            },
+          }),
+        })
+      : animate(stage, {
+          opacity: [1, 1],
+          duration: 1,
+          ease: "linear",
+          autoplay: onScroll({
+            // target: stage,
+            // container: window,
+            // enter: "top top",
+            // leave: "bottom bottom",
+            sync: true,
+            onUpdate: (self) => {
+              const observer = self as { progress?: number };
+              if (typeof observer.progress !== "number") return;
+              applyProgress(observer.progress);
+            },
+          }),
+        });
 
     return () => {
-      cancelAnimationFrame(rafId);
-      clearTimeout(resizeTimer);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
+      syncFromBridge.revert();
       progressRef.current = 0;
       setScrollLogoBoost(0);
       setScrollProgress(0);

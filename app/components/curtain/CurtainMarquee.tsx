@@ -8,6 +8,7 @@ export type CurtainMarqueeProps = {
   styles: CurtainStyles;
   lineCount: number;
   lineText: string;
+  rootClassName?: string;
   getHalfStyle?: (i: number, lineCount: number, side: HalfSide) => CSSProperties;
   onLeftHalfRef?: (i: number, el: HTMLDivElement | null) => void;
   onRightHalfRef?: (i: number, el: HTMLDivElement | null) => void;
@@ -17,6 +18,7 @@ export function CurtainMarquee({
   styles,
   lineCount,
   lineText,
+  rootClassName,
   getHalfStyle,
   onLeftHalfRef,
   onRightHalfRef,
@@ -27,7 +29,10 @@ export function CurtainMarquee({
     Boolean(styles.marqueeRight);
 
   return (
-    <div className={styles.curtain} aria-hidden="true">
+    <div
+      className={rootClassName ? `${styles.curtain} ${rootClassName}` : styles.curtain}
+      aria-hidden="true"
+    >
       {Array.from({ length: lineCount }, (_, i) => {
         const lineClass = i % 2 === 0 ? styles.curtainLine : styles.curtainLineAlt;
         const durationSec = 124 + ((i * 7) % 6) * 8;
