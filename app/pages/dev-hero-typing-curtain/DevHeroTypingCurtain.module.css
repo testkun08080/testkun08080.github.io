@@ -130,7 +130,7 @@
   animation: marqueeRight var(--marquee-duration, 22s) linear infinite;
 }
 
-.marqueeTrack > p {
+.marqueeTrack>p {
   flex: none;
   margin: 0;
   padding-right: 0.6em;
@@ -182,6 +182,13 @@
 
 .halfRight .halfClip {
   animation-name: halfOpenToRight;
+}
+
+.jsDriven .half,
+.jsDriven .halfClip,
+.jsDriven .layerA,
+.jsDriven .layerB {
+  animation: none !important;
 }
 
 .tail {
@@ -345,6 +352,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .marqueeLeft,
   .marqueeRight {
     animation: none;

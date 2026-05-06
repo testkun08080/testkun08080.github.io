@@ -7,6 +7,36 @@
   position: relative;
 }
 
+.bridgeTrack {
+  position: relative;
+  width: 100%;
+  height: 520vh;
+}
+
+.bridgePin {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.bridgeScene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.heroLayer {
+  background: transparent;
+}
+
+.greetingLayer {
+  background: transparent;
+}
+
 .sectionHead {
   width: min(100%, 1100px);
   margin: 0 auto;

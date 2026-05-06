@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { HeroBurstLogoSection } from "../../components/dev-integrated/HeroBurstLogoSection";
 import { SideCenterStickySection } from "../../components/dev-integrated/SideCenterStickySection";
 import { ScrollTypingHeading } from "../../components/dev-integrated/ScrollTypingHeading";
+import { CurtainMarquee } from "../../components/curtain/CurtainMarquee";
 import { productionHomeCopy } from "../../lib/translations";
 import styles from "./DevHeroTypingCurtain.module.css";
 
@@ -128,79 +129,25 @@ export default function Page() {
                 />
               </section>
 
-              <div className={styles.curtain} aria-hidden="true">
-                {Array.from({ length: lineCount }, (_, i) => {
-                  const edgeDistance = Math.min(i, lineCount - 1 - i);
-                  const reverseDistance = Math.max(i, lineCount - 1 - i);
+              <CurtainMarquee
+                styles={styles}
+                lineCount={lineCount}
+                lineText={CURTAIN_LINE}
+                getHalfStyle={(i, n) => {
+                  const edgeDistance = Math.min(i, n - 1 - i);
+                  const reverseDistance = Math.min(i, n - 1 - i);
                   const closeStart = CLOSE_BASE + edgeDistance * CLOSE_STEP;
                   const closeEnd = closeStart + PHASE_SPAN;
                   const openStart = OPEN_BASE + reverseDistance * OPEN_STEP;
                   const openEnd = openStart + PHASE_SPAN;
-                  const lineClass =
-                    i % 2 === 0 ? styles.curtainLine : styles.curtainLineAlt;
-                  const base = styles.marqueeTrack;
-                  const trackLeft =
-                    i % 2 === 0
-                      ? `${base} ${styles.marqueeLeft}`
-                      : `${base} ${styles.marqueeRight}`;
-                  const trackRight =
-                    i % 2 === 0
-                      ? `${base} ${styles.marqueeRight}`
-                      : `${base} ${styles.marqueeLeft}`;
-                  const durationSec = 124 + ((i * 7) % 6) * 8;
-                  const marqueeStyle = {
-                    ["--marquee-duration" as string]: `${durationSec}s`,
+                  return {
+                    "--close-start": `${closeStart}%`,
+                    "--close-end": `${closeEnd}%`,
+                    "--open-start": `${openStart}%`,
+                    "--open-end": `${openEnd}%`,
                   } as CSSProperties;
-                  return (
-                    <div key={i} className={styles.row}>
-                      <div
-                        className={`${styles.half} ${styles.halfLeft}`}
-                        style={
-                          {
-                            "--close-start": `${closeStart}%`,
-                            "--close-end": `${closeEnd}%`,
-                            "--open-start": `${openStart}%`,
-                            "--open-end": `${openEnd}%`,
-                          } as CSSProperties
-                        }
-                      >
-                        <div className={styles.halfClip}>
-                          <div className={trackLeft} style={marqueeStyle}>
-                            <p className={lineClass} aria-hidden>
-                              {CURTAIN_LINE}
-                            </p>
-                            <p className={lineClass} aria-hidden>
-                              {CURTAIN_LINE}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className={`${styles.half} ${styles.halfRight}`}
-                        style={
-                          {
-                            "--close-start": `${closeStart}%`,
-                            "--close-end": `${closeEnd}%`,
-                            "--open-start": `${openStart}%`,
-                            "--open-end": `${openEnd}%`,
-                          } as CSSProperties
-                        }
-                      >
-                        <div className={styles.halfClip}>
-                          <div className={trackRight} style={marqueeStyle}>
-                            <p className={lineClass} aria-hidden>
-                              {CURTAIN_LINE}
-                            </p>
-                            <p className={lineClass} aria-hidden>
-                              {CURTAIN_LINE}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                }}
+              />
             </div>
           </div>
         </div>

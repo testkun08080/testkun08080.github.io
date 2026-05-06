@@ -234,6 +234,7 @@
   from {
     transform: translate3d(-105%, 0, 0);
   }
+
   to {
     transform: translate3d(0, 0, 0);
   }
@@ -243,6 +244,7 @@
   from {
     transform: translate3d(0, 0, 0);
   }
+
   to {
     transform: translate3d(-105%, 0, 0);
   }
@@ -252,6 +254,7 @@
   from {
     transform: translate3d(105%, 0, 0);
   }
+
   to {
     transform: translate3d(0, 0, 0);
   }
@@ -261,12 +264,14 @@
   from {
     transform: translate3d(0, 0, 0);
   }
+
   to {
     transform: translate3d(105%, 0, 0);
   }
 }
 
 @supports (animation-timeline: view()) {
+
   .half,
   .halfClip {
     animation-fill-mode: both;
@@ -286,6 +291,7 @@
 }
 
 @supports (animation-timeline: scroll(root block)) {
+
   .half,
   .halfClip {
     animation-fill-mode: both;
@@ -323,6 +329,7 @@
 }
 
 @keyframes layerAVisibility {
+
   0%,
   49% {
     opacity: 1;
@@ -330,6 +337,7 @@
     z-index: 2;
     pointer-events: auto;
   }
+
   50%,
   100% {
     opacity: 0;
@@ -340,6 +348,7 @@
 }
 
 @keyframes layerBVisibility {
+
   0%,
   49% {
     opacity: 0;
@@ -347,6 +356,7 @@
     z-index: 1;
     pointer-events: none;
   }
+
   50%,
   100% {
     opacity: 1;

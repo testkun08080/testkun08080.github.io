@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { CurtainMarquee } from "../../components/curtain/CurtainMarquee";
 import { productionHomeCopy } from "../../lib/translations";
 import styles from "./DevBarcodeFlipTransitionText.module.css";
 
@@ -158,52 +159,25 @@ export default function Page() {
               </div>
             </section>
 
-            <div className={styles.curtain} aria-hidden="true">
-              {Array.from({ length: lineCount }, (_, i) => {
-                const edgeDistance = Math.min(i, lineCount - 1 - i);
-                const reverseDistance = Math.max(i, lineCount - 1 - i);
+            <CurtainMarquee
+              styles={styles}
+              lineCount={lineCount}
+              lineText={CURTAIN_LINE}
+              getHalfStyle={(i, n) => {
+                const edgeDistance = Math.min(i, n - 1 - i);
+                const reverseDistance = Math.max(i, n - 1 - i);
                 const closeStart = CLOSE_BASE + edgeDistance * CLOSE_STEP;
                 const closeEnd = closeStart + PHASE_SPAN;
                 const openStart = OPEN_BASE + reverseDistance * OPEN_STEP;
                 const openEnd = openStart + PHASE_SPAN;
-                const lineClass =
-                  i % 2 === 0 ? styles.curtainLine : styles.curtainLineAlt;
-                return (
-                  <div key={i} className={styles.row}>
-                    <div
-                      className={`${styles.half} ${styles.halfLeft}`}
-                      style={
-                        {
-                          "--close-start": `${closeStart}%`,
-                          "--close-end": `${closeEnd}%`,
-                          "--open-start": `${openStart}%`,
-                          "--open-end": `${openEnd}%`,
-                        } as CSSProperties
-                      }
-                    >
-                      <div className={styles.halfClip}>
-                        <p className={lineClass}>{CURTAIN_LINE}</p>
-                      </div>
-                    </div>
-                    <div
-                      className={`${styles.half} ${styles.halfRight}`}
-                      style={
-                        {
-                          "--close-start": `${closeStart}%`,
-                          "--close-end": `${closeEnd}%`,
-                          "--open-start": `${openStart}%`,
-                          "--open-end": `${openEnd}%`,
-                        } as CSSProperties
-                      }
-                    >
-                      <div className={styles.halfClip}>
-                        <p className={lineClass}>{CURTAIN_LINE}</p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                return {
+                  "--close-start": `${closeStart}%`,
+                  "--close-end": `${closeEnd}%`,
+                  "--open-start": `${openStart}%`,
+                  "--open-end": `${openEnd}%`,
+                } as CSSProperties;
+              }}
+            />
           </div>
         </div>
       </div>
