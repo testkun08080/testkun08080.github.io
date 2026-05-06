@@ -27,15 +27,13 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
         run: npm ci
-        working-directory: app
 
       - name: Ensure Linux native binaries are present
         run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu @rolldown/binding-linux-x64-gnu lightningcss-linux-x64-gnu
-        working-directory: app
 
       - name: Typecheck
         run: npm run typecheck
