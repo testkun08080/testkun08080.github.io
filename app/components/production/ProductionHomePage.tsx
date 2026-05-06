@@ -8,6 +8,9 @@ import { ScrollTypingHeading } from "../dev-integrated/ScrollTypingHeading";
 import { SideCenterStickySection } from "../dev-integrated/SideCenterStickySection";
 import { SkillsToolsSection } from "../dev-integrated/SkillsToolsSection";
 import { WorkReelsSection } from "../dev-integrated/WorkReelsSection";
+import { StickyQuickMenu } from "../portfolio/StickyQuickMenu";
+import { ProductionFooter } from "./ProductionFooter";
+import { ProductionResumeDownload } from "./ProductionResumeDownload";
 import { productionHomeCopy } from "../../lib/translations";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import styles from "./ProductionHomePage.module.css";
@@ -278,15 +281,23 @@ export function ProductionHomePage() {
               />
             </header>
             <ContactCardSection />
+            <ProductionResumeDownload
+              heading={copy.resumeHeading}
+              resumeJaLabel={copy.resumeJaLabel}
+              resumeEnLabel={copy.resumeEnLabel}
+              downloadLabel={copy.resumeDownloadLabel}
+            />
           </section>
         </SideCenterStickySection>
       </section>
 
-      <footer id="footer" className={styles.footer}>
-        <p className={styles.copyright}>
-          © {new Date().getFullYear()} Shoichi Hasegawa
-        </p>
-      </footer>
+      <StickyQuickMenu
+        items={copy.menuItems}
+        menuLabel={copy.menuButton}
+        languageLabel={copy.menuLanguageLabel}
+      />
+
+      <ProductionFooter />
     </main>
   );
 }
