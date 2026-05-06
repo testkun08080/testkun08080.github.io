@@ -37,7 +37,9 @@ export function ProductionResumeDownload({
       }),
     });
 
-    return () => anim.revert();
+    return () => {
+      anim.revert();
+    };
   }, []);
 
   return (
