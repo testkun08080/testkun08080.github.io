@@ -1,4 +1,4 @@
-import { animate, stagger } from "animejs";
+import { animate, onScroll } from "animejs";
 import { useEffect, useRef } from "react";
 import styles from "../shared-dev-assets/DevHogehoge.module.css";
 
@@ -32,25 +32,23 @@ export function WorkReelsSection({
     const root = rootRef.current;
     if (!root) return;
 
-    const cards = Array.from(root.querySelectorAll<HTMLElement>(`.${styles.reelCard}`));
-    if (!cards.length) return;
-
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReducedMotion) return;
 
-    cards.forEach((card) => {
-      card.style.opacity = "0";
-      card.style.transform = "translateY(22px)";
-    });
+    root.style.opacity = "0";
+    root.style.transform = "translateY(40px)";
 
-    const entrance = animate(cards, {
+    const entrance = animate(root, {
       opacity: [0, 1],
-      translateY: [22, 0],
-      duration: 520,
-      delay: stagger(90),
-      ease: "out(3)",
+      translateY: ["40px", "0px"],
+      ease: "linear",
+      autoplay: onScroll({
+        enter: "top 85%",
+        leave: "top 20%",
+        sync: true,
+      }),
     });
 
     return () => {

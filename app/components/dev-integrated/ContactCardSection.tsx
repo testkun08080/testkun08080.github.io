@@ -1,3 +1,5 @@
+import { animate, onScroll } from "animejs";
+import { useEffect, useRef } from "react";
 import styles from "../shared-dev-assets/DevContact.module.css";
 
 type ContactItem = {
@@ -25,8 +27,33 @@ const CONTACT_ITEMS = [
 ] satisfies ContactItem[];
 
 export function ContactCardSection() {
+  const rootRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    root.style.opacity = "0";
+    root.style.transform = "translateY(40px)";
+
+    const anim = animate(root, {
+      opacity: [0, 1],
+      translateY: ["40px", "0px"],
+      ease: "linear",
+      autoplay: onScroll({
+        enter: "top 85%",
+        leave: "top 20%",
+        sync: true,
+      }),
+    });
+
+    return () => anim.revert();
+  }, []);
+
   return (
-    <section className={styles.card}>
+    <section ref={rootRef} className={styles.card}>
       <div className={styles.cardHeader}>
         <p className={styles.eyebrow}>OPEN TO WORK</p>
         <h3 className={styles.title}>Let&apos;s build something great.</h3>

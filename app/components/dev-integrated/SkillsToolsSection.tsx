@@ -32,18 +32,18 @@ export function SkillsToolsSection({
     );
     if (!cards.length) return;
 
-    cards.forEach((card) => {
-      card.style.opacity = "0.01";
-      card.style.transform = "translateY(22px) scale(0.94)";
-    });
+    page.style.opacity = "0";
+    page.style.transform = "translateY(40px)";
 
-    const reveal = animate(cards, {
+    const containerReveal = animate(page, {
       opacity: [0, 1],
-      translateY: [22, 0],
-      scale: [0.94, 1],
-      duration: 660,
-      ease: "out(4)",
-      delay: stagger(60),
+      translateY: ["40px", "0px"],
+      ease: "linear",
+      autoplay: onScroll({
+        enter: "top 85%",
+        leave: "top 20%",
+        sync: true,
+      }),
     });
 
     const drift = animate(cards, {
@@ -93,7 +93,7 @@ export function SkillsToolsSection({
 
     return () => {
       scrollSync.revert();
-      reveal.revert();
+      containerReveal.revert();
       drift.revert();
       pointerCleanups.forEach((cleanup) => cleanup());
     };

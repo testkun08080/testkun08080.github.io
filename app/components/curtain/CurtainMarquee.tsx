@@ -14,6 +14,11 @@ export type CurtainMarqueeProps = {
   onRightHalfRef?: (i: number, el: HTMLDivElement | null) => void;
 };
 
+const MARQUEE_BASE_DURATION_S = 124;
+const MARQUEE_OFFSET_FACTOR = 7;
+const MARQUEE_OFFSET_CYCLE = 6;
+const MARQUEE_OFFSET_STEP_S = 8;
+
 export function CurtainMarquee({
   styles,
   lineCount,
@@ -23,10 +28,11 @@ export function CurtainMarquee({
   onLeftHalfRef,
   onRightHalfRef,
 }: CurtainMarqueeProps) {
-  const hasMarquee =
-    Boolean(styles.marqueeTrack) &&
-    Boolean(styles.marqueeLeft) &&
-    Boolean(styles.marqueeRight);
+  const hasMarquee = !!(
+    styles.marqueeTrack &&
+    styles.marqueeLeft &&
+    styles.marqueeRight
+  );
 
   return (
     <div
@@ -35,7 +41,10 @@ export function CurtainMarquee({
     >
       {Array.from({ length: lineCount }, (_, i) => {
         const lineClass = i % 2 === 0 ? styles.curtainLine : styles.curtainLineAlt;
-        const durationSec = 124 + ((i * 7) % 6) * 8;
+        const durationSec =
+          MARQUEE_BASE_DURATION_S +
+          ((i * MARQUEE_OFFSET_FACTOR) % MARQUEE_OFFSET_CYCLE) *
+            MARQUEE_OFFSET_STEP_S;
         const marqueeStyle = {
           ["--marquee-duration" as string]: `${durationSec}s`,
         } as CSSProperties;
