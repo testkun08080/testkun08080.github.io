@@ -1,4 +1,4 @@
-import { animate, onScroll, stagger } from "animejs";
+import { animate, createScope, onScroll, stagger } from "animejs";
 import { useEffect, useRef, useState } from "react";
 import styles from "../shared-dev-assets/DevSoftwareTools.module.css";
 import { TOOL_CATEGORIES } from "../shared-dev-assets/toolCategories";
@@ -13,7 +13,8 @@ export function SkillsToolsSection({
   closeLabel = "Close",
 }: SkillsToolsSectionProps) {
   const COLLAPSED_GRID_MAX_HEIGHT = 296;
-  const pageRef = useRef<HTMLElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
+  const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const gridRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const [expandedMap, setExpandedMap] = useState<Record<string, boolean>>({});
   const [overflowMap, setOverflowMap] = useState<Record<string, boolean>>({});
@@ -21,29 +22,27 @@ export function SkillsToolsSection({
   useEffect(() => {
     const page = pageRef.current;
     if (!page) return;
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReducedMotion) return;
+    const categorySections = Array.from(
+      page.querySelectorAll<HTMLElement>(`.${styles.iconSection}`),
+    );
 
     const cards = Array.from(
       page.querySelectorAll<HTMLElement>("[data-tool-card]"),
     );
-    if (!cards.length) return;
+    if (!cards.length || !categorySections.length) return;
 
-    page.style.opacity = "0";
-    page.style.transform = "translateY(40px)";
-
-    const containerReveal = animate(page, {
-      opacity: [0, 1],
-      translateY: ["40px", "0px"],
-      ease: "linear",
-      autoplay: onScroll({
-        enter: "top 85%",
-        leave: "top 20%",
-        sync: true,
-      }),
+    scopeRef.current = createScope({ root: page }).add(() => {
+      categorySections.forEach((section) => {
+        animate(section, {
+          opacity: [0, 1],
+          translateY: ["40px", "0px"],
+          autoplay: onScroll({
+            enter: "bottom top",
+            leave: "top center",
+            sync: true,
+          }),
+        });
+      });
     });
 
     const drift = animate(cards, {
@@ -64,7 +63,7 @@ export function SkillsToolsSection({
       autoplay: onScroll({
         target: page,
         enter: "top bottom",
-        leave: "bottom top",
+        leave: "center center",
         sync: true,
         onUpdate: (self) => {
           const observer = self as { progress?: number };
@@ -92,8 +91,9 @@ export function SkillsToolsSection({
     });
 
     return () => {
+      scopeRef.current?.revert();
+      scopeRef.current = null;
       scrollSync.revert();
-      containerReveal.revert();
       drift.revert();
       pointerCleanups.forEach((cleanup) => cleanup());
     };
@@ -152,7 +152,9 @@ export function SkillsToolsSection({
             <div
               id={`tools-grid-${category.id}`}
               className={`${styles.iconGridViewport} ${
-                overflowMap[category.id] ? styles.iconGridViewportCollapsible : ""
+                overflowMap[category.id]
+                  ? styles.iconGridViewportCollapsible
+                  : ""
               } ${
                 overflowMap[category.id] && !expandedMap[category.id]
                   ? styles.iconGridViewportCollapsed
