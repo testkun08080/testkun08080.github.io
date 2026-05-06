@@ -63,7 +63,6 @@ export function SkillsToolsSection({
       ease: "linear",
       autoplay: onScroll({
         target: page,
-        container: window,
         enter: "top bottom",
         leave: "bottom top",
         sync: true,
@@ -139,7 +138,7 @@ export function SkillsToolsSection({
   };
 
   return (
-    <main ref={pageRef} className={styles.page}>
+    <div ref={pageRef} className={styles.page}>
       {TOOL_CATEGORIES.map((category) => (
         <section key={category.id} className={styles.iconSection}>
           <h2 className={styles.sectionTitle}>{category.title}</h2>
@@ -216,6 +215,6 @@ export function SkillsToolsSection({
           ) : null}
         </section>
       ))}
-    </main>
+    </div>
   );
 }

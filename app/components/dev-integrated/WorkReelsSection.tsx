@@ -6,13 +6,13 @@ const REELS = [
   {
     label: "Reel 01",
     period: "2022 - 2024",
-    embedUrl: "https://www.youtube-nocookie.com/embed/pMOKLQ0rxhU?rel=0&playsinline=1",
+    embedUrl: "https://www.youtube.com/embed/pMOKLQ0rxhU?rel=0&playsinline=1",
     watchUrl: "https://www.youtube.com/watch?v=pMOKLQ0rxhU",
   },
   {
     label: "Reel 02",
     period: "2017 - 2022",
-    embedUrl: "https://www.youtube-nocookie.com/embed/L2ci7xq4EEk?rel=0&playsinline=1",
+    embedUrl: "https://www.youtube.com/embed/L2ci7xq4EEk?rel=0&playsinline=1",
     watchUrl: "https://www.youtube.com/watch?v=L2ci7xq4EEk",
   },
 ] as const;
@@ -26,13 +26,15 @@ export function WorkReelsSection({
   fallbackPrefix = "埋め込みが表示されない場合は",
   fallbackLinkLabel = "YouTubeで開く",
 }: WorkReelsSectionProps) {
-  const rootRef = useRef<HTMLElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
-    const cards = Array.from(root.querySelectorAll<HTMLElement>(`.${styles.reelCard}`));
+    const cards = Array.from(
+      root.querySelectorAll<HTMLElement>(`.${styles.reelCard}`),
+    );
     if (!cards.length) return;
 
     const prefersReducedMotion = window.matchMedia(
@@ -57,12 +59,12 @@ export function WorkReelsSection({
     let hasPlayed = false;
     const scrollTriggerProxy = { progress: 0 };
     const scrollTrigger = animate(scrollTriggerProxy, {
-      progress: 1,
-      duration: 1,
+      // progress: 1,
+      // duration: 1,
       ease: "linear",
       autoplay: onScroll({
-        target: root,
-        container: window,
+        // target: root,
+        // container: window,
         enter: "top 90%",
         leave: "bottom top",
         sync: true,
@@ -84,7 +86,7 @@ export function WorkReelsSection({
   }, []);
 
   return (
-    <main ref={rootRef} className={styles.page}>
+    <div ref={rootRef} className={styles.page}>
       {REELS.map((reel) => (
         <section key={reel.label} className={styles.reelSection}>
           <div className={styles.reelCard}>
@@ -109,6 +111,6 @@ export function WorkReelsSection({
           </div>
         </section>
       ))}
-    </main>
+    </div>
   );
 }

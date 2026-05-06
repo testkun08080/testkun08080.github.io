@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { animate, onScroll } from "animejs";
 import { CurtainMarquee } from "../../components/curtain/CurtainMarquee";
+import { ContactCardSection } from "../../components/dev-integrated/ContactCardSection";
 import { HeroBurstLogoSection } from "../../components/dev-integrated/HeroBurstLogoSection";
+import { SideCenterStickySection } from "../../components/dev-integrated/SideCenterStickySection";
+import { SkillsToolsSection } from "../../components/dev-integrated/SkillsToolsSection";
 import { ScrollTypingHeading } from "../../components/dev-integrated/ScrollTypingHeading";
+import { WorkReelsSection } from "../../components/dev-integrated/WorkReelsSection";
 import { StickyQuickMenu } from "../../components/portfolio/StickyQuickMenu";
 import { clamp01 } from "../../lib/barcodeTextBridgeMath";
 import { productionHomeCopy } from "../../lib/translations";
@@ -24,7 +28,11 @@ const ACTIVE_PRESET = MOTION_PRESETS.legacy;
 
 const ja = productionHomeCopy.ja;
 const CURTAIN_SINGLE_LINE = ja.greetingBgRowText;
-const CURTAIN_LINE = Array.from({ length: REPEAT_N }, () => CURTAIN_SINGLE_LINE).join(" ");
+const CURTAIN_LINE = Array.from(
+  { length: REPEAT_N },
+  () => CURTAIN_SINGLE_LINE,
+).join(" ");
+const copy = productionHomeCopy.ja;
 
 function lerp(from: number, to: number, progress: number) {
   return from + (to - from) * progress;
@@ -44,10 +52,7 @@ export default function Page() {
   const measureRowRef = useRef<HTMLParagraphElement>(null);
   const curtainLeftRefs = useRef<Array<HTMLDivElement | null>>([]);
   const curtainRightRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const menuRef = useRef<HTMLDivElement>(null);
   const bridgeScrollProgressRef = useRef(0);
-  const heroMenuVisibleRef = useRef(false);
-  const [isHeroMenuVisible, setIsHeroMenuVisible] = useState(false);
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
 
   useEffect(() => {
@@ -103,8 +108,7 @@ export default function Page() {
     const track = trackRef.current;
     const layerA = layerARef.current;
     const layerB = layerBRef.current;
-    const menu = menuRef.current;
-    if (!track || !layerA || !layerB || !menu) return;
+    if (!track || !layerA || !layerB) return;
 
     const applyBridgeProgress = (progress: number) => {
       rowTiming.forEach((timing, i) => {
@@ -138,16 +142,6 @@ export default function Page() {
       layerB.style.visibility = bVisible ? "visible" : "hidden";
       layerA.style.zIndex = bVisible ? "1" : "2";
       layerB.style.zIndex = bVisible ? "2" : "1";
-
-      const menuProgress = clamp01((progress - 0.48) / 0.16);
-      const nextHeroMenuVisible = menuProgress > 0.6;
-      if (heroMenuVisibleRef.current !== nextHeroMenuVisible) {
-        heroMenuVisibleRef.current = nextHeroMenuVisible;
-        setIsHeroMenuVisible(nextHeroMenuVisible);
-      }
-      menu.style.opacity = String(menuProgress);
-      menu.style.transform = `translate3d(0, ${(1 - menuProgress) * -14}px, 0)`;
-      menu.style.pointerEvents = nextHeroMenuVisible ? "auto" : "none";
     };
 
     if (reduceMotion) {
@@ -230,22 +224,106 @@ export default function Page() {
                   curtainRightRefs.current[i] = el;
                 }}
               />
-              <div ref={menuRef} className={styles.heroMenuShell}>
-                <StickyQuickMenu
-                  items={[
-                    { href: "#hero", label: "Hero" },
-                    { href: "#work", label: "Work" },
-                    { href: "#skills", label: "Skills" },
-                    { href: "#contact", label: "Contact" },
-                  ]}
-                  visibleOverride={isHeroMenuVisible}
-                  menuLabel="Menu"
-                />
-              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <section id="sticky-side" className={styles.section}>
+        <SideCenterStickySection
+          aboutHeading={copy.aboutHeading}
+          aboutText={copy.aboutText}
+          sideWords={copy.sideWords}
+        >
+          <section
+            id="work"
+            className={`${styles.section} ${styles.workSection}`}
+          >
+            <header className={styles.sectionHead}>
+              <ScrollTypingHeading
+                text={copy.workHeading}
+                headingClassName={styles.sectionHeadingWord}
+                underlineClassName={styles.sectionHeadingLine}
+              />
+            </header>
+            <WorkReelsSection
+              fallbackPrefix={copy.reelsFallbackPrefix}
+              fallbackLinkLabel={copy.reelsFallbackLink}
+            />
+          </section>
+
+          <section
+            id="skills"
+            className={`${styles.section} ${styles.skillsSection}`}
+          >
+            <header className={styles.sectionHead}>
+              <ScrollTypingHeading
+                text={copy.skillsHeading}
+                headingClassName={styles.sectionHeadingWord}
+                underlineClassName={styles.sectionHeadingLine}
+              />
+            </header>
+            <SkillsToolsSection
+              showMoreLabel={copy.skillsShowMore}
+              closeLabel={copy.skillsClose}
+            />
+          </section>
+
+          <section
+            id="contact"
+            className={`${styles.section} ${styles.contactSection}`}
+          >
+            <header className={styles.sectionHead}>
+              <ScrollTypingHeading
+                text={copy.contactHeading}
+                headingClassName={styles.sectionHeadingWord}
+                underlineClassName={styles.sectionHeadingLine}
+              />
+            </header>
+            <ContactCardSection />
+          </section>
+        </SideCenterStickySection>
+      </section>
+
+      {/* <footer id="footer" className={styles.footer}>
+              <button
+                type="button"
+                className={styles.languageToggle}
+                onClick={toggleLanguage}
+                aria-label={copy.footerLanguageAriaLabel}
+              >
+                <span
+                  className={
+                    language === "ja"
+                      ? styles.languageActiveRed
+                      : styles.languageInactive
+                  }
+                >
+                  日本語
+                </span>
+                <span className={styles.languageSeparator}> / </span>
+                <span
+                  className={
+                    language === "en"
+                      ? styles.languageActiveBlue
+                      : styles.languageInactive
+                  }
+                >
+                  English
+                </span>
+              </button>
+              <p className={styles.copyright}>
+                © {new Date().getFullYear()} Shoichi Hasegawa
+              </p>
+            </footer> */}
+
+      {/* <StickyQuickMenu
+        items={copy.menuItems}
+        language={language}
+        onToggleLanguage={toggleLanguage}
+        menuLabel={copy.menuButton}
+        languageLabel={copy.menuLanguageLabel}
+      /> */}
     </main>
   );
 }
