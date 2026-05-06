@@ -60,7 +60,7 @@ export function HeroChapter({ className }: Props) {
     <section
       ref={containerRef}
       className={className}
-      style={{ height: "min(320vh, 2800px)" }}
+      // style={{ height: "min(320vh, 2800px)" }}
       aria-label="Hero"
     >
       <div className="sticky top-0 flex h-dvh min-h-dvh w-full flex-col items-center justify-center overflow-hidden px-4">

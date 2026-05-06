@@ -1,15 +1,30 @@
 import { animate, createScope, onScroll } from "animejs";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type MutableRefObject } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import styles from "./ScrollTypingHeading.module.css";
 
-type ScrollTypingHeadingProps = {
+export type ScrollTypingHeadingProps = {
   text: string;
   enter?: string;
   leave?: string;
   headingClassName?: string;
   underlineClassName?: string;
+  /**
+   * Bridge / external scroll sync: reads [0–1] each frame via scroll–RAF chain.
+   * When set, skips anime.js onScroll linkage for this heading.
+   */
+  bridgeScrollProgressRef?: MutableRefObject<number>;
+  /** Characters begin only once ref value reaches this threshold (defaults below). */
+  bridgeTypingRevealStart?: number;
+  /** Full typing + underline reveal by this threshold. */
+  bridgeTypingRevealEnd?: number;
 };
+
+const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
+
+function lerpOpacity(a: number, b: number, t: number) {
+  return a + (b - a) * t;
+}
 
 export function ScrollTypingHeading({
   text,
@@ -17,6 +32,10 @@ export function ScrollTypingHeading({
   leave = "center top",
   headingClassName,
   underlineClassName,
+  bridgeScrollProgressRef,
+  /** Default: curtain mostly open (phase 0.5→1); pass 1 to gate strictly on full bridge progress */
+  bridgeTypingRevealStart = 0.1,
+  bridgeTypingRevealEnd = 1,
 }: ScrollTypingHeadingProps) {
   const reduceMotion = usePrefersReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -34,11 +53,64 @@ export function ScrollTypingHeading({
     if (reduceMotion) {
       word.textContent = text;
       line.style.transform = "scaleX(1)";
+      word.style.opacity = "1";
       return;
     }
 
     word.textContent = "";
     typedCountRef.current = -1;
+
+    if (bridgeScrollProgressRef) {
+      const startRaw = bridgeTypingRevealStart;
+      const endRaw = bridgeTypingRevealEnd;
+      const start = Math.min(startRaw, endRaw);
+      const end = Math.max(startRaw, endRaw);
+      let rafId = 0;
+
+      const applyFromBridgeProgress = () => {
+        const p = bridgeScrollProgressRef.current;
+        if (p < start) {
+          line.style.transform = "scaleX(0)";
+          word.textContent = "";
+          typedCountRef.current = -1;
+          word.style.opacity = "0.45";
+          return;
+        }
+
+        const span = end - start;
+        const sub =
+          span <= 1e-6
+            ? p >= start
+              ? 1
+              : 0
+            : clamp01((Math.min(p, end) - start) / span);
+        line.style.transform = `scaleX(${sub})`;
+        word.style.opacity = String(lerpOpacity(0.45, 1, sub));
+
+        const nextCount = Math.floor(sub * text.length);
+        typedCountRef.current = nextCount;
+        word.textContent = text.slice(0, nextCount);
+      };
+
+      const schedule = () => {
+        cancelAnimationFrame(rafId);
+        rafId = window.requestAnimationFrame(applyFromBridgeProgress);
+      };
+
+      schedule();
+      window.addEventListener("scroll", schedule, { passive: true });
+      window.addEventListener("resize", schedule, { passive: true });
+
+      return () => {
+        window.removeEventListener("scroll", schedule);
+        window.removeEventListener("resize", schedule);
+        cancelAnimationFrame(rafId);
+        word.textContent = text;
+        line.style.transform = "scaleX(1)";
+        typedCountRef.current = -1;
+        word.style.opacity = "";
+      };
+    }
 
     scopeRef.current = createScope({ root }).add(() => {
       animate(line, {
@@ -76,7 +148,15 @@ export function ScrollTypingHeading({
       line.style.transform = "scaleX(1)";
       typedCountRef.current = -1;
     };
-  }, [text, enter, leave, reduceMotion]);
+  }, [
+    text,
+    enter,
+    leave,
+    reduceMotion,
+    bridgeScrollProgressRef,
+    bridgeTypingRevealStart,
+    bridgeTypingRevealEnd,
+  ]);
 
   return (
     <div ref={rootRef} className={styles.heading}>

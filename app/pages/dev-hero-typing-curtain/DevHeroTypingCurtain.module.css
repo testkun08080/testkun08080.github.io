@@ -1,38 +1,33 @@
 .page {
-  color: var(--color-text-heading);
-  scroll-behavior: smooth;
-}
-
-.section {
-  position: relative;
-}
-
-.bridgeTrack {
   position: relative;
   width: 100%;
-  height: 360vh;
 }
 
-.bridgePin {
+.track {
+  position: relative;
+  width: 100%;
+  height: 520vh;
+  view-timeline-name: --barcode-track;
+  view-timeline-axis: block;
+}
+
+.pin {
   position: sticky;
   top: 0;
-  width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
-.bridgeScene {
+.scene {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100%;
 }
 
 .layer {
   position: absolute;
   inset: 0;
-  transition: opacity 0.12s linear;
 }
 
 .layerA {
@@ -48,17 +43,10 @@
   align-items: center;
   justify-content: center;
   padding: clamp(1.25rem, 4vw, 2.5rem);
+  /* background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%); */
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-}
-
-.heroLayer {
-  background: transparent;
-}
-
-.heroCurtain {
-  z-index: 6;
 }
 
 .typingWord {
@@ -69,14 +57,14 @@
   font-weight: 900;
   letter-spacing: 0.02em;
   line-height: 0.98;
-  color: var(--color-anime-about-text);
+  color: #f8fafc;
 }
 
 .typingUnderline {
   justify-self: center;
   width: clamp(180px, 46vw, 520px);
   height: 6px;
-  background: var(--color-anime-about-text);
+  /* background: #a5f3fc; */
   transform: scaleX(0);
   transform-origin: 50% 50%;
 }
@@ -142,7 +130,7 @@
   animation: marqueeRight var(--marquee-duration, 22s) linear infinite;
 }
 
-.marqueeTrack > p {
+.marqueeTrack>p {
   flex: none;
   margin: 0;
   padding-right: 0.6em;
@@ -180,107 +168,71 @@
 
 .halfLeft {
   transform: translate3d(-105%, 0, 0);
+  animation-name: halfCloseFromLeft;
 }
 
 .halfRight {
   transform: translate3d(105%, 0, 0);
+  animation-name: halfCloseFromRight;
 }
 
-.heroMenuShell {
-  position: relative;
-  z-index: 7;
-  opacity: 0;
-  transform: translate3d(0, -14px, 0);
-  pointer-events: none;
-  will-change: opacity, transform;
+.halfLeft .halfClip {
+  animation-name: halfOpenToLeft;
 }
 
-.greetingLayer {
-  background: transparent;
+.halfRight .halfClip {
+  animation-name: halfOpenToRight;
 }
 
-.sectionHead {
-  width: min(100%, 1100px);
-  margin: 0 auto;
-  padding: 2rem 1rem 0.6rem;
+.jsDriven .half,
+.jsDriven .halfClip,
+.jsDriven .layerA,
+.jsDriven .layerB {
+  animation: none !important;
 }
 
-.sectionHeadingWord {
-  margin: 0;
-  min-height: 1.1em;
-  text-align: center;
-  font-size: clamp(2.2rem, 6.2vw, 4.2rem);
-  font-weight: 900;
-  line-height: 0.98;
-  letter-spacing: 0.01em;
-  color: var(--color-anime-about-text);
+.tail {
+  height: 40vh;
 }
 
-.sectionHeadingLine {
-  width: min(72vw, 520px);
-  height: 6px;
-  background: var(--color-anime-about-text);
-  transform: scaleX(0);
-  transform-origin: 50% 50%;
+@keyframes halfCloseFromLeft {
+  from {
+    transform: translate3d(-105%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
-.workSection {
-  z-index: 8;
+@keyframes halfOpenToLeft {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-105%, 0, 0);
+  }
 }
 
-.skillsSection {
-  z-index: 9;
+@keyframes halfCloseFromRight {
+  from {
+    transform: translate3d(105%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
-.contactSection {
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 57px;
-  margin-top: 100px;
-  margin-bottom: 100px;
-}
+@keyframes halfOpenToRight {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
 
-.footer {
-  min-height: 24dvh;
-  display: grid;
-  place-content: center;
-  gap: 0.45rem;
-  text-align: center;
-  padding: 2rem 1rem;
-  background: transparent;
-}
-
-.languageToggle {
-  border: 0;
-  background: transparent;
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
-  font-size: clamp(1rem, 2.3vw, 1.25rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
-
-.languageActiveRed {
-  color: var(--color-anime-side-text);
-}
-
-.languageActiveBlue {
-  color: var(--color-anime-center-heading);
-}
-
-.languageInactive,
-.languageSeparator {
-  color: color-mix(in srgb, var(--color-anime-side-text) 55%, var(--color-anime-center-heading) 45%);
-}
-
-.copyright {
-  margin: 0;
-  font-size: 0.82rem;
-  letter-spacing: 0.03em;
-  color: color-mix(in srgb, var(--color-anime-center-heading) 58%, var(--color-anime-side-text) 42%);
+  to {
+    transform: translate3d(105%, 0, 0);
+  }
 }
 
 @keyframes marqueeLeft {
@@ -303,16 +255,103 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .page {
-    scroll-behavior: auto;
+@supports (animation-timeline: view()) {
+
+  .half,
+  .halfClip {
+    animation-fill-mode: both;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  .heroMenuShell {
-    transform: translate3d(0, 0, 0);
+  .half {
+    animation-timeline: --barcode-track;
+    animation-range: entry var(--close-start) entry var(--close-end);
+  }
+
+  .halfClip {
+    animation-timeline: --barcode-track;
+    animation-range: entry var(--open-start) entry var(--open-end);
+  }
+}
+
+@supports (animation-timeline: scroll(root block)) {
+
+  .half,
+  .halfClip {
+    animation-fill-mode: both;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .half {
+    animation-timeline: scroll(root block);
+    animation-range: var(--close-start) var(--close-end);
+  }
+
+  .halfClip {
+    animation-timeline: scroll(root block);
+    animation-range: var(--open-start) var(--open-end);
+  }
+
+  .layerA {
+    animation-name: layerAVisibility;
+    animation-timeline: scroll(root block);
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-range: 36% 86%;
+    animation-timing-function: linear;
+  }
+
+  .layerB {
+    animation-name: layerBVisibility;
+    animation-timeline: scroll(root block);
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-range: 36% 86%;
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes layerAVisibility {
+
+  0%,
+  49% {
     opacity: 1;
+    visibility: visible;
+    z-index: 2;
     pointer-events: auto;
   }
+
+  50%,
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+@keyframes layerBVisibility {
+
+  0%,
+  49% {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
 
   .marqueeLeft,
   .marqueeRight {

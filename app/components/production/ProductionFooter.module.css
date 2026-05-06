@@ -1,0 +1,39 @@
+.footer {
+  min-height: 24dvh;
+  display: grid;
+  place-content: center;
+  gap: 0.45rem;
+  text-align: center;
+  padding: 2rem 1rem;
+  background: transparent;
+}
+
+.languageToggle {
+  border: 0;
+  background: transparent;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: clamp(1rem, 2.3vw, 1.25rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.languageActive {
+  color: var(--color-text-body);
+}
+
+.languageInactive,
+.languageSeparator {
+  color: var(--color-text-body);
+}
+
+.copyright {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  color: color-mix(
+    in srgb,
+    var(--color-anime-center-heading) 58%,
+    var(--color-anime-side-text) 42%
+  );
+}

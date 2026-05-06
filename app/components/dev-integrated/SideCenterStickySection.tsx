@@ -37,11 +37,10 @@ export function SideCenterStickySection({
   const rightRef = useRef<HTMLDivElement>(null);
   const sideTypingSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
-  const [isMobileViewport, setIsMobileViewport] = useState(
-    () =>
-      typeof window !== "undefined"
-        ? window.matchMedia("(max-width: 640px)").matches
-        : false,
+  const [isMobileViewport, setIsMobileViewport] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 640px)").matches
+      : false,
   );
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
   // Hold typing animation instances for pause/resume
@@ -62,13 +61,17 @@ export function SideCenterStickySection({
       const stickyFrame = stickyFrameRef.current;
       const leftBlock = leftRef.current;
       if (!stickyFrame || !leftBlock) return;
-      const sampleRow = leftBlock.querySelector(`.${styles.sideText}`) as HTMLParagraphElement | null;
+      const sampleRow = leftBlock.querySelector(
+        `.${styles.sideText}`,
+      ) as HTMLParagraphElement | null;
       const sampleHeight = sampleRow?.getBoundingClientRect().height ?? 0;
       if (sampleHeight <= 0) return;
       const blockStyles = window.getComputedStyle(leftBlock);
-      const gap = Number.parseFloat(blockStyles.rowGap || blockStyles.gap || "0") || 0;
+      const gap =
+        Number.parseFloat(blockStyles.rowGap || blockStyles.gap || "0") || 0;
       const rowPitch = sampleHeight + gap;
-      const frameHeight = stickyFrame.getBoundingClientRect().height || window.innerHeight;
+      const frameHeight =
+        stickyFrame.getBoundingClientRect().height || window.innerHeight;
       const buffer = isMobileViewport ? 2 : 1;
       const minRows = isMobileViewport ? 34 : 24;
       const maxRows = isMobileViewport ? 56 : 44;
@@ -99,7 +102,12 @@ export function SideCenterStickySection({
   }, [isMobileViewport]);
 
   useEffect(() => {
-    if (!rootRef.current || !leftRef.current || !rightRef.current || !centerAreaRef.current) {
+    if (
+      !rootRef.current ||
+      !leftRef.current ||
+      !rightRef.current ||
+      !centerAreaRef.current
+    ) {
       return;
     }
 
@@ -107,7 +115,10 @@ export function SideCenterStickySection({
     const leftBlock = leftRef.current;
     const rightBlock = rightRef.current;
     const centerArea = centerAreaRef.current;
-    sideTypingSpansRef.current = sideTypingSpansRef.current.slice(0, lineCount * 2);
+    sideTypingSpansRef.current = sideTypingSpansRef.current.slice(
+      0,
+      lineCount * 2,
+    );
 
     if (reduceMotion) {
       leftBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
@@ -199,7 +210,11 @@ export function SideCenterStickySection({
       aria-label="Side center sticky"
     >
       {/* Side typing background: pinned through the whole stage (about + children) */}
-      <div ref={stickyFrameRef} className={styles.stickyFrame} aria-hidden="true">
+      <div
+        ref={stickyFrameRef}
+        className={styles.stickyFrame}
+        aria-hidden="true"
+      >
         <div
           ref={leftRef}
           className={`${styles.sideBlock} ${styles.leftBlock}`}

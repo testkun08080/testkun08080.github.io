@@ -6,6 +6,189 @@
   position: relative;
 }
 
+.bridgeTrack {
+  position: relative;
+  width: 100%;
+  height: 360vh;
+}
+
+.bridgePin {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.bridgeScene {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.12s linear;
+}
+
+.layerA {
+  z-index: 2;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.layerB {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.heroLayer {
+  background: transparent;
+}
+
+.heroCurtain {
+  z-index: 6;
+}
+
+.typingWord {
+  margin: 0;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(2.2rem, 10vw, 6rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 0.98;
+  color: var(--color-anime-about-text);
+}
+
+.typingUnderline {
+  justify-self: center;
+  width: clamp(180px, 46vw, 520px);
+  height: 6px;
+  background: var(--color-anime-about-text);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}
+
+.curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.measureRow {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+}
+
+.row {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.half {
+  flex: 1 1 50%;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.halfClip {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  contain: layout paint;
+}
+
+.marqueeTrack {
+  display: flex;
+  flex: none;
+  width: max-content;
+  align-items: center;
+  height: 100%;
+  will-change: transform;
+}
+
+.marqueeLeft {
+  animation: marqueeLeft var(--marquee-duration, 22s) linear infinite;
+}
+
+.marqueeRight {
+  animation: marqueeRight var(--marquee-duration, 22s) linear infinite;
+}
+
+.marqueeTrack > p {
+  flex: none;
+  margin: 0;
+  padding-right: 0.6em;
+}
+
+.curtainLine {
+  margin: 0;
+  max-width: none;
+  text-align: center;
+  font-size: clamp(0.55rem, min(1.8vh, 1.35vw), 1.05rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-anime-bg-row, #ffc5c5);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  white-space: nowrap;
+  opacity: 0.92;
+}
+
+.curtainLineAlt {
+  margin: 0;
+  max-width: none;
+  text-align: center;
+  font-size: clamp(0.55rem, min(1.8vh, 1.35vw), 1.05rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+  color: var(--color-anime-bg-row, #ffc5c5);
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  white-space: nowrap;
+  opacity: 0.48;
+}
+
+.halfLeft {
+  transform: translate3d(-105%, 0, 0);
+}
+
+.halfRight {
+  transform: translate3d(105%, 0, 0);
+}
+
+.greetingLayer {
+  background: transparent;
+}
+
 .workSection,
 .skillsSection,
 .contactSection {
@@ -39,60 +222,6 @@
   transform-origin: 50% 50%;
 }
 
-.resumeDownloadWrap {
-  display: grid;
-  justify-items: center;
-  gap: 0.9rem;
-  margin: 1rem auto 0;
-  padding: 0 1rem;
-  z-index: 7;
-}
-
-.resumeDownloadHeading {
-  margin: 0;
-  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  color: var(--color-text-body);
-}
-
-.resumeDownloadButtons {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.7rem;
-}
-
-.resumeDownloadButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 12.5rem;
-  padding: 0.62rem 1rem;
-  border: 1px solid var(--color-text-body);
-  border-radius: 999px;
-  text-decoration: none;
-  font-size: clamp(0.9rem, 1.5vw, 1rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  color: var(--color-text-body);
-  background: color-mix(in srgb, var(--color-bg, #fff) 84%, transparent);
-  transition:
-    transform 0.2s ease,
-    background-color 0.2s ease;
-}
-
-.resumeDownloadButton:hover {
-  transform: translateY(-1px);
-  background: color-mix(in srgb, var(--color-bg, #fff) 72%, transparent);
-}
-
-.resumeDownloadButton:focus-visible {
-  outline: 2px solid var(--color-text-body);
-  outline-offset: 2px;
-}
-
 .workSection {
   z-index: 8;
   padding-top: 4rem;
@@ -114,59 +243,35 @@
   margin-bottom: 6rem;
 }
 
-.footer {
-  min-height: 12dvh;
-  display: grid;
-  place-content: center;
-  gap: 0.75rem;
-  text-align: center;
-  padding: 3rem 1rem;
-  background: transparent;
-  color: var(--color-text-body);
+@keyframes marqueeLeft {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
-.languageToggle {
-  border: 0;
-  background: transparent;
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
-  font-size: clamp(1rem, 2.3vw, 1.25rem);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
+@keyframes marqueeRight {
+  from {
+    transform: translate3d(-50%, 0, 0);
+  }
 
-.languageActiveRed {
-  color: var(--color-text-body);
-}
-
-.languageActiveBlue {
-  color: var(--color-text-body);
-}
-
-.languageInactive,
-.languageSeparator {
-  color: var(--color-text-body);
-}
-
-.copyright {
-  margin: 0;
-  font-size: 0.82rem;
-  letter-spacing: 0.03em;
-  color: var(--color-text-body);
+  to {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .resumeDownloadButton {
-    transition: none;
-  }
-}
-
-@media (max-width: 640px) {
-  .resumeDownloadWrap {
-    margin-top: 0.6rem;
+  .page {
+    scroll-behavior: auto;
   }
 
-  .resumeDownloadButton {
-    min-width: min(92vw, 18rem);
+  .marqueeLeft,
+  .marqueeRight {
+    animation: none;
   }
+
 }
+

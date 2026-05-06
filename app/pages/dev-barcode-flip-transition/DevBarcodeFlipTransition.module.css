@@ -1,0 +1,326 @@
+.page {
+  position: relative;
+  width: 100%;
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  height: 520vh;
+  view-timeline-name: --barcode-track;
+  view-timeline-axis: block;
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  text-align: center;
+}
+
+.layerA {
+  z-index: 2;
+  background: linear-gradient(165deg, #f4f1ea 0%, #e8e4dc 45%, #dfe8f2 100%);
+  color: #0f172a;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.layerB {
+  z-index: 1;
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 50%, #0c4a6e 100%);
+  color: #ecfeff;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  opacity: 0.88;
+}
+
+.hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.8rem;
+  opacity: 0.65;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btnGhost {
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 0.65rem 1.35rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.layerA .btnGhost {
+  color: #334155;
+}
+
+.layerB .btnGhost {
+  color: #a5f3fc;
+}
+
+.curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.row {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.half {
+  flex: 1 1 50%;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.panel {
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* p=0 と同等 — JS 実行前も画面全体がストライプで塞がらない */
+.halfLeft {
+  transform: translate3d(-105%, 0, 0);
+  animation-name: halfCloseFromLeft;
+}
+
+.halfRight {
+  transform: translate3d(105%, 0, 0);
+  animation-name: halfCloseFromRight;
+}
+
+.halfLeft .panel {
+  animation-name: halfOpenToLeft;
+}
+
+.halfRight .panel {
+  animation-name: halfOpenToRight;
+}
+
+.halfDark {
+  background: #0a0a0a;
+}
+
+.halfLight {
+  background: #ececec;
+}
+
+.tail {
+  height: 40vh;
+}
+
+.reduceStack {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.reduceSection {
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.reduceA {
+  background: linear-gradient(165deg, #f4f1ea 0%, #e8e4dc 100%);
+  color: #0f172a;
+}
+
+.reduceB {
+  background: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+  color: #ecfeff;
+}
+
+@keyframes halfCloseFromLeft {
+  from {
+    transform: translate3d(-105%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes halfOpenToLeft {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-105%, 0, 0);
+  }
+}
+
+@keyframes halfCloseFromRight {
+  from {
+    transform: translate3d(105%, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes halfOpenToRight {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(105%, 0, 0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .half,
+  .panel {
+    animation-fill-mode: both;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .half {
+    animation-timeline: --barcode-track;
+    animation-range: entry var(--close-start) entry var(--close-end);
+  }
+
+  .panel {
+    animation-timeline: --barcode-track;
+    animation-range: entry var(--open-start) entry var(--open-end);
+  }
+
+}
+
+@supports (animation-timeline: scroll(root block)) {
+  .half,
+  .panel {
+    animation-fill-mode: both;
+    animation-duration: 1s;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .half {
+    animation-timeline: scroll(root block);
+    animation-range: var(--close-start) var(--close-end);
+  }
+
+  .panel {
+    animation-timeline: scroll(root block);
+    animation-range: var(--open-start) var(--open-end);
+  }
+
+  .layerA {
+    animation-name: layerAVisibility;
+    animation-timeline: scroll(root block);
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-range: 36% 86%;
+    animation-timing-function: linear;
+  }
+
+  .layerB {
+    animation-name: layerBVisibility;
+    animation-timeline: scroll(root block);
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-range: 36% 86%;
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes layerAVisibility {
+  0%,
+  49% {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+    pointer-events: auto;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+@keyframes layerBVisibility {
+  0%,
+  49% {
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+    pointer-events: auto;
+  }
+}

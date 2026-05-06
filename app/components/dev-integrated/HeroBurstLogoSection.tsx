@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MutableRefObject } from "react";
+import { animate, onScroll } from "animejs";
 import {
   FlowMode,
   HeroLogoInkWebGL,
 } from "../../components/portfolio/HeroLogoInkWebGL";
 import { PathBarcodeTemplate3D } from "../../components/portfolio/PathBarcodeTemplate3D";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
+import { P_HERO_CURTAIN_CLOSE_END } from "./bridgeScrollPhases";
 import styles from "../shared-dev-assets/DevBurstOverlayAnimeLogo.module.css";
 
 const HERO_BARCODE = {
@@ -25,7 +27,19 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
+export type HeroBurstLogoSectionProps = {
+  onReady?: () => void;
+  /**
+   * Full bridge scroll progress in [0, 1]. When set, barcode zoom-out / logo fade
+   * follow `clamp(p / P_HERO_CURTAIN_CLOSE_END)` so they match hero fade and curtain close.
+   */
+  bridgeScrollProgressRef?: MutableRefObject<number>;
+};
+
+export function HeroBurstLogoSection({
+  onReady,
+  bridgeScrollProgressRef,
+}: HeroBurstLogoSectionProps) {
   const reduceMotion = usePrefersReducedMotion();
   const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -57,12 +71,10 @@ export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
       return;
     }
 
-    let rafId = 0;
     const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
-    const updateByScroll = () => {
-      const rect = stage.getBoundingClientRect();
-      const scrollable = Math.max(rect.height - window.innerHeight, 1);
-      const progressed = clamp01(-rect.top / scrollable);
+    const p1 = P_HERO_CURTAIN_CLOSE_END;
+    const applyProgress = (progress: number) => {
+      const progressed = clamp01(progress);
       const scale = 1 + progressed * 0.9;
       const opacity = 1 - progressed;
       barcodeFrame.style.transform = `scale(${scale})`;
@@ -73,30 +85,47 @@ export function HeroBurstLogoSection({ onReady }: { onReady?: () => void }) {
       setScrollProgress(progressed);
     };
 
-    let resizeTimer = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(rafId);
-      rafId = window.requestAnimationFrame(updateByScroll);
-    };
-    const onResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(onScroll, 150);
-    };
-
-    updateByScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize, { passive: true });
+    const syncFromBridge = bridgeScrollProgressRef
+      ? animate(stage, {
+          opacity: [1, 1],
+          duration: 1,
+          ease: "linear",
+          autoplay: onScroll({
+            // target: stage,
+            // container: window,
+            // enter: "top top",
+            // leave: "bottom bottom",
+            sync: true,
+            onUpdate: () => {
+              applyProgress(clamp01(bridgeScrollProgressRef.current / p1));
+            },
+          }),
+        })
+      : animate(stage, {
+          opacity: [1, 1],
+          duration: 1,
+          ease: "linear",
+          autoplay: onScroll({
+            // target: stage,
+            // container: window,
+            // enter: "top top",
+            // leave: "bottom bottom",
+            sync: true,
+            onUpdate: (self) => {
+              const observer = self as { progress?: number };
+              if (typeof observer.progress !== "number") return;
+              applyProgress(observer.progress);
+            },
+          }),
+        });
 
     return () => {
-      cancelAnimationFrame(rafId);
-      clearTimeout(resizeTimer);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
+      syncFromBridge.revert();
       progressRef.current = 0;
       setScrollLogoBoost(0);
       setScrollProgress(0);
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, bridgeScrollProgressRef]);
 
   const fs = HERO_BARCODE.fontSize;
   const shaderInkScale = lerp(4.0, 4.0 * 2.8, scrollProgress);
