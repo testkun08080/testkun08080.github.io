@@ -15,6 +15,7 @@ type StickyQuickMenuProps = {
   onToggleLanguage?: () => void;
   menuLabel?: string;
   languageLabel?: string;
+  languageAriaLabel?: string;
   visibleOverride?: boolean;
   rootClassName?: string;
   rootStyle?: CSSProperties;
@@ -28,6 +29,7 @@ export function StickyQuickMenu({
   onToggleLanguage,
   menuLabel = "Menu",
   languageLabel = "Language",
+  languageAriaLabel = "Switch language between Japanese and English",
   visibleOverride,
   rootClassName,
   rootStyle,
@@ -194,7 +196,7 @@ export function StickyQuickMenu({
               onToggleLanguage();
               closeMenu();
             }}
-            aria-label="Switch language between Japanese and English"
+            aria-label={languageAriaLabel}
           >
             {languageLabel}: {language === "en" ? "English" : "日本語"}
           </button>

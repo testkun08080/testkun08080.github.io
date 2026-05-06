@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { ProductionHomePage } from "./ProductionHomePage";
+import { LanguageProvider } from "../../lib/LanguageContext";
 
 vi.mock("../dev-integrated/ContactCardSection", () => ({
   ContactCardSection: () => <div>ContactCardSection</div>,
@@ -26,9 +27,7 @@ vi.mock("../dev-integrated/SkillsToolsSection", () => ({
 vi.mock("../dev-integrated/WorkReelsSection", () => ({
   WorkReelsSection: () => <div>WorkReelsSection</div>,
 }));
-vi.mock("../portfolio/StickyQuickMenu", () => ({
-  StickyQuickMenu: () => <div>StickyQuickMenu</div>,
-}));
+// Removed mock to test language functionality with real StickyQuickMenu
 
 function mockMatchMedia() {
   Object.defineProperty(window, "matchMedia", {
@@ -51,8 +50,15 @@ describe("ProductionHomePage language flow", () => {
     mockMatchMedia();
     document.documentElement.lang = "ja";
 
-    const { unmount } = render(<ProductionHomePage />);
+    const { unmount } = render(
+      <LanguageProvider>
+        <ProductionHomePage />
+      </LanguageProvider>,
+    );
     expect(document.documentElement.lang).toBe("ja");
+
+    const menuButton = screen.getByRole("button", { name: "メニュー" });
+    fireEvent.click(menuButton);
 
     fireEvent.click(
       screen.getByRole("button", {
