@@ -33,6 +33,7 @@ export function SideCenterStickySection({
   const aboutTrackRef = useRef<HTMLDivElement>(null);
   const stickyFrameRef = useRef<HTMLDivElement>(null);
   const centerAreaRef = useRef<HTMLDivElement>(null);
+  const aboutTextRef = useRef<HTMLParagraphElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const sideTypingSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
@@ -106,7 +107,8 @@ export function SideCenterStickySection({
       !rootRef.current ||
       !leftRef.current ||
       !rightRef.current ||
-      !centerAreaRef.current
+      !centerAreaRef.current ||
+      !aboutTextRef.current
     ) {
       return;
     }
@@ -115,6 +117,7 @@ export function SideCenterStickySection({
     const leftBlock = leftRef.current;
     const rightBlock = rightRef.current;
     const centerArea = centerAreaRef.current;
+    const aboutTextEl = aboutTextRef.current;
     sideTypingSpansRef.current = sideTypingSpansRef.current.slice(
       0,
       lineCount * 2,
@@ -124,6 +127,8 @@ export function SideCenterStickySection({
       leftBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
       rightBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
       centerArea.style.opacity = "1";
+      aboutTextEl.style.opacity = "1";
+      aboutTextEl.style.transform = "translateY(0px)";
       sideTypingSpansRef.current.forEach((span) => {
         if (!span) return;
         span.style.width = "100%";
@@ -154,6 +159,16 @@ export function SideCenterStickySection({
           target: stage,
           enter: "top top",
           leave: "bottom bottom",
+          sync: true,
+        }),
+      });
+
+      animate(aboutTextEl, {
+        opacity: [0, 1],
+        translateY: ["40px", "0px"],
+        autoplay: onScroll({
+          enter: "bottom top",
+          leave: "top center",
           sync: true,
         }),
       });
@@ -261,7 +276,9 @@ export function SideCenterStickySection({
               headingClassName={styles.centerHeading}
               underlineClassName={styles.centerLine}
             />
-            <p className={styles.aboutText}>{aboutText}</p>
+            <p ref={aboutTextRef} className={styles.aboutText}>
+              {aboutText}
+            </p>
           </div>
         </div>
       </div>
