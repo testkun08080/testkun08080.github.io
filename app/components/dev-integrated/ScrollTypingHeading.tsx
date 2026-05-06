@@ -34,7 +34,7 @@ export function ScrollTypingHeading({
   underlineClassName,
   bridgeScrollProgressRef,
   /** Default: curtain mostly open (phase 0.5→1); pass 1 to gate strictly on full bridge progress */
-  bridgeTypingRevealStart = 0.88,
+  bridgeTypingRevealStart = 0.1,
   bridgeTypingRevealEnd = 1,
 }: ScrollTypingHeadingProps) {
   const reduceMotion = usePrefersReducedMotion();
@@ -79,7 +79,11 @@ export function ScrollTypingHeading({
 
         const span = end - start;
         const sub =
-          span <= 1e-6 ? (p >= start ? 1 : 0) : clamp01((Math.min(p, end) - start) / span);
+          span <= 1e-6
+            ? p >= start
+              ? 1
+              : 0
+            : clamp01((Math.min(p, end) - start) / span);
         line.style.transform = `scaleX(${sub})`;
         word.style.opacity = String(lerpOpacity(0.45, 1, sub));
 

@@ -147,8 +147,8 @@ export default function Page() {
                   headingClassName={curtainStyles.typingWord}
                   underlineClassName={curtainStyles.typingUnderline}
                   bridgeScrollProgressRef={bridgeScrollProgressRef}
-                  bridgeTypingRevealStart={P_HERO_CURTAIN_CLOSE_END}
-                  bridgeTypingRevealEnd={P_CURTAIN_OPEN_END}
+                  // bridgeTypingRevealStart={P_HERO_CURTAIN_CLOSE_END}
+                  // bridgeTypingRevealEnd={P_CURTAIN_OPEN_END}
                 />
               </section>
 
@@ -176,7 +176,7 @@ export default function Page() {
         </div>
       </div>
 
-      <section id="sticky-side" className={styles.section}>
+      {/* <section id="sticky-side" className={styles.section}>
         <SideCenterStickySection
           aboutHeading={copy.aboutHeading}
           aboutText={copy.aboutText}
@@ -258,7 +258,7 @@ export default function Page() {
             </p>
           </footer>
         </SideCenterStickySection>
-      </section>
+      </section> */}
 
       <StickyQuickMenu items={menuItems} />
     </main>
