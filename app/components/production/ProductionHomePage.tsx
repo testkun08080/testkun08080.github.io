@@ -50,6 +50,17 @@ export function ProductionHomePage() {
   const measureRowRef = useRef<HTMLParagraphElement>(null);
   const curtainLeftRefs = useRef<Array<HTMLDivElement | null>>([]);
   const curtainRightRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const leftXRef = useRef<number[]>([]);
+  const rightXRef = useRef<number[]>([]);
+  const layerSwapRef = useRef<{
+    opacityA: number;
+    opacityB: number;
+    bVisible: boolean;
+  }>({
+    opacityA: 1,
+    opacityB: 0,
+    bVisible: false,
+  });
   const bridgeScrollProgressRef = useRef(0);
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
   const [isLoadingVisible, setIsLoadingVisible] = useState(true);
@@ -151,20 +162,39 @@ export function ProductionHomePage() {
 
         const leftX = open > 0 ? lerp(0, -105, open) : lerp(-105, 0, close);
         const rightX = open > 0 ? lerp(0, 105, open) : lerp(105, 0, close);
-        left.style.transform = `translate3d(${leftX}%, 0, 0)`;
-        right.style.transform = `translate3d(${rightX}%, 0, 0)`;
+        const nextLeftX = Math.round(leftX * 1000) / 1000;
+        const nextRightX = Math.round(rightX * 1000) / 1000;
+        if (leftXRef.current[i] !== nextLeftX) {
+          leftXRef.current[i] = nextLeftX;
+          left.style.transform = `translate3d(${nextLeftX}%, 0, 0)`;
+        }
+        if (rightXRef.current[i] !== nextRightX) {
+          rightXRef.current[i] = nextRightX;
+          right.style.transform = `translate3d(${nextRightX}%, 0, 0)`;
+        }
       });
 
       const swap = clamp01((progress - 0.44) / 0.12);
-      layerA.style.opacity = String(1 - swap);
-      layerB.style.opacity = String(swap);
+      const opacityA = Math.round((1 - swap) * 1000) / 1000;
+      const opacityB = Math.round(swap * 1000) / 1000;
+      if (layerSwapRef.current.opacityA !== opacityA) {
+        layerSwapRef.current.opacityA = opacityA;
+        layerA.style.opacity = String(opacityA);
+      }
+      if (layerSwapRef.current.opacityB !== opacityB) {
+        layerSwapRef.current.opacityB = opacityB;
+        layerB.style.opacity = String(opacityB);
+      }
       const bVisible = swap > 0.5;
-      layerA.style.pointerEvents = bVisible ? "none" : "auto";
-      layerB.style.pointerEvents = bVisible ? "auto" : "none";
-      layerA.style.visibility = bVisible ? "hidden" : "visible";
-      layerB.style.visibility = bVisible ? "visible" : "hidden";
-      layerA.style.zIndex = bVisible ? "1" : "2";
-      layerB.style.zIndex = bVisible ? "2" : "1";
+      if (layerSwapRef.current.bVisible !== bVisible) {
+        layerSwapRef.current.bVisible = bVisible;
+        layerA.style.pointerEvents = bVisible ? "none" : "auto";
+        layerB.style.pointerEvents = bVisible ? "auto" : "none";
+        layerA.style.visibility = bVisible ? "hidden" : "visible";
+        layerB.style.visibility = bVisible ? "visible" : "hidden";
+        layerA.style.zIndex = bVisible ? "1" : "2";
+        layerB.style.zIndex = bVisible ? "2" : "1";
+      }
     };
 
     if (reduceMotion) {
@@ -194,6 +224,9 @@ export function ProductionHomePage() {
 
     return () => {
       progressSync.revert();
+      leftXRef.current = [];
+      rightXRef.current = [];
+      layerSwapRef.current = { opacityA: 1, opacityB: 0, bVisible: false };
       applyBridgeProgress(0);
     };
   }, [reduceMotion, rowTiming]);
