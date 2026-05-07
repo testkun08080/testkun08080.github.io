@@ -4,6 +4,7 @@ import { StickyQuickMenu } from "./StickyQuickMenu";
 
 vi.mock("animejs", () => ({
   animate: () => ({ revert: vi.fn() }),
+  stagger: (value: number) => value,
 }));
 
 function mockMatchMedia(matches: boolean) {
