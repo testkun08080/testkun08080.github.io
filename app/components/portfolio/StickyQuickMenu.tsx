@@ -1,5 +1,6 @@
 import { animate, stagger } from "animejs";
 import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
+import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import styles from "./StickyQuickMenu.module.css";
 
 type StickyQuickMenuItem = {
@@ -43,7 +44,6 @@ export function StickyQuickMenu({
   const lastScrollYRef = useRef(0);
   const upwardDistanceRef = useRef(0);
   const visibleRef = useRef(false);
-  const rafIdRef = useRef(0);
 
   const menuItems = useMemo(() => items, [items]);
   const menuVisible = menuOpen || prefersReducedMotion;
@@ -139,18 +139,13 @@ export function StickyQuickMenu({
       }
     };
 
-    const onScroll = () => {
-      cancelAnimationFrame(rafIdRef.current);
-      rafIdRef.current = requestAnimationFrame(updateVisibility);
-    };
-
     lastScrollYRef.current = window.scrollY;
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    const unsubscribe = subscribeWindowRaf(updateVisibility, {
+      scroll: true,
+      resize: true,
+    });
     return () => {
-      cancelAnimationFrame(rafIdRef.current);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      unsubscribe();
     };
   }, [heroSelector, upwardThreshold, visibleOverride]);
 

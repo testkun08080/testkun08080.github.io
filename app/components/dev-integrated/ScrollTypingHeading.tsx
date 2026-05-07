@@ -1,6 +1,7 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef, type MutableRefObject } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
+import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import styles from "./ScrollTypingHeading.module.css";
 
 export type ScrollTypingHeadingProps = {
@@ -42,6 +43,8 @@ export function ScrollTypingHeading({
   const wordRef = useRef<HTMLHeadingElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const typedCountRef = useRef(-1);
+  const lineScaleRef = useRef<number>(0);
+  const wordOpacityRef = useRef<number>(1);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
 
   useEffect(() => {
@@ -54,11 +57,15 @@ export function ScrollTypingHeading({
       word.textContent = text;
       line.style.transform = "scaleX(1)";
       word.style.opacity = "1";
+      lineScaleRef.current = 1;
+      wordOpacityRef.current = 1;
       return;
     }
 
     word.textContent = "";
     typedCountRef.current = -1;
+    lineScaleRef.current = 0;
+    wordOpacityRef.current = 0.45;
 
     if (bridgeScrollProgressRef) {
       const startRaw = bridgeTypingRevealStart;
@@ -70,10 +77,18 @@ export function ScrollTypingHeading({
       const applyFromBridgeProgress = () => {
         const p = bridgeScrollProgressRef.current;
         if (p < start) {
-          line.style.transform = "scaleX(0)";
-          word.textContent = "";
+          if (lineScaleRef.current !== 0) {
+            lineScaleRef.current = 0;
+            line.style.transform = "scaleX(0)";
+          }
+          if (typedCountRef.current !== -1) {
+            word.textContent = "";
+          }
           typedCountRef.current = -1;
-          word.style.opacity = "0.45";
+          if (wordOpacityRef.current !== 0.45) {
+            wordOpacityRef.current = 0.45;
+            word.style.opacity = "0.45";
+          }
           return;
         }
 
@@ -84,10 +99,19 @@ export function ScrollTypingHeading({
               ? 1
               : 0
             : clamp01((Math.min(p, end) - start) / span);
-        line.style.transform = `scaleX(${sub})`;
-        word.style.opacity = String(lerpOpacity(0.45, 1, sub));
+        if (lineScaleRef.current !== sub) {
+          lineScaleRef.current = sub;
+          line.style.transform = `scaleX(${sub})`;
+        }
+
+        const nextOpacity = lerpOpacity(0.45, 1, sub);
+        if (wordOpacityRef.current !== nextOpacity) {
+          wordOpacityRef.current = nextOpacity;
+          word.style.opacity = String(nextOpacity);
+        }
 
         const nextCount = Math.floor(sub * text.length);
+        if (nextCount === typedCountRef.current) return;
         typedCountRef.current = nextCount;
         word.textContent = text.slice(0, nextCount);
       };
@@ -98,17 +122,20 @@ export function ScrollTypingHeading({
       };
 
       schedule();
-      window.addEventListener("scroll", schedule, { passive: true });
-      window.addEventListener("resize", schedule, { passive: true });
+      const unsubscribe = subscribeWindowRaf(schedule, {
+        scroll: true,
+        resize: true,
+      });
 
       return () => {
-        window.removeEventListener("scroll", schedule);
-        window.removeEventListener("resize", schedule);
+        unsubscribe();
         cancelAnimationFrame(rafId);
         word.textContent = text;
         line.style.transform = "scaleX(1)";
+        lineScaleRef.current = 1;
         typedCountRef.current = -1;
         word.style.opacity = "";
+        wordOpacityRef.current = 1;
       };
     }
 
@@ -146,7 +173,9 @@ export function ScrollTypingHeading({
       scopeRef.current = null;
       word.textContent = text;
       line.style.transform = "scaleX(1)";
+      lineScaleRef.current = 1;
       typedCountRef.current = -1;
+      wordOpacityRef.current = 1;
     };
   }, [
     text,

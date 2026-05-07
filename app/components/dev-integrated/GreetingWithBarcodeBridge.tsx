@@ -14,6 +14,7 @@ import {
   rowCloseLocal,
   rowOpenLocal,
 } from "../../lib/barcodeTextBridgeMath";
+import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import { productionHomeCopy } from "../../lib/translations";
 import type { Language } from "../../lib/translations";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
@@ -49,6 +50,10 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
   const measureCurtainRef = useRef<HTMLParagraphElement>(null);
   const leftRefs = useRef<Array<HTMLDivElement | null>>([]);
   const rightRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const leftXRef = useRef<number[]>([]);
+  const rightXRef = useRef<number[]>([]);
+  const heroOpacityRef = useRef(1);
+  const heroVisibleRef = useRef(true);
   const rafRef = useRef(0);
   const bridgeScrollProgressRef = useRef(0);
 
@@ -109,8 +114,16 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
       const heroOpacity = clamp01(1 - p / p1);
       const heroEl = heroUnderlayRef.current;
       if (heroEl) {
-        heroEl.style.setProperty("--hero-opacity", heroOpacity.toFixed(3));
-        heroEl.style.visibility = heroOpacity <= 0.001 ? "hidden" : "visible";
+        const nextHeroOpacity = Math.round(heroOpacity * 1000) / 1000;
+        if (heroOpacityRef.current !== nextHeroOpacity) {
+          heroOpacityRef.current = nextHeroOpacity;
+          heroEl.style.setProperty("--hero-opacity", nextHeroOpacity.toFixed(3));
+        }
+        const nextVisible = nextHeroOpacity > 0.001;
+        if (heroVisibleRef.current !== nextVisible) {
+          heroVisibleRef.current = nextVisible;
+          heroEl.style.visibility = nextVisible ? "visible" : "hidden";
+        }
       }
 
       const n = curtainLineCount;
@@ -122,8 +135,16 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
           const right = rightRefs.current[i];
           if (!left || !right) continue;
           const lp = easeOutCubic(rowCloseLocal(t, i, n));
-          left.style.transform = `translate3d(${-105 + lp * 105}%, 0, 0)`;
-          right.style.transform = `translate3d(${105 - lp * 105}%, 0, 0)`;
+          const nextLeftX = Math.round((-105 + lp * 105) * 1000) / 1000;
+          const nextRightX = Math.round((105 - lp * 105) * 1000) / 1000;
+          if (leftXRef.current[i] !== nextLeftX) {
+            leftXRef.current[i] = nextLeftX;
+            left.style.transform = `translate3d(${nextLeftX}%, 0, 0)`;
+          }
+          if (rightXRef.current[i] !== nextRightX) {
+            rightXRef.current[i] = nextRightX;
+            right.style.transform = `translate3d(${nextRightX}%, 0, 0)`;
+          }
         }
       } else if (p < p2) {
         const span = p2 - p1;
@@ -133,33 +154,52 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
           const right = rightRefs.current[i];
           if (!left || !right) continue;
           const lp = easeOutCubic(rowOpenLocal(t, i, n));
-          left.style.transform = `translate3d(${-lp * 105}%, 0, 0)`;
-          right.style.transform = `translate3d(${lp * 105}%, 0, 0)`;
+          const nextLeftX = Math.round((-lp * 105) * 1000) / 1000;
+          const nextRightX = Math.round((lp * 105) * 1000) / 1000;
+          if (leftXRef.current[i] !== nextLeftX) {
+            leftXRef.current[i] = nextLeftX;
+            left.style.transform = `translate3d(${nextLeftX}%, 0, 0)`;
+          }
+          if (rightXRef.current[i] !== nextRightX) {
+            rightXRef.current[i] = nextRightX;
+            right.style.transform = `translate3d(${nextRightX}%, 0, 0)`;
+          }
         }
       } else {
         for (let i = 0; i < n; i += 1) {
           const left = leftRefs.current[i];
           const right = rightRefs.current[i];
           if (!left || !right) continue;
-          left.style.transform = "translate3d(-105%, 0, 0)";
-          right.style.transform = "translate3d(105%, 0, 0)";
+          if (leftXRef.current[i] !== -105) {
+            leftXRef.current[i] = -105;
+            left.style.transform = "translate3d(-105%, 0, 0)";
+          }
+          if (rightXRef.current[i] !== 105) {
+            rightXRef.current[i] = 105;
+            right.style.transform = "translate3d(105%, 0, 0)";
+          }
         }
       }
     };
 
-    const onScroll = () => {
+    const scheduleUpdate = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(update);
     };
 
     update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    const unsubscribe = subscribeWindowRaf(scheduleUpdate, {
+      scroll: true,
+      resize: true,
+    });
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      unsubscribe();
       cancelAnimationFrame(rafRef.current);
+      leftXRef.current = [];
+      rightXRef.current = [];
+      heroOpacityRef.current = 1;
+      heroVisibleRef.current = true;
     };
   }, [curtainLineCount, reduceMotion, p1, p2]);
 

@@ -71,6 +71,32 @@ export function PathBarcodeTemplate3D({
     const pathLen = path.getTotalLength();
     const spacing = pathLen / items.length;
     const state = { offset: 0 };
+    const sampleCount = Math.max(256, items.length * 8);
+    const sampleSpacing = pathLen / sampleCount;
+    const points = Array.from({ length: sampleCount }, (_, i) =>
+      path.getPointAtLength(i * sampleSpacing),
+    );
+    const tangents = points.map((p, i) => {
+      const n = points[(i + 1) % sampleCount];
+      return { x: n.x - p.x, y: n.y - p.y };
+    });
+
+    const sampleAtDistance = (distance: number) => {
+      const normalized = ((distance % pathLen) + pathLen) % pathLen;
+      const index = normalized / sampleSpacing;
+      const i0 = Math.floor(index) % sampleCount;
+      const i1 = (i0 + 1) % sampleCount;
+      const t = index - Math.floor(index);
+      const p0 = points[i0];
+      const p1 = points[i1];
+      const tx = tangents[i0].x + (tangents[i1].x - tangents[i0].x) * t;
+      const ty = tangents[i0].y + (tangents[i1].y - tangents[i0].y) * t;
+      return {
+        x: p0.x + (p1.x - p0.x) * t,
+        y: p0.y + (p1.y - p0.y) * t,
+        angle: (Math.atan2(ty, tx) * 180) / Math.PI,
+      };
+    };
 
     const placeItems = () => {
       const bounds = itemsLayer.getBoundingClientRect();
@@ -78,13 +104,11 @@ export function PathBarcodeTemplate3D({
       const scaleY = bounds.height / (vbH || 1);
       for (let i = 0; i < items.length; i += 1) {
         const d = (i * spacing + state.offset + pathLen) % pathLen;
-        const p = path.getPointAtLength(d);
-        const n = path.getPointAtLength((d + 2) % pathLen);
-        const angle = (Math.atan2(n.y - p.y, n.x - p.x) * 180) / Math.PI;
-        const x = (p.x - vbX) * scaleX;
-        const y = (p.y - vbY) * scaleY;
+        const sampled = sampleAtDistance(d);
+        const x = (sampled.x - vbX) * scaleX;
+        const y = (sampled.y - vbY) * scaleY;
         items[i].style.transform =
-          `translate(${x}px, ${y}px) rotate(${angle}deg)`;
+          `translate(${x}px, ${y}px) rotate(${sampled.angle}deg)`;
       }
     };
 

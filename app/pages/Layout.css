@@ -87,7 +87,7 @@ a {
 body.page-transition #page-content {
   opacity: 0;
   transform: translateY(6px);
-  filter: blur(4px);
+  filter: blur(3px);
 }
 
 /* app/public/noise.png — ゆっくりパンして粒の向きが変わる感じ（app の grain を簡略化） */
