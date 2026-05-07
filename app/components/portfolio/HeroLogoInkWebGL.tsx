@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type MutableRefObject,
+} from "react";
 import {
   CanvasTexture,
   Color,
@@ -66,6 +72,12 @@ export type HeroLogoInkWebGLProps = {
   edgeStrength?: number;
   edgeColor?: string;
   edgeInkMix?: number;
+  runtimeRef?: MutableRefObject<{
+    logoSize?: number;
+    inkScale?: number;
+    warpScale?: number;
+    opacity?: number;
+  }>;
 
   onReady?: () => void;
 };
@@ -332,6 +344,7 @@ export function HeroLogoInkWebGL({
   edgeStrength = 1.6,
   edgeColor = "#1a1714",
   edgeInkMix = 0.7,
+  runtimeRef,
   onReady,
 }: HeroLogoInkWebGLProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -588,9 +601,10 @@ export function HeroLogoInkWebGL({
 
     const syncUniforms = (elapsed: number, dt: number) => {
       const p = propsRef.current;
+      const runtime = runtimeRef?.current;
       uniforms.u_time.value = elapsed;
       uniforms.u_paused.value = p.paused ? 1 : 0;
-      uniforms.u_logoSize.value = p.logoSize;
+      uniforms.u_logoSize.value = runtime?.logoSize ?? p.logoSize;
       uniforms.u_center.value.set(p.centerX, p.centerY);
       uniforms.u_instanceCount.value = Math.max(
         1,
@@ -600,8 +614,8 @@ export function HeroLogoInkWebGL({
       uniforms.u_instanceAngleOffset.value =
         (p.instanceAngleOffset * Math.PI) / 180;
       uniforms.u_instanceRotation.value = (p.instanceRotation * Math.PI) / 180;
-      uniforms.u_inkScale.value = p.inkScale;
-      uniforms.u_warpScale.value = p.warpScale;
+      uniforms.u_inkScale.value = runtime?.inkScale ?? p.inkScale;
+      uniforms.u_warpScale.value = runtime?.warpScale ?? p.warpScale;
       uniforms.u_warpAmount.value = p.warpAmount;
       uniforms.u_warpSpeed.value = p.warpSpeed;
       setVec3(
@@ -648,6 +662,12 @@ export function HeroLogoInkWebGL({
         hexToVec3(p.edgeColor),
       );
       uniforms.u_edgeInkMix.value = p.edgeInkMix;
+
+      if (typeof runtime?.opacity === "number") {
+        canvas.style.opacity = String(runtime.opacity);
+      } else {
+        canvas.style.opacity = "";
+      }
     };
 
     // Initial resize before first frame
@@ -695,6 +715,7 @@ export function HeroLogoInkWebGL({
       placeholderTex.dispose();
       if (logoTex) logoTex.dispose();
       renderer.dispose();
+      canvas.style.opacity = "";
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logoUrl]);

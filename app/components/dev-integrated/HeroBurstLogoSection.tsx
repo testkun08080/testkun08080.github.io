@@ -41,12 +41,18 @@ export function HeroBurstLogoSection({
   bridgeScrollProgressRef,
 }: HeroBurstLogoSectionProps) {
   const reduceMotion = usePrefersReducedMotion();
-  const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const stageRef = useRef<HTMLElement>(null);
   const barcodeFrameRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
+  const logoScaleRef = useRef(1);
+  const barcodeOpacityRef = useRef(1);
+  const logoRuntimeRef = useRef({
+    logoSize: 0.2,
+    inkScale: 4.0,
+    warpScale: 2.0,
+    opacity: 1,
+  });
 
   // Detect mobile once on mount
   useEffect(() => {
@@ -66,8 +72,13 @@ export function HeroBurstLogoSection({
     if (reduceMotion) {
       barcodeFrame.style.opacity = "1";
       barcodeFrame.style.transform = "scale(1)";
-      setScrollLogoBoost(0);
-      setScrollProgress(0);
+      progressRef.current = 0;
+      logoScaleRef.current = 1;
+      barcodeOpacityRef.current = 1;
+      logoRuntimeRef.current.logoSize = 0.2;
+      logoRuntimeRef.current.inkScale = 4.0;
+      logoRuntimeRef.current.warpScale = 2.0;
+      logoRuntimeRef.current.opacity = 1;
       return;
     }
 
@@ -77,12 +88,20 @@ export function HeroBurstLogoSection({
       const progressed = clamp01(progress);
       const scale = 1 + progressed * 0.9;
       const opacity = 1 - progressed;
-      barcodeFrame.style.transform = `scale(${scale})`;
-      barcodeFrame.style.opacity = String(opacity);
-      if (Math.abs(progressed - progressRef.current) < 0.01) return;
+      if (Math.abs(scale - logoScaleRef.current) > 1e-3) {
+        logoScaleRef.current = scale;
+        barcodeFrame.style.transform = `scale(${scale})`;
+      }
+      if (Math.abs(opacity - barcodeOpacityRef.current) > 1e-3) {
+        barcodeOpacityRef.current = opacity;
+        barcodeFrame.style.opacity = String(opacity);
+      }
+      if (Math.abs(progressed - progressRef.current) < 1e-3) return;
       progressRef.current = progressed;
-      setScrollLogoBoost(progressed * 0.16);
-      setScrollProgress(progressed);
+      logoRuntimeRef.current.logoSize = 0.2 + progressed * 0.16;
+      logoRuntimeRef.current.inkScale = lerp(4.0, 4.0 * 2.8, progressed);
+      logoRuntimeRef.current.warpScale = lerp(2.0, 2.0 * 2.2, progressed);
+      logoRuntimeRef.current.opacity = lerp(1, 0, progressed);
     };
 
     const syncFromBridge = bridgeScrollProgressRef
@@ -122,15 +141,14 @@ export function HeroBurstLogoSection({
     return () => {
       syncFromBridge.revert();
       progressRef.current = 0;
-      setScrollLogoBoost(0);
-      setScrollProgress(0);
+      logoRuntimeRef.current.logoSize = 0.2;
+      logoRuntimeRef.current.inkScale = 4.0;
+      logoRuntimeRef.current.warpScale = 2.0;
+      logoRuntimeRef.current.opacity = 1;
     };
   }, [reduceMotion, bridgeScrollProgressRef]);
 
   const fs = HERO_BARCODE.fontSize;
-  const shaderInkScale = lerp(4.0, 4.0 * 2.8, scrollProgress);
-  const shaderWarpScale = lerp(2.0, 2.0 * 2.2, scrollProgress);
-  const shaderOpacity = reduceMotion ? 1 : lerp(1, 0, scrollProgress);
   const textRepeat = isMobile ? TEXT_REPEAT_MOBILE : TEXT_REPEAT_DESKTOP;
 
   return (
@@ -140,11 +158,11 @@ export function HeroBurstLogoSection({
           className={styles.logoLayer}
           paused={reduceMotion}
           flowMode={"radial" as FlowMode}
-          logoSize={0.2 + scrollLogoBoost}
+          logoSize={0.2}
           mouseEnabled={!reduceMotion}
-          inkScale={shaderInkScale}
-          warpScale={shaderWarpScale}
-          style={{ opacity: shaderOpacity }}
+          inkScale={4.0}
+          warpScale={2.0}
+          runtimeRef={logoRuntimeRef}
           onReady={onReady}
         />
 
