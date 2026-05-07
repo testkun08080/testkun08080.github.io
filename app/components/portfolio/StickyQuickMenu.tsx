@@ -1,4 +1,4 @@
-import { animate } from "animejs";
+import { animate, stagger } from "animejs";
 import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
 import styles from "./StickyQuickMenu.module.css";
 
@@ -82,7 +82,7 @@ export function StickyQuickMenu({
       animate(links, {
         opacity: [0, 1],
         translateX: [10, 0],
-        delay: (_el, i) => i * 55,
+        delay: stagger(55),
         duration: 260,
         ease: "out(2)",
       });
