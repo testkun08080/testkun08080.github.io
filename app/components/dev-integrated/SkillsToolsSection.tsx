@@ -52,30 +52,31 @@ export function SkillsToolsSection({
       delay: stagger(50, { from: "center" }),
       ease: "inOut(3)",
       loop: true,
+      debug: true,
       alternate: true,
     });
 
-    const scrollSyncProxy = { progress: 0 };
-    const scrollSync = animate(scrollSyncProxy, {
-      progress: 1,
-      duration: 1,
-      ease: "linear",
-      autoplay: onScroll({
-        target: page,
-        enter: "top bottom",
-        leave: "center center",
-        sync: true,
-        onUpdate: (self) => {
-          const observer = self as { progress?: number };
-          if (typeof observer.progress !== "number") return;
-          if (observer.progress > 0.01 && observer.progress < 0.99) {
-            drift.play();
-          } else {
-            drift.pause();
-          }
-        },
-      }),
-    });
+    // const scrollSyncProxy = { progress: 0 };
+    // const scrollSync = animate(scrollSyncProxy, {
+    //   progress: 1,
+    //   duration: 1,
+    //   ease: "linear",
+    //   autoplay: onScroll({
+    //     target: page,
+    //     enter: "top bottom",
+    //     leave: "center center",
+    //     sync: true,
+    //     onUpdate: (self) => {
+    //       const observer = self as { progress?: number };
+    //       if (typeof observer.progress !== "number") return;
+    //       if (observer.progress > 0.01 && observer.progress < 0.99) {
+    //         drift.play();
+    //       } else {
+    //         drift.pause();
+    //       }
+    //     },
+    //   }),
+    // });
 
     const pointerCleanups = cards.map((card) => {
       const handlePointerDown = () => {
@@ -94,7 +95,7 @@ export function SkillsToolsSection({
     return () => {
       scopeRef.current?.revert();
       scopeRef.current = null;
-      scrollSync.revert();
+      // scrollSync.revert();
       drift.revert();
       pointerCleanups.forEach((cleanup) => cleanup());
     };

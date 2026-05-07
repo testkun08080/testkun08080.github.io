@@ -120,7 +120,7 @@ export default function Page() {
                 aria-hidden={true}
               >
                 <ScrollTypingHeading
-                  text="こんにちわ"
+                  text="KONNICHIWA"
                   headingClassName={styles.typingWord}
                   underlineClassName={styles.typingUnderline}
                   bridgeScrollProgressRef={bridgeScrollProgressRef}

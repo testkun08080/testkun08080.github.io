@@ -73,7 +73,7 @@
 
 .typingUnderline {
   justify-self: center;
-  width: clamp(180px, 46vw, 520px);
+  width: clamp(380px, 46vw, 520px);
   height: 6px;
   background: var(--color-anime-about-text);
   transform: scaleX(0);
@@ -141,7 +141,7 @@
   animation: marqueeRight var(--marquee-duration, 22s) linear infinite;
 }
 
-.marqueeTrack > p {
+.marqueeTrack>p {
   flex: none;
   margin: 0;
   padding-right: 0.6em;
@@ -274,4 +274,3 @@
   }
 
 }
-

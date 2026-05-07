@@ -9,6 +9,7 @@ import { SideCenterStickySection } from "../dev-integrated/SideCenterStickySecti
 import { SkillsToolsSection } from "../dev-integrated/SkillsToolsSection";
 import { WorkReelsSection } from "../dev-integrated/WorkReelsSection";
 import { StickyQuickMenu } from "../portfolio/StickyQuickMenu";
+import { LoadingScreen } from "./LoadingScreen";
 import { ProductionFooter } from "./ProductionFooter";
 import { ProductionResumeDownload } from "./ProductionResumeDownload";
 import { productionHomeCopy } from "../../lib/translations";
@@ -18,6 +19,7 @@ import styles from "./ProductionHomePage.module.css";
 
 const INITIAL_LINE_COUNT = 16;
 const REPEAT_N = 15;
+const HOME_LOADING_MS = 900;
 const MOTION_PRESETS = {
   legacy: {
     closeBase: 0.06,
@@ -50,12 +52,23 @@ export function ProductionHomePage() {
   const curtainRightRefs = useRef<Array<HTMLDivElement | null>>([]);
   const bridgeScrollProgressRef = useRef(0);
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
+  const [isLoadingVisible, setIsLoadingVisible] = useState(true);
   const copy = productionHomeCopy[language];
   const curtainSingleLine = copy.greetingBgRowText;
   const curtainLine = useMemo(
     () => Array.from({ length: REPEAT_N }, () => curtainSingleLine).join(" "),
     [curtainSingleLine],
   );
+
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      setIsLoadingVisible(false);
+    }, HOME_LOADING_MS);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, []);
 
   useEffect(() => {
     const previousLang = document.documentElement.lang;
@@ -187,6 +200,7 @@ export function ProductionHomePage() {
 
   return (
     <main className={styles.page}>
+      <LoadingScreen visible={isLoadingVisible} />
       <div className={styles.section}>
         <div ref={trackRef} className={styles.bridgeTrack}>
           <div className={styles.bridgePin}>
@@ -214,12 +228,12 @@ export function ProductionHomePage() {
                 aria-hidden
               >
                 <ScrollTypingHeading
-                  text="こんにちわ"
+                  text="KONNICHIWA"
                   headingClassName={styles.typingWord}
                   underlineClassName={styles.typingUnderline}
                   bridgeScrollProgressRef={bridgeScrollProgressRef}
-                  bridgeTypingRevealStart={0.52}
-                  bridgeTypingRevealEnd={0.76}
+                  bridgeTypingRevealStart={0.58}
+                  bridgeTypingRevealEnd={0.88}
                 />
               </section>
               <CurtainMarquee
