@@ -99,8 +99,8 @@
     color-mix(in srgb, var(--app-bg-color) 72%, transparent) 80%,
     var(--app-bg-color) 100%
   );
-  backdrop-filter: blur(calc(var(--fx-collapse-blur) * 0.58));
-  -webkit-backdrop-filter: blur(calc(var(--fx-collapse-blur) * 0.58));
+  backdrop-filter: blur(calc(var(--fx-collapse-blur) * 0.45));
+  -webkit-backdrop-filter: blur(calc(var(--fx-collapse-blur) * 0.45));
   mask-image: linear-gradient(to bottom, transparent 0%, black 62%, black 100%);
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 62%, black 100%);
 }
@@ -156,13 +156,13 @@
     box-shadow 180ms ease,
     transform 180ms ease,
     background-color 180ms ease;
-  box-shadow: 0 12px 28px -24px rgba(15, 23, 42, 0.55);
+  box-shadow: 0 10px 24px -24px rgba(15, 23, 42, 0.5);
 }
 
 .iconCard:hover {
   border-color: var(--color-border-strong);
   background: var(--surface-card-tool-hover);
-  box-shadow: 0 20px 30px -24px rgba(15, 23, 42, 0.7);
+  box-shadow: 0 16px 26px -24px rgba(15, 23, 42, 0.64);
 }
 
 .iconCard:focus-visible {

@@ -14,6 +14,7 @@ import {
   rowCloseLocal,
   rowOpenLocal,
 } from "../../lib/barcodeTextBridgeMath";
+import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import { productionHomeCopy } from "../../lib/translations";
 import type { Language } from "../../lib/translations";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
@@ -181,18 +182,19 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
       }
     };
 
-    const onScroll = () => {
+    const scheduleUpdate = () => {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = requestAnimationFrame(update);
     };
 
     update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    const unsubscribe = subscribeWindowRaf(scheduleUpdate, {
+      scroll: true,
+      resize: true,
+    });
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      unsubscribe();
       cancelAnimationFrame(rafRef.current);
       leftXRef.current = [];
       rightXRef.current = [];

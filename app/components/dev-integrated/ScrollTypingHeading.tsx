@@ -1,6 +1,7 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef, type MutableRefObject } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
+import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import styles from "./ScrollTypingHeading.module.css";
 
 export type ScrollTypingHeadingProps = {
@@ -121,12 +122,13 @@ export function ScrollTypingHeading({
       };
 
       schedule();
-      window.addEventListener("scroll", schedule, { passive: true });
-      window.addEventListener("resize", schedule, { passive: true });
+      const unsubscribe = subscribeWindowRaf(schedule, {
+        scroll: true,
+        resize: true,
+      });
 
       return () => {
-        window.removeEventListener("scroll", schedule);
-        window.removeEventListener("resize", schedule);
+        unsubscribe();
         cancelAnimationFrame(rafId);
         word.textContent = text;
         line.style.transform = "scaleX(1)";
