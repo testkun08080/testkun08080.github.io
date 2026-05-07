@@ -73,7 +73,7 @@ export const messages = {
     sunaba_message: "A sandbox for experiments and expression",
     about_title: "About",
     about_greeting:
-      "Nice to meet you!\nI'm Shoichi Hasegawa from Japan (๑•᎑•๑)\nI am passionate about creating and supporting outstanding art through technology, especially LookDev and shader development.\nWith both engineering and art backgrounds, I bridge technical problem-solving and creative vision.",
+      "Nice to meet you!\n(๑•᎑•๑)\nI live by doing, with full focus, whatever I genuinely find interesting.\nAmong those pursuits, I especially enjoy supporting and creating art and content.\nMy strengths are in rendering and shader development.\nThe most satisfying part is solving both technical and artistic challenges and carrying a project through to success.",
     about_resume: "Resume",
     about_section_title2: "Skills and profile",
     about_profile_name: "Shoichi Hasegawa",
@@ -178,9 +178,9 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     greetingBgRowText: "hi there hello oi",
     aboutHeading: "About",
     aboutText: `Nice to meet you!
-I'm Shoichi Hasegawa from Japan (๑•᎑•๑)
-I am passionate about creating and supporting outstanding art through technology, especially LookDev and shader development.
-With both engineering and art backgrounds, I bridge technical problem-solving and creative vision.`,
+    (๑•᎑•๑)
+    I am passionate about creating and supporting outstanding art through technology,especially LookDev and shader development.
+    With both engineering and art backgrounds, I bridge technical problem-solving and creative vision.`,
     sideWords: [
       "lookdev pipeline",
       "shader support",

@@ -119,7 +119,7 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
         autoplay: onScroll({
           target: track,
           sync: true,
-          debug: true,
+          debug: false,
           onUpdate: (self) => {
             const observer = self as { progress?: number };
             if (typeof observer.progress !== "number") return;
@@ -193,7 +193,7 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
         ref={aboutTextRef}
         className={styles.outroText}
         style={{
-          width: "min(86vw, 980px)",
+          // width: "min(86vw, 980px)",
           textAlign: "center",
           marginInline: "auto",
           whiteSpace: "pre-line",
@@ -203,66 +203,6 @@ export function AboutStickySection({ aboutText }: AboutStickySectionProps) {
           opacity: 1,
         }}
       />
-      {/* <section ref={trackRef} className={styles.track}>
-        <div className={styles.stickyFrame}>
-          <div ref={centerRef} className={styles.centerContent}>
-            <ScrollTypingHeading
-              text="About"
-              headingClassName={styles.centerHeading}
-              underlineClassName={styles.centerLine}
-            />
-            <p
-              ref={aboutTextRef}
-              className={styles.outroText}
-              style={{
-                width: "min(86vw, 980px)",
-                textAlign: "center",
-                marginInline: "auto",
-                whiteSpace: "pre-line",
-                lineHeight: 1.55,
-                color: "var(--color-anime-about-text)",
-                fontSize: "clamp(0.98rem, 1.55vw, 1.16rem)",
-              }}
-            />
-          </div>
-
-          <div
-            ref={leftRef}
-            className={`${styles.wordBlock} ${styles.leftBlock}`}
-          >
-            {Array.from({ length: LINE_COUNT }).map((_, i) => (
-              <p key={`l-${i}`} className={styles.sideText}>
-                <span
-                  className={styles.sideTyping}
-                  ref={(el) => {
-                    sideTypingSpansRef.current[i] = el;
-                  }}
-                >
-                  {WORDS[i % WORDS.length]}
-                </span>
-              </p>
-            ))}
-          </div>
-
-          <div
-            ref={rightRef}
-            className={`${styles.wordBlock} ${styles.rightBlock}`}
-          >
-            {Array.from({ length: LINE_COUNT }).map((_, i) => (
-              <p key={`r-${i}`} className={styles.sideText}>
-                <span
-                  className={styles.sideTyping}
-                  ref={(el) => {
-                    sideTypingSpansRef.current[LINE_COUNT + i] = el;
-                  }}
-                >
-                  {WORDS[i % WORDS.length]}
-                </span>
-              </p>
-            ))}
-          </div>
-        </div>
-      </section> */}
     </main>
   );
 }

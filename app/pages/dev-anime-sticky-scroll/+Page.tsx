@@ -37,7 +37,7 @@ export default function Page() {
           enter: "top top",
           leave: "bottom bottom",
           sync: true,
-          debug: true,
+          debug: false,
           onUpdate: (self) => {
             const observer = self as { progress?: number };
             updateTypingByProgress(observer.progress);
@@ -55,7 +55,7 @@ export default function Page() {
           enter: "top top",
           leave: "bottom bottom",
           sync: true,
-          debug: true,
+          debug: false,
         }),
       });
     });
@@ -73,7 +73,8 @@ export default function Page() {
       <section className={styles.intro}>
         <h1 className={styles.title}>dev-anime-sticky-scroll</h1>
         <p className={styles.copy}>
-          前面テキストは sticky で固定。スクロールすると背景とテキストが連動で変化します。
+          前面テキストは sticky
+          で固定。スクロールすると背景とテキストが連動で変化します。
         </p>
       </section>
 

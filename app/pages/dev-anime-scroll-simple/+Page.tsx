@@ -37,7 +37,7 @@ export default function Page() {
           leave: "top bottom",
           sync: true,
           repeat: false,
-          debug: true,
+          debug: false,
         }),
       });
 
@@ -52,7 +52,7 @@ export default function Page() {
           leave: "top bottom",
           sync: true,
           repeat: false,
-          debug: true,
+          debug: false,
         }),
       });
 
@@ -68,7 +68,7 @@ export default function Page() {
           enter: "bottom-=80 top",
           leave: "top bottom",
           repeat: false,
-          debug: true,
+          debug: false,
         }),
       });
     });

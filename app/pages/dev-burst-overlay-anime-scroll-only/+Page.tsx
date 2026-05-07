@@ -29,7 +29,7 @@ export default function Page() {
           leave: "center top-=100",
           sync: true,
           // repeat: true,
-          debug: true,
+          debug: false,
         }),
       });
 
@@ -39,7 +39,7 @@ export default function Page() {
           enter: "bottom top",
           leave: "center center",
           sync: true,
-          debug: true,
+          debug: false,
           onUpdate: (self) => {
             const observer = self as { progress?: number };
             if (typeof observer.progress !== "number") return;

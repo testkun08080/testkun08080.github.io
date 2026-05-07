@@ -69,7 +69,7 @@ export default function Page() {
           enter: "bottom top",
           leave: "center top",
           sync: true,
-          debug: true,
+          debug: false,
         }),
       });
 
@@ -82,7 +82,7 @@ export default function Page() {
           enter: "bottom top",
           leave: "center top",
           sync: true,
-          debug: true,
+          debug: false,
         }),
       });
 
@@ -183,7 +183,6 @@ export default function Page() {
           </p>
         ))}
       </section>
-
     </main>
   );
 }

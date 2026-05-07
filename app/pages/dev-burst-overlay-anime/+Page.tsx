@@ -60,11 +60,10 @@ export default function Page() {
             leave: "top bottom",
             sync: true,
             repeat: true,
-            // debug: true,
+            // debug: false,
           }),
         });
       });
-
     });
 
     return () => {

@@ -38,7 +38,7 @@ export function SkillsToolsSection({
           translateY: ["40px", "0px"],
           autoplay: onScroll({
             enter: "bottom top",
-            leave: "top center",
+            leave: "center center",
             sync: true,
           }),
         });
@@ -52,7 +52,7 @@ export function SkillsToolsSection({
       delay: stagger(50, { from: "center" }),
       ease: "inOut(3)",
       loop: true,
-      debug: true,
+      debug: false,
       alternate: true,
     });
 
@@ -85,7 +85,7 @@ export function SkillsToolsSection({
           rotate: ["0deg", "-2deg", "1.6deg", "0deg"],
           duration: 380,
           ease: "out(5)",
-          debug: true,
+          debug: false,
         });
       };
       card.addEventListener("pointerdown", handlePointerDown);

@@ -43,7 +43,7 @@ export default function AnimalsScrollLatest() {
             // enter: "top bottom",
             // leave: "bottom top",
             sync: true,
-            debug: true,
+            debug: false,
             onUpdate: (self) => {
               const observer = self as { progress?: number };
               console.log("progress", observer.progress);
