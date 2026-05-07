@@ -6,12 +6,20 @@ type ProductionFooterProps = {
   language?: SupportedLanguage;
   onToggleLanguage?: () => void;
   footerLanguageAriaLabel?: string;
+  resumeHeading?: string;
+  resumeJaLabel?: string;
+  resumeEnLabel?: string;
+  resumeDownloadLabel?: string;
 };
 
 export function ProductionFooter({
   language,
   onToggleLanguage,
   footerLanguageAriaLabel,
+  resumeHeading,
+  resumeJaLabel,
+  resumeEnLabel,
+  resumeDownloadLabel,
 }: ProductionFooterProps) {
   const showLanguageToggle =
     language !== undefined &&
@@ -29,7 +37,9 @@ export function ProductionFooter({
         >
           <span
             className={
-              language === "ja" ? styles.languageActive : styles.languageInactive
+              language === "ja"
+                ? styles.languageActive
+                : styles.languageInactive
             }
           >
             日本語
@@ -37,7 +47,9 @@ export function ProductionFooter({
           <span className={styles.languageSeparator}> / </span>
           <span
             className={
-              language === "en" ? styles.languageActive : styles.languageInactive
+              language === "en"
+                ? styles.languageActive
+                : styles.languageInactive
             }
           >
             English

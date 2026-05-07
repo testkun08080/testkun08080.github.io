@@ -8,6 +8,38 @@
   background: transparent;
 }
 
+.resumeLinks {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: center;
+}
+
+.resumeHeading {
+  font-size: clamp(0.95rem, 1.7vw, 1.1rem);
+  font-weight: 800;
+  color: var(--color-text-body);
+}
+
+.resumeLinkRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+}
+
+.resumeLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 11.5rem;
+  padding: 0.55rem 0.95rem;
+  border: 1px solid var(--color-text-body);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--color-text-body);
+}
+
 .languageToggle {
   border: 0;
   background: transparent;

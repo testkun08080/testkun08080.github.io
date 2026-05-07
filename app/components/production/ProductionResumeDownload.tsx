@@ -1,4 +1,4 @@
-import { animate, onScroll } from "animejs";
+import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef } from "react";
 import styles from "./ProductionResumeDownload.module.css";
 
@@ -16,6 +16,7 @@ export function ProductionResumeDownload({
   downloadLabel,
 }: ProductionResumeDownloadProps) {
   const rootRef = useRef<HTMLElement>(null);
+  const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -23,22 +24,21 @@ export function ProductionResumeDownload({
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    root.style.opacity = "0";
-    root.style.transform = "translateY(40px)";
-
-    const anim = animate(root, {
-      opacity: [0, 1],
-      translateY: ["40px", "0px"],
-      ease: "linear",
-      autoplay: onScroll({
-        enter: "top 85%",
-        leave: "top 20%",
-        sync: true,
-      }),
+    scopeRef.current = createScope({ root }).add(() => {
+      animate(root, {
+        opacity: [0, 1],
+        translateY: ["40px", "0px"],
+        autoplay: onScroll({
+          enter: "bottom top",
+          leave: "center center",
+          sync: true,
+        }),
+      });
     });
 
     return () => {
-      anim.revert();
+      scopeRef.current?.revert();
+      scopeRef.current = null;
     };
   }, []);
 

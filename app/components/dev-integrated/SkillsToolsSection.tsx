@@ -84,6 +84,7 @@ export function SkillsToolsSection({
           rotate: ["0deg", "-2deg", "1.6deg", "0deg"],
           duration: 380,
           ease: "out(5)",
+          debug: true,
         });
       };
       card.addEventListener("pointerdown", handlePointerDown);

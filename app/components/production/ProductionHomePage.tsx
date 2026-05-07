@@ -50,7 +50,7 @@ export function ProductionHomePage() {
   const curtainRightRefs = useRef<Array<HTMLDivElement | null>>([]);
   const bridgeScrollProgressRef = useRef(0);
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
-  const copy = productionHomeCopy.ja;
+  const copy = productionHomeCopy[language];
   const curtainSingleLine = copy.greetingBgRowText;
   const curtainLine = useMemo(
     () => Array.from({ length: REPEAT_N }, () => curtainSingleLine).join(" "),
@@ -310,7 +310,15 @@ export function ProductionHomePage() {
         onToggleLanguage={toggleLanguage}
       />
 
-      <ProductionFooter />
+      <ProductionFooter
+        language={language}
+        onToggleLanguage={toggleLanguage}
+        footerLanguageAriaLabel={copy.footerLanguageAriaLabel}
+        resumeHeading={copy.resumeHeading}
+        resumeJaLabel={copy.resumeJaLabel}
+        resumeEnLabel={copy.resumeEnLabel}
+        resumeDownloadLabel={copy.resumeDownloadLabel}
+      />
     </main>
   );
 }

@@ -55,17 +55,17 @@ describe("ProductionHomePage language flow", () => {
         <ProductionHomePage />
       </LanguageProvider>,
     );
-    expect(document.documentElement.lang).toBe("ja");
+    expect(document.documentElement.lang).toBe("en");
 
-    const menuButton = screen.getByRole("button", { name: "メニュー" });
+    const menuButton = screen.getByRole("button", { name: "Menu" });
     fireEvent.click(menuButton);
 
     fireEvent.click(
-      screen.getByRole("button", {
-        name: "日本語と英語を切り替える",
-      }),
+      screen.getAllByRole("button", {
+        name: "Switch language between Japanese and English",
+      })[0],
     );
-    expect(document.documentElement.lang).toBe("en");
+    expect(document.documentElement.lang).toBe("ja");
 
     unmount();
     expect(document.documentElement.lang).toBe("ja");
