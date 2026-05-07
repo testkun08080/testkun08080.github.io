@@ -61,7 +61,6 @@
   grid-template-rows: 296px;
   overflow: hidden;
   transition: grid-template-rows 260ms ease;
-  will-change: grid-template-rows;
 }
 
 .iconGridViewportExpanded {

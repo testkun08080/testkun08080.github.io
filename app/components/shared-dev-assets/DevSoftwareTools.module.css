@@ -63,7 +63,6 @@
 .iconGridViewportCollapsible {
   overflow: hidden;
   transition: max-height 260ms ease;
-  will-change: max-height;
 }
 
 .iconGridViewportCollapsed {
