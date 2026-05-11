@@ -1,8 +1,14 @@
 import { animate, stagger } from "animejs";
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import styles from "./StickyQuickMenu.module.css";
-import { getMenuIcon } from "./StickyQuickMenu.icons";
 
 type StickyQuickMenuItem = {
   href: string;
@@ -40,7 +46,6 @@ export function StickyQuickMenu({
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const menuId = useId();
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -50,26 +55,27 @@ export function StickyQuickMenu({
 
   const menuItems = useMemo(() => items, [items]);
   const menuVisible = menuOpen || prefersReducedMotion;
-  const effectiveVisible = typeof visibleOverride === "boolean" ? visibleOverride : isVisible;
+  const effectiveVisible =
+    typeof visibleOverride === "boolean" ? visibleOverride : isVisible;
 
   useEffect(() => {
     if (typeof window === "undefined" || !("matchMedia" in window)) return;
-    const mediaReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const mediaMobile = window.matchMedia("(max-width: 480px)");
+    const mediaReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
 
     const handleReducedMotionChange = () =>
       setPrefersReducedMotion(mediaReducedMotion.matches);
-    const handleMobileChange = () => setIsMobile(mediaMobile.matches);
 
     handleReducedMotionChange();
-    handleMobileChange();
 
     mediaReducedMotion.addEventListener("change", handleReducedMotionChange);
-    mediaMobile.addEventListener("change", handleMobileChange);
 
     return () => {
-      mediaReducedMotion.removeEventListener("change", handleReducedMotionChange);
-      mediaMobile.removeEventListener("change", handleMobileChange);
+      mediaReducedMotion.removeEventListener(
+        "change",
+        handleReducedMotionChange,
+      );
     };
   }, []);
 
@@ -147,7 +153,10 @@ export function StickyQuickMenu({
 
       if (deltaY < 0) {
         upwardDistanceRef.current += Math.abs(deltaY);
-        if (!visibleRef.current && upwardDistanceRef.current >= upwardThreshold) {
+        if (
+          !visibleRef.current &&
+          upwardDistanceRef.current >= upwardThreshold
+        ) {
           visibleRef.current = true;
           setIsVisible(true);
         }
@@ -184,8 +193,14 @@ export function StickyQuickMenu({
         onClick={() => setMenuOpen((prev) => !prev)}
         aria-expanded={menuOpen}
         aria-controls={menuId}
+        aria-label={menuLabel}
       >
-        {menuLabel}
+        <img
+          src="/logo-inv.png"
+          alt=""
+          aria-hidden="true"
+          className={styles.fabLogo}
+        />
       </button>
       <div
         id={menuId}
@@ -194,7 +209,6 @@ export function StickyQuickMenu({
         aria-hidden={!menuVisible}
       >
         {menuItems.map((item) => {
-          const IconComponent = getMenuIcon(item.iconKey);
           return (
             <a
               key={item.href}
@@ -205,18 +219,7 @@ export function StickyQuickMenu({
               title={item.label}
               aria-label={item.label}
             >
-              {IconComponent ? (
-                <>
-                  <span className={styles.menuIcon}>
-                    <IconComponent size={24} />
-                  </span>
-                  {!isMobile && (
-                    <span className={styles.menuItemText}>{item.label}</span>
-                  )}
-                </>
-              ) : (
-                <span>{item.label}</span>
-              )}
+              <span className={styles.menuItemText}>{item.label}</span>
             </a>
           );
         })}
