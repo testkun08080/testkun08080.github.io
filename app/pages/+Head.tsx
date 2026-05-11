@@ -4,7 +4,7 @@ export function Head() {
   const description =
     "Testkun's portfolio site. Showcasing shader development, LookDev, and creative web projects bridging technology and art.";
   const siteUrl = "https://testkun08080.github.io";
-  const ogImage = `${siteUrl}/utils/thumb.webp`;
+  const ogImage = `${siteUrl}/utils/ogp.webp`;
 
   return (
     <>
@@ -13,9 +13,9 @@ export function Head() {
       <meta name="robots" content="index,follow" />
       <link rel="canonical" href={siteUrl} />
 
-      <link rel="icon" href="/utils/thumb.webp" type="image/webp" />
-      <link rel="icon" href="/utils/thumb.png" type="image/png" />
-      <link rel="apple-touch-icon" href="/utils/thumb.png" />
+      <link rel="icon" href="/utils/ogp.webp" type="image/webp" />
+      <link rel="icon" href="/utils/ogp.jpeg" type="image/jpeg" />
+      <link rel="apple-touch-icon" href="/utils/ogp.jpeg" />
       <meta name="theme-color" content="#0f172a" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
 

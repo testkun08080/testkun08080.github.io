@@ -27,7 +27,7 @@ export default function Page() {
     Logo: folder({
       logoUrl: {
         value: "/logo-trans.svg",
-        options: ["/logo-trans.svg", "/logo.svg"],
+        options: ["/logo-trans.svg", "/logo.png"],
       },
       logoSize: { value: 0.2, min: 0.05, max: 1.0, step: 0.005 },
       centerX: { value: 0.0, min: -1.5, max: 1.5, step: 0.01 },

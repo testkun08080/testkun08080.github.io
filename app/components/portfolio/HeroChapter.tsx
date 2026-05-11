@@ -107,13 +107,6 @@ export function HeroChapter({ className }: Props) {
           }}
         >
           <div className="relative aspect-1595/2155 w-full">
-            {/* <motion.img
-              src="/logo.svg"
-              alt=""
-              className="absolute inset-0 h-full w-full object-contain object-center"
-              style={{ opacity: logoSolid }}
-              draggable={false}
-            /> */}
             <motion.img
               src="/logo-trans.svg"
               alt=""

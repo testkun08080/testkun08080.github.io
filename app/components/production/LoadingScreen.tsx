@@ -23,7 +23,7 @@ export function LoadingScreen({ visible }: Props) {
       aria-hidden="true"
     >
       <div className={styles.inner}>
-        <img src="/logo.svg" className={styles.logo} alt="" />
+        <img src="/logo.png" className={styles.logo} alt="" />
         <div className={styles.bar} />
       </div>
     </div>
