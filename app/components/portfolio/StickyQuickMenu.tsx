@@ -1,11 +1,19 @@
 import { animate, stagger } from "animejs";
-import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import styles from "./StickyQuickMenu.module.css";
 
 type StickyQuickMenuItem = {
   href: string;
   label: string;
+  iconKey?: string;
 };
 
 type StickyQuickMenuProps = {
@@ -47,15 +55,28 @@ export function StickyQuickMenu({
 
   const menuItems = useMemo(() => items, [items]);
   const menuVisible = menuOpen || prefersReducedMotion;
-  const effectiveVisible = typeof visibleOverride === "boolean" ? visibleOverride : isVisible;
+  const effectiveVisible =
+    typeof visibleOverride === "boolean" ? visibleOverride : isVisible;
 
   useEffect(() => {
     if (typeof window === "undefined" || !("matchMedia" in window)) return;
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setPrefersReducedMotion(media.matches);
-    onChange();
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
+    const mediaReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
+
+    const handleReducedMotionChange = () =>
+      setPrefersReducedMotion(mediaReducedMotion.matches);
+
+    handleReducedMotionChange();
+
+    mediaReducedMotion.addEventListener("change", handleReducedMotionChange);
+
+    return () => {
+      mediaReducedMotion.removeEventListener(
+        "change",
+        handleReducedMotionChange,
+      );
+    };
   }, []);
 
   useEffect(() => {
@@ -132,7 +153,10 @@ export function StickyQuickMenu({
 
       if (deltaY < 0) {
         upwardDistanceRef.current += Math.abs(deltaY);
-        if (!visibleRef.current && upwardDistanceRef.current >= upwardThreshold) {
+        if (
+          !visibleRef.current &&
+          upwardDistanceRef.current >= upwardThreshold
+        ) {
           visibleRef.current = true;
           setIsVisible(true);
         }
@@ -169,8 +193,14 @@ export function StickyQuickMenu({
         onClick={() => setMenuOpen((prev) => !prev)}
         aria-expanded={menuOpen}
         aria-controls={menuId}
+        aria-label={menuLabel}
       >
-        {menuLabel}
+        <img
+          src="/logo-inv.png"
+          alt=""
+          aria-hidden="true"
+          className={styles.fabLogo}
+        />
       </button>
       <div
         id={menuId}
@@ -178,11 +208,21 @@ export function StickyQuickMenu({
         className={`${styles.fabMenu} ${menuVisible ? styles.fabMenuOpen : ""}`}
         aria-hidden={!menuVisible}
       >
-        {menuItems.map((item) => (
-          <a key={item.href} href={item.href} onClick={closeMenu}>
-            {item.label}
-          </a>
-        ))}
+        {menuItems.map((item) => {
+          return (
+            <a
+              key={item.href}
+              href={item.href}
+              onClick={closeMenu}
+              className={styles.menuItem}
+              data-label={item.label}
+              title={item.label}
+              aria-label={item.label}
+            >
+              <span className={styles.menuItemText}>{item.label}</span>
+            </a>
+          );
+        })}
         {onToggleLanguage ? (
           <button
             type="button"

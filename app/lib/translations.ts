@@ -124,7 +124,7 @@ export type ProductionHomeCopy = {
   contactHeading: string;
   menuButton: string;
   menuLanguageLabel: string;
-  menuItems: { href: string; label: string }[];
+  menuItems: { href: string; label: string; iconKey?: string }[];
   reelsFallbackPrefix: string;
   reelsFallbackLink: string;
   skillsShowMore: string;
@@ -157,11 +157,11 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     menuButton: "メニュー",
     menuLanguageLabel: "言語",
     menuItems: [
-      { href: "#hero", label: "TOP" },
-      { href: "#sticky-side", label: "自己紹介" },
-      { href: "#work", label: "作品" },
-      { href: "#skills", label: "スキル" },
-      { href: "#contact", label: "連絡先" },
+      { href: "#hero", label: "TOP", iconKey: "home" },
+      { href: "#sticky-side", label: "自己紹介", iconKey: "info" },
+      { href: "#work", label: "作品", iconKey: "work" },
+      { href: "#skills", label: "スキル", iconKey: "skills" },
+      { href: "#contact", label: "連絡先", iconKey: "contact" },
     ],
     reelsFallbackPrefix: "埋め込みが表示されない場合は",
     reelsFallbackLink: "YouTubeで開く",
@@ -195,11 +195,11 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     menuButton: "Menu",
     menuLanguageLabel: "Language",
     menuItems: [
-      { href: "#hero", label: "TOP" },
-      { href: "#sticky-side", label: "about" },
-      { href: "#work", label: "work" },
-      { href: "#skills", label: "skills" },
-      { href: "#contact", label: "contact" },
+      { href: "#hero", label: "TOP", iconKey: "home" },
+      { href: "#sticky-side", label: "about", iconKey: "info" },
+      { href: "#work", label: "work", iconKey: "work" },
+      { href: "#skills", label: "skills", iconKey: "skills" },
+      { href: "#contact", label: "contact", iconKey: "contact" },
     ],
     reelsFallbackPrefix: "If the embed is unavailable,",
     reelsFallbackLink: "open on YouTube",
