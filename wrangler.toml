@@ -1,9 +1,0 @@
-name = "testkun-portfolio"
-pages_build_output_dir = "app/dist/client"
-compatibility_date = "2026-05-11"
-
-[env.production]
-vars = { ENVIRONMENT = "production" }
-
-[env.preview]
-vars = { ENVIRONMENT = "preview" }
