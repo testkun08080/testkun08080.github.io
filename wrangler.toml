@@ -1,0 +1,14 @@
+name = "testkun-portfolio"
+type = "javascript"
+pages_build_config = {}
+
+[build]
+command = "npm ci && npm run build:pages"
+cwd = "./"
+output_dir = "app/dist/client"
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+[env.preview]
+vars = { ENVIRONMENT = "preview" }
