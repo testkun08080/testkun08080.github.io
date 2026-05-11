@@ -1,11 +1,6 @@
 name = "testkun-portfolio"
-type = "javascript"
-pages_build_config = {}
-
-[build]
-command = "npm ci && npm run build:pages"
-cwd = "./"
-output_dir = "app/dist/client"
+pages_build_output_dir = "app/dist/client"
+compatibility_date = "2026-05-11"
 
 [env.production]
 vars = { ENVIRONMENT = "production" }
