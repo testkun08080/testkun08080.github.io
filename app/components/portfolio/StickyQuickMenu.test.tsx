@@ -7,12 +7,12 @@ vi.mock("animejs", () => ({
   stagger: (value: number) => value,
 }));
 
-function mockMatchMedia(matches: boolean) {
+function mockMatchMedia(matches: boolean, query?: string) {
   Object.defineProperty(window, "matchMedia", {
     writable: true,
-    value: vi.fn().mockImplementation(() => ({
-      matches,
-      media: "(prefers-reduced-motion: reduce)",
+    value: vi.fn().mockImplementation((q: string) => ({
+      matches: query ? q === query : matches,
+      media: query || "(prefers-reduced-motion: reduce)",
       onchange: null,
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
@@ -53,5 +53,25 @@ describe("StickyQuickMenu", () => {
 
     fireEvent.click(button);
     expect(panel).toHaveAttribute("aria-hidden", "false");
+  });
+
+  it("renders menu items with icon support", () => {
+    mockMatchMedia(false);
+
+    render(
+      <StickyQuickMenu
+        items={[
+          { href: "#hero", label: "TOP", iconKey: "home" },
+          { href: "#about", label: "About", iconKey: "info" },
+        ]}
+      />,
+    );
+    const button = screen.getByRole("button", { name: "Menu" });
+    fireEvent.click(button);
+
+    const links = screen.getAllByRole("link");
+    expect(links).toHaveLength(2);
+    expect(links[0]).toHaveAttribute("data-label", "TOP");
+    expect(links[1]).toHaveAttribute("data-label", "About");
   });
 });

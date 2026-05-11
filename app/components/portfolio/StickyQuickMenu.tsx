@@ -2,10 +2,12 @@ import { animate, stagger } from "animejs";
 import { useEffect, useId, useMemo, useRef, useState, type CSSProperties } from "react";
 import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import styles from "./StickyQuickMenu.module.css";
+import { getMenuIcon } from "./StickyQuickMenu.icons";
 
 type StickyQuickMenuItem = {
   href: string;
   label: string;
+  iconKey?: string;
 };
 
 type StickyQuickMenuProps = {
@@ -38,6 +40,7 @@ export function StickyQuickMenu({
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const menuId = useId();
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -51,11 +54,23 @@ export function StickyQuickMenu({
 
   useEffect(() => {
     if (typeof window === "undefined" || !("matchMedia" in window)) return;
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onChange = () => setPrefersReducedMotion(media.matches);
-    onChange();
-    media.addEventListener("change", onChange);
-    return () => media.removeEventListener("change", onChange);
+    const mediaReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mediaMobile = window.matchMedia("(max-width: 480px)");
+
+    const handleReducedMotionChange = () =>
+      setPrefersReducedMotion(mediaReducedMotion.matches);
+    const handleMobileChange = () => setIsMobile(mediaMobile.matches);
+
+    handleReducedMotionChange();
+    handleMobileChange();
+
+    mediaReducedMotion.addEventListener("change", handleReducedMotionChange);
+    mediaMobile.addEventListener("change", handleMobileChange);
+
+    return () => {
+      mediaReducedMotion.removeEventListener("change", handleReducedMotionChange);
+      mediaMobile.removeEventListener("change", handleMobileChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -178,11 +193,33 @@ export function StickyQuickMenu({
         className={`${styles.fabMenu} ${menuVisible ? styles.fabMenuOpen : ""}`}
         aria-hidden={!menuVisible}
       >
-        {menuItems.map((item) => (
-          <a key={item.href} href={item.href} onClick={closeMenu}>
-            {item.label}
-          </a>
-        ))}
+        {menuItems.map((item) => {
+          const IconComponent = getMenuIcon(item.iconKey);
+          return (
+            <a
+              key={item.href}
+              href={item.href}
+              onClick={closeMenu}
+              className={styles.menuItem}
+              data-label={item.label}
+              title={item.label}
+              aria-label={item.label}
+            >
+              {IconComponent ? (
+                <>
+                  <span className={styles.menuIcon}>
+                    <IconComponent size={24} />
+                  </span>
+                  {!isMobile && (
+                    <span className={styles.menuItemText}>{item.label}</span>
+                  )}
+                </>
+              ) : (
+                <span>{item.label}</span>
+              )}
+            </a>
+          );
+        })}
         {onToggleLanguage ? (
           <button
             type="button"

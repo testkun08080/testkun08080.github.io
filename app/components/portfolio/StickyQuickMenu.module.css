@@ -53,13 +53,29 @@
 }
 
 .fabMenu a {
-  display: block;
-  padding: 0.22rem 0.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.25rem;
   color: #e2e8f0;
   text-decoration: none;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  position: relative;
+}
+
+.menuIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.menuItemText {
+  white-space: nowrap;
 }
 
 .menuAction {
@@ -105,28 +121,80 @@
   }
 }
 
+@media (max-width: 480px) {
+  .fabButton {
+    padding: 0.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+  }
+
+  .fabMenu {
+    min-width: auto;
+    max-width: calc(100vw - 1rem);
+    padding: 0.5rem;
+    grid-auto-flow: column;
+    grid-auto-columns: auto;
+    gap: 0.25rem;
+  }
+
+  .fabMenu a {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 0.35rem;
+    font-size: 0;
+    padding: 0.35rem;
+  }
+
+  .menuIcon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .menuItemText {
+    display: none;
+  }
+
+  .fabMenu a:hover::after,
+  .fabMenu a:focus::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: -2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    background: rgb(15 23 42 / 0.95);
+    border: 1px solid rgb(148 163 184 / 0.45);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.65rem;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .menuAction {
+    grid-column: 1 / -1;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+  }
+}
+
 @media (max-width: 420px) {
   .fabArea {
     right: 0.5rem;
     bottom: 0.5rem;
   }
 
-  .fabButton {
-    padding: 0.5rem 0.76rem;
-    font-size: 0.82rem;
-  }
-
   .fabMenu {
-    min-width: 108px;
-    max-width: calc(100vw - 1rem);
     padding: 0.44rem;
-  }
-
-  .fabMenu a {
-    font-size: 0.75rem;
-    letter-spacing: 0.03em;
-    text-transform: none;
-    line-height: 1.32;
   }
 
   .menuAction {
