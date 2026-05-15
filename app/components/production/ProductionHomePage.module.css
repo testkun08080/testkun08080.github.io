@@ -120,7 +120,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   contain: layout paint;
 }
 
@@ -178,11 +178,11 @@
 }
 
 .halfLeft {
-  transform: translate3d(-105%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
 }
 
 .halfRight {
-  transform: translate3d(105%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
 }
 
 .greetingLayer {
