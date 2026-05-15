@@ -7,6 +7,14 @@ import styles from "./SideCenterStickySection.module.css";
 
 const INITIAL_LINE_COUNT = 33;
 const START_OFFSET_VW = 22;
+const SCROLL_IDLE_MS = 140;
+
+/** True while the user is still scrolling through the hero bridge (before sticky-side pins). */
+function isInHeroBridgePhase() {
+  const sticky = document.getElementById("sticky-side");
+  if (!sticky) return false;
+  return sticky.getBoundingClientRect().top > 0;
+}
 
 type SideCenterStickySectionProps = {
   aboutHeading?: string;
@@ -46,6 +54,8 @@ export function SideCenterStickySection({
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
   // Hold typing animation instances for pause/resume
   const typingAnimsRef = useRef<ReturnType<typeof animate>[]>([]);
+  const sectionVisibleRef = useRef(false);
+  const scrollIdleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 640px)");
@@ -194,15 +204,21 @@ export function SideCenterStickySection({
     });
 
     // Pause loop animations when section is not visible
+    const setTypingPlayback = (playing: boolean) => {
+      for (const anim of typingAnimsRef.current) {
+        if (playing) anim.play();
+        else anim.pause();
+      }
+    };
+
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          for (const anim of typingAnimsRef.current) {
-            if (entry.isIntersecting) {
-              anim.play();
-            } else {
-              anim.pause();
-            }
+          sectionVisibleRef.current = entry.isIntersecting;
+          if (entry.isIntersecting) {
+            setTypingPlayback(true);
+          } else {
+            setTypingPlayback(false);
           }
         }
       },
@@ -210,7 +226,29 @@ export function SideCenterStickySection({
     );
     if (rootRef.current) io.observe(rootRef.current);
 
+    const handleWindowScroll = () => {
+      if (!isInHeroBridgePhase()) {
+        if (sectionVisibleRef.current) setTypingPlayback(true);
+        return;
+      }
+      setTypingPlayback(false);
+      if (scrollIdleTimerRef.current) {
+        clearTimeout(scrollIdleTimerRef.current);
+      }
+      scrollIdleTimerRef.current = setTimeout(() => {
+        scrollIdleTimerRef.current = null;
+        if (sectionVisibleRef.current) {
+          setTypingPlayback(true);
+        }
+      }, SCROLL_IDLE_MS);
+    };
+    window.addEventListener("scroll", handleWindowScroll, { passive: true });
+
     return () => {
+      window.removeEventListener("scroll", handleWindowScroll);
+      if (scrollIdleTimerRef.current) {
+        clearTimeout(scrollIdleTimerRef.current);
+      }
       io.disconnect();
       scopeRef.current?.revert();
       scopeRef.current = null;

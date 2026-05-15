@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import styles from "../shared-dev-assets/DevSoftwareTools.module.css";
 import { TOOL_CATEGORIES } from "../shared-dev-assets/toolCategories";
 
+const SCROLL_IDLE_MS = 140;
+
 type SkillsToolsSectionProps = {
   showMoreLabel?: string;
   closeLabel?: string;
@@ -16,6 +18,9 @@ export function SkillsToolsSection({
   const pageRef = useRef<HTMLDivElement>(null);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
   const gridRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const driftAnimRef = useRef<ReturnType<typeof animate> | null>(null);
+  const sectionVisibleRef = useRef(false);
+  const scrollIdleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [expandedMap, setExpandedMap] = useState<Record<string, boolean>>({});
   const [overflowMap, setOverflowMap] = useState<Record<string, boolean>>({});
 
@@ -55,6 +60,34 @@ export function SkillsToolsSection({
       debug: false,
       alternate: true,
     });
+    driftAnimRef.current = drift;
+
+    const setDriftPlaying = (playing: boolean) => {
+      if (!driftAnimRef.current) return;
+      if (playing) driftAnimRef.current.play();
+      else driftAnimRef.current.pause();
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          sectionVisibleRef.current = entry.isIntersecting;
+          setDriftPlaying(entry.isIntersecting);
+        }
+      },
+      { rootMargin: "120px 0px", threshold: 0 },
+    );
+    io.observe(page);
+
+    const handleWindowScroll = () => {
+      setDriftPlaying(false);
+      if (scrollIdleTimerRef.current) clearTimeout(scrollIdleTimerRef.current);
+      scrollIdleTimerRef.current = setTimeout(() => {
+        scrollIdleTimerRef.current = null;
+        if (sectionVisibleRef.current) setDriftPlaying(true);
+      }, SCROLL_IDLE_MS);
+    };
+    window.addEventListener("scroll", handleWindowScroll, { passive: true });
 
     // const scrollSyncProxy = { progress: 0 };
     // const scrollSync = animate(scrollSyncProxy, {
@@ -93,9 +126,12 @@ export function SkillsToolsSection({
     });
 
     return () => {
+      window.removeEventListener("scroll", handleWindowScroll);
+      if (scrollIdleTimerRef.current) clearTimeout(scrollIdleTimerRef.current);
+      io.disconnect();
+      driftAnimRef.current = null;
       scopeRef.current?.revert();
       scopeRef.current = null;
-      // scrollSync.revert();
       drift.revert();
       pointerCleanups.forEach((cleanup) => cleanup());
     };

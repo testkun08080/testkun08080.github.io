@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animate, onScroll } from "animejs";
 import { CurtainMarquee } from "../curtain/CurtainMarquee";
 import { clamp01 } from "../../lib/barcodeTextBridgeMath";
@@ -62,6 +62,13 @@ export function ProductionHomePage() {
     bVisible: false,
   });
   const bridgeScrollProgressRef = useRef(0);
+  const heroBridgeApplyRef = useRef<((progress: number) => void) | null>(null);
+  const registerBridgeApply = useCallback(
+    (fn: ((progress: number) => void) | null) => {
+      heroBridgeApplyRef.current = fn;
+    },
+    [],
+  );
   const [lineCount, setLineCount] = useState(INITIAL_LINE_COUNT);
   const [isLoadingVisible, setIsLoadingVisible] = useState(true);
   const copy = productionHomeCopy[language];
@@ -195,6 +202,23 @@ export function ProductionHomePage() {
         layerA.style.zIndex = bVisible ? "1" : "2";
         layerB.style.zIndex = bVisible ? "2" : "1";
       }
+      heroBridgeApplyRef.current?.(progress);
+    };
+
+    let pendingBridgeProgress: number | null = null;
+    let bridgeRafId = 0;
+    const flushBridgeProgress = () => {
+      bridgeRafId = 0;
+      if (pendingBridgeProgress === null) return;
+      const bridgeProgress = pendingBridgeProgress;
+      pendingBridgeProgress = null;
+      bridgeScrollProgressRef.current = bridgeProgress;
+      applyBridgeProgress(bridgeProgress);
+    };
+    const scheduleBridgeProgress = (progress: number) => {
+      pendingBridgeProgress = progress;
+      if (bridgeRafId) return;
+      bridgeRafId = requestAnimationFrame(flushBridgeProgress);
     };
 
     if (reduceMotion) {
@@ -215,14 +239,13 @@ export function ProductionHomePage() {
         onUpdate: (self) => {
           const observer = self as { progress?: number };
           if (typeof observer.progress !== "number") return;
-          const bridgeProgress = clamp01(observer.progress);
-          bridgeScrollProgressRef.current = bridgeProgress;
-          applyBridgeProgress(bridgeProgress);
+          scheduleBridgeProgress(clamp01(observer.progress));
         },
       }),
     });
 
     return () => {
+      if (bridgeRafId) cancelAnimationFrame(bridgeRafId);
       progressSync.revert();
       leftXRef.current = [];
       rightXRef.current = [];
@@ -253,6 +276,7 @@ export function ProductionHomePage() {
               >
                 <HeroBurstLogoSection
                   bridgeScrollProgressRef={bridgeScrollProgressRef}
+                  registerBridgeApply={registerBridgeApply}
                 />
               </section>
               <section

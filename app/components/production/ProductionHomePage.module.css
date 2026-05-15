@@ -225,11 +225,15 @@
 .workSection {
   z-index: 8;
   padding-top: 4rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 .skillsSection {
   z-index: 9;
   padding-top: 4rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1200px;
 }
 
 .contactSection {
