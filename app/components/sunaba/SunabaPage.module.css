@@ -1,0 +1,59 @@
+.page {
+  position: relative;
+  min-height: 100dvh;
+  background: var(--app-bg-color);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: min(72rem, 100%);
+  margin: 0 auto;
+  padding: 2.5rem 1rem 3rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.typingWord {
+  margin: 0;
+  min-height: 1.1em;
+  text-align: center;
+  font-size: clamp(2.8rem, 9vw, 5.5rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  color: var(--color-text-heading);
+  text-transform: lowercase;
+}
+
+.typingUnderline {
+  justify-self: center;
+  width: clamp(160px, 42vw, 320px);
+  height: 5px;
+  background: var(--color-text-heading);
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}
+
+.description {
+  margin: 0;
+  max-width: 40ch;
+  font-size: clamp(0.9rem, 2.2vw, 1rem);
+  line-height: 1.65;
+  letter-spacing: 0.06em;
+  color: var(--color-text-body);
+}
+
+.main {
+  position: relative;
+  z-index: 1;
+  padding-bottom: 1rem;
+}
+

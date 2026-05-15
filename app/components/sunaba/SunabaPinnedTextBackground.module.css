@@ -1,0 +1,23 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pinned {
+  position: absolute;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: var(--color-text-subtitle);
+  white-space: nowrap;
+  user-select: none;
+  transform-origin: center center;
+}
+
+.hidden {
+  opacity: 0;
+}
