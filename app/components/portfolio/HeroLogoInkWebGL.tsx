@@ -142,6 +142,8 @@ uniform float u_edgeWidth;
 uniform float u_edgeStrength;
 uniform vec3  u_edgeColor;
 uniform float u_edgeInkMix;
+uniform vec2  u_drawMin;        // conservative draw bounds in aspect-corrected uv
+uniform vec2  u_drawMax;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 345.45));
@@ -181,6 +183,12 @@ void main() {
   vec2 uv = v_uv * 2.0 - 1.0;
   float aspect = u_resolution.x / max(u_resolution.y, 1.0);
   uv.x *= aspect;
+
+  // Conservative coarse reject to skip expensive work outside logo region.
+  if (uv.x < u_drawMin.x || uv.x > u_drawMax.x || uv.y < u_drawMin.y || uv.y > u_drawMax.y) {
+    gl_FragColor = vec4(0.0);
+    return;
+  }
 
   float t = mix(0.0, u_time, 1.0 - u_paused);
 
@@ -305,6 +313,100 @@ function setVec3(target: number[], src: [number, number, number]) {
 function isMobileDevice(): boolean {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(max-width: 768px)").matches || navigator.maxTouchPoints > 0;
+}
+
+type DrawRegion = {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+  px: number;
+  py: number;
+  pw: number;
+  ph: number;
+};
+
+/** width/height must be logical CSS pixels (same space as WebGLRenderer.setSize); Three multiplies scissor by devicePixelRatio internally. */
+function computeDrawRegion(
+  width: number,
+  height: number,
+  p: {
+    logoSize: number;
+    centerX: number;
+    centerY: number;
+    instanceCount: number;
+    instanceRadius: number;
+    instanceAngleOffset: number;
+    instanceRotation: number;
+    uvDistortAmount: number;
+    mouseEnabled: boolean;
+    mouseStrength: number;
+    blurRadius: number;
+  },
+  logoAspect: number,
+): DrawRegion {
+  const aspect = width / Math.max(height, 1);
+  const count = Math.max(1, Math.min(MAX_INSTANCES, Math.round(p.instanceCount)));
+  const halfH = Math.max(0, p.logoSize);
+  const halfW = halfH * Math.max(logoAspect, 1e-4);
+
+  // Conservative padding from shader-space offsets.
+  const distortPad = Math.max(0, p.uvDistortAmount) * 0.5;
+  const mousePad = p.mouseEnabled ? Math.max(0, p.mouseStrength) : 0;
+  const blurPad = Math.max(0, p.blurRadius) * 1.6;
+  const luvPad = distortPad + mousePad + blurPad + 0.02;
+  const exHalfW = halfW * (1 + luvPad * 2);
+  const exHalfH = halfH * (1 + luvPad * 2);
+
+  const baseAngle = (p.instanceAngleOffset * Math.PI) / 180;
+  const step = count > 1 ? (Math.PI * 2) / count : 0;
+  const ringRadius = count > 1 ? p.instanceRadius : 0;
+  const rotStep = (p.instanceRotation * Math.PI) / 180;
+
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+
+  for (let i = 0; i < count; i += 1) {
+    const ringAngle = baseAngle + step * i;
+    const cx = p.centerX + Math.cos(ringAngle) * ringRadius;
+    const cy = p.centerY + Math.sin(ringAngle) * ringRadius;
+
+    const selfAngle = rotStep * i;
+    const c = Math.abs(Math.cos(selfAngle));
+    const s = Math.abs(Math.sin(selfAngle));
+    const ax = c * exHalfW + s * exHalfH;
+    const ay = s * exHalfW + c * exHalfH;
+
+    minX = Math.min(minX, cx - ax);
+    maxX = Math.max(maxX, cx + ax);
+    minY = Math.min(minY, cy - ay);
+    maxY = Math.max(maxY, cy + ay);
+  }
+
+  // Clamp in shader uv domain (x is aspect-corrected).
+  minX = Math.max(-aspect, minX);
+  maxX = Math.min(aspect, maxX);
+  minY = Math.max(-1, minY);
+  maxY = Math.min(1, maxY);
+
+  const minXNdc = minX / Math.max(aspect, 1e-6);
+  const maxXNdc = maxX / Math.max(aspect, 1e-6);
+  const minYNdc = minY;
+  const maxYNdc = maxY;
+
+  const left = ((minXNdc + 1) * 0.5) * width;
+  const right = ((maxXNdc + 1) * 0.5) * width;
+  const bottom = ((minYNdc + 1) * 0.5) * height;
+  const top = ((maxYNdc + 1) * 0.5) * height;
+
+  const px = Math.max(0, Math.floor(Math.min(left, right)));
+  const py = Math.max(0, Math.floor(Math.min(bottom, top)));
+  const pw = Math.max(0, Math.ceil(Math.max(left, right)) - px);
+  const ph = Math.max(0, Math.ceil(Math.max(bottom, top)) - py);
+
+  return { minX, minY, maxX, maxY, px, py, pw, ph };
 }
 
 export function HeroLogoInkWebGL({
@@ -446,6 +548,7 @@ export function HeroLogoInkWebGL({
     }
     renderer.outputColorSpace = SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
+    renderer.autoClear = false;
 
     const scene = new Scene();
     const camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
@@ -499,6 +602,8 @@ export function HeroLogoInkWebGL({
       u_edgeStrength: { value: edgeStrength },
       u_edgeColor: { value: hexToVec3(edgeColor) },
       u_edgeInkMix: { value: edgeInkMix },
+      u_drawMin: { value: new Vector2(-1, -1) },
+      u_drawMax: { value: new Vector2(1, 1) },
     };
 
     const material = new ShaderMaterial({
@@ -602,6 +707,7 @@ export function HeroLogoInkWebGL({
     const syncUniforms = (elapsed: number, dt: number) => {
       const p = propsRef.current;
       const runtime = runtimeRef?.current;
+      const logoAspectValue = uniforms.u_logoAspect.value as number;
       uniforms.u_time.value = elapsed;
       uniforms.u_paused.value = p.paused ? 1 : 0;
       uniforms.u_logoSize.value = runtime?.logoSize ?? p.logoSize;
@@ -663,6 +769,33 @@ export function HeroLogoInkWebGL({
       );
       uniforms.u_edgeInkMix.value = p.edgeInkMix;
 
+      const drawRegion = computeDrawRegion(
+        Math.max(1, canvas.clientWidth),
+        Math.max(1, canvas.clientHeight),
+        {
+          logoSize: uniforms.u_logoSize.value as number,
+          centerX: p.centerX,
+          centerY: p.centerY,
+          instanceCount: p.instanceCount,
+          instanceRadius: p.instanceRadius,
+          instanceAngleOffset: p.instanceAngleOffset,
+          instanceRotation: p.instanceRotation,
+          uvDistortAmount: p.uvDistortAmount,
+          mouseEnabled: p.mouseEnabled,
+          mouseStrength: p.mouseStrength,
+          blurRadius: p.blurRadius,
+        },
+        logoAspectValue,
+      );
+      uniforms.u_drawMin.value.set(drawRegion.minX, drawRegion.minY);
+      uniforms.u_drawMax.value.set(drawRegion.maxX, drawRegion.maxY);
+      if (drawRegion.pw > 0 && drawRegion.ph > 0) {
+        renderer.setScissorTest(true);
+        renderer.setScissor(drawRegion.px, drawRegion.py, drawRegion.pw, drawRegion.ph);
+      } else {
+        renderer.setScissorTest(false);
+      }
+
       if (typeof runtime?.opacity === "number") {
         canvas.style.opacity = String(runtime.opacity);
       } else {
@@ -679,6 +812,8 @@ export function HeroLogoInkWebGL({
       const elapsed = (now - start) / 1000;
       const dt = Math.min(0.1, (now - lastNow) / 1000);
       lastNow = now;
+      renderer.setScissorTest(false);
+      renderer.clear(true, true, true);
       syncUniforms(elapsed, dt);
       renderer.render(scene, camera);
       rafId = window.requestAnimationFrame(draw);
@@ -705,6 +840,7 @@ export function HeroLogoInkWebGL({
       cancelled = true;
       running = false;
       if (rafId) window.cancelAnimationFrame(rafId);
+      renderer.setScissorTest(false);
       document.removeEventListener("visibilitychange", handleVisibility);
       target.removeEventListener("pointermove", onPointerMove);
       canvas.removeEventListener("pointerleave", onPointerLeave);
