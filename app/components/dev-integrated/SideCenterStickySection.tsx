@@ -9,13 +9,6 @@ const INITIAL_LINE_COUNT = 33;
 const START_OFFSET_VW = 22;
 const SCROLL_IDLE_MS = 140;
 
-/** True while the user is still scrolling through the hero bridge (before sticky-side pins). */
-function isInHeroBridgePhase() {
-  const sticky = document.getElementById("sticky-side");
-  if (!sticky) return false;
-  return sticky.getBoundingClientRect().top > 0;
-}
-
 type SideCenterStickySectionProps = {
   aboutHeading?: string;
   aboutText: string;
@@ -227,10 +220,15 @@ export function SideCenterStickySection({
     if (rootRef.current) io.observe(rootRef.current);
 
     const handleWindowScroll = () => {
-      if (!isInHeroBridgePhase()) {
-        if (sectionVisibleRef.current) setTypingPlayback(true);
+      if (sectionVisibleRef.current) {
+        if (scrollIdleTimerRef.current) {
+          clearTimeout(scrollIdleTimerRef.current);
+          scrollIdleTimerRef.current = null;
+        }
+        setTypingPlayback(true);
         return;
       }
+
       setTypingPlayback(false);
       if (scrollIdleTimerRef.current) {
         clearTimeout(scrollIdleTimerRef.current);
