@@ -120,7 +120,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   contain: layout paint;
 }
 
@@ -178,11 +178,11 @@
 }
 
 .halfLeft {
-  transform: translate3d(-105%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
 }
 
 .halfRight {
-  transform: translate3d(105%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
 }
 
 .greetingLayer {
@@ -225,11 +225,15 @@
 .workSection {
   z-index: 8;
   padding-top: 4rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 .skillsSection {
   z-index: 9;
   padding-top: 4rem;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1200px;
 }
 
 .contactSection {

@@ -34,14 +34,22 @@ export type HeroBurstLogoSectionProps = {
    * follow `clamp(p / P_HERO_CURTAIN_CLOSE_END)` so they match hero fade and curtain close.
    */
   bridgeScrollProgressRef?: MutableRefObject<number>;
+  /** Production bridge: hero updates run from the parent rAF batch (no duplicate onScroll). */
+  registerBridgeApply?: (
+    fn: ((bridgeProgress: number) => void) | null,
+  ) => void;
 };
+
+const HERO_HEAVY_EFFECTS_OFF_PROGRESS = 0.85;
 
 export function HeroBurstLogoSection({
   onReady,
   bridgeScrollProgressRef,
+  registerBridgeApply,
 }: HeroBurstLogoSectionProps) {
   const reduceMotion = usePrefersReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
+  const [heavyEffectsPaused, setHeavyEffectsPaused] = useState(false);
   const stageRef = useRef<HTMLElement>(null);
   const barcodeFrameRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
@@ -88,6 +96,12 @@ export function HeroBurstLogoSection({
       const progressed = clamp01(progress);
       const scale = 1 + progressed * 0.9;
       const opacity = 1 - progressed;
+      const unchanged =
+        Math.abs(scale - logoScaleRef.current) <= 1e-3 &&
+        Math.abs(opacity - barcodeOpacityRef.current) <= 1e-3 &&
+        Math.abs(progressed - progressRef.current) < 1e-3;
+      if (unchanged) return;
+
       if (Math.abs(scale - logoScaleRef.current) > 1e-3) {
         logoScaleRef.current = scale;
         barcodeFrame.style.transform = `scale(${scale})`;
@@ -96,13 +110,33 @@ export function HeroBurstLogoSection({
         barcodeOpacityRef.current = opacity;
         barcodeFrame.style.opacity = String(opacity);
       }
-      if (Math.abs(progressed - progressRef.current) < 1e-3) return;
-      progressRef.current = progressed;
-      logoRuntimeRef.current.logoSize = 0.2 + progressed * 0.16;
-      logoRuntimeRef.current.inkScale = lerp(4.0, 4.0 * 2.8, progressed);
-      logoRuntimeRef.current.warpScale = lerp(2.0, 2.0 * 2.2, progressed);
-      logoRuntimeRef.current.opacity = lerp(1, 0, progressed);
+      if (Math.abs(progressed - progressRef.current) >= 1e-3) {
+        progressRef.current = progressed;
+        logoRuntimeRef.current.logoSize = 0.2 + progressed * 0.16;
+        logoRuntimeRef.current.inkScale = lerp(4.0, 4.0 * 2.8, progressed);
+        logoRuntimeRef.current.warpScale = lerp(2.0, 2.0 * 2.2, progressed);
+        logoRuntimeRef.current.opacity = lerp(1, 0, progressed);
+        const shouldPauseHeavy = progressed >= HERO_HEAVY_EFFECTS_OFF_PROGRESS;
+        setHeavyEffectsPaused((prev) =>
+          prev === shouldPauseHeavy ? prev : shouldPauseHeavy,
+        );
+      }
     };
+
+    if (registerBridgeApply) {
+      registerBridgeApply((bridgeProgress) => {
+        applyProgress(clamp01(bridgeProgress / p1));
+      });
+      return () => {
+        registerBridgeApply(null);
+        progressRef.current = 0;
+        setHeavyEffectsPaused(false);
+        logoRuntimeRef.current.logoSize = 0.2;
+        logoRuntimeRef.current.inkScale = 4.0;
+        logoRuntimeRef.current.warpScale = 2.0;
+        logoRuntimeRef.current.opacity = 1;
+      };
+    }
 
     const syncFromBridge = bridgeScrollProgressRef
       ? animate(stage, {
@@ -110,10 +144,6 @@ export function HeroBurstLogoSection({
           duration: 1,
           ease: "linear",
           autoplay: onScroll({
-            // target: stage,
-            // container: window,
-            // enter: "top top",
-            // leave: "bottom bottom",
             sync: true,
             onUpdate: () => {
               applyProgress(clamp01(bridgeScrollProgressRef.current / p1));
@@ -125,10 +155,6 @@ export function HeroBurstLogoSection({
           duration: 1,
           ease: "linear",
           autoplay: onScroll({
-            // target: stage,
-            // container: window,
-            // enter: "top top",
-            // leave: "bottom bottom",
             sync: true,
             onUpdate: (self) => {
               const observer = self as { progress?: number };
@@ -141,12 +167,13 @@ export function HeroBurstLogoSection({
     return () => {
       syncFromBridge.revert();
       progressRef.current = 0;
+      setHeavyEffectsPaused(false);
       logoRuntimeRef.current.logoSize = 0.2;
       logoRuntimeRef.current.inkScale = 4.0;
       logoRuntimeRef.current.warpScale = 2.0;
       logoRuntimeRef.current.opacity = 1;
     };
-  }, [reduceMotion, bridgeScrollProgressRef]);
+  }, [reduceMotion, bridgeScrollProgressRef, registerBridgeApply]);
 
   const fs = HERO_BARCODE.fontSize;
   const textRepeat = isMobile ? TEXT_REPEAT_MOBILE : TEXT_REPEAT_DESKTOP;
@@ -156,7 +183,7 @@ export function HeroBurstLogoSection({
       <div className={styles.stickyViewport}>
         <HeroLogoInkWebGL
           className={styles.logoLayer}
-          paused={reduceMotion}
+          paused={reduceMotion || heavyEffectsPaused}
           flowMode={"radial" as FlowMode}
           logoSize={0.2}
           mouseEnabled={!reduceMotion}
@@ -168,7 +195,7 @@ export function HeroBurstLogoSection({
 
         <div ref={barcodeFrameRef} className={styles.barcodeFrame}>
           <PathBarcodeTemplate3D
-            paused={reduceMotion}
+            paused={reduceMotion || heavyEffectsPaused}
             className={styles.barcodeTheme}
             flowDurationMs={33000}
             textUnit="*0123456789ABCDEF* "

@@ -450,9 +450,14 @@ export function HeroLogoInkWebGL({
   onReady,
 }: HeroLogoInkWebGLProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const resumeDrawRef = useRef<(() => void) | null>(null);
   const [unavailable, setUnavailable] = useState(false);
   const onReadyRef = useRef(onReady);
   onReadyRef.current = onReady;
+
+  useEffect(() => {
+    if (!paused) resumeDrawRef.current?.();
+  }, [paused]);
 
   const propsRef = useRef({
     paused,
@@ -807,8 +812,15 @@ export function HeroLogoInkWebGL({
     resize();
 
     let lastNow = start;
+    resumeDrawRef.current = () => {
+      if (!running || rafId || propsRef.current.paused) return;
+      lastNow = performance.now();
+      rafId = window.requestAnimationFrame(draw);
+    };
     const draw = (now: number) => {
       if (!running) return;
+      rafId = 0;
+      if (propsRef.current.paused) return;
       const elapsed = (now - start) / 1000;
       const dt = Math.min(0.1, (now - lastNow) / 1000);
       lastNow = now;
@@ -839,6 +851,7 @@ export function HeroLogoInkWebGL({
     return () => {
       cancelled = true;
       running = false;
+      resumeDrawRef.current = null;
       if (rafId) window.cancelAnimationFrame(rafId);
       renderer.setScissorTest(false);
       document.removeEventListener("visibilitychange", handleVisibility);
