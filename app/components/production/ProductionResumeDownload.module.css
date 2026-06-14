@@ -52,28 +52,6 @@
   outline-offset: 2px;
 }
 
-.blogLink {
-  margin: 0.15rem 0 0;
-  font-size: 0.82rem;
-  letter-spacing: 0.03em;
-  color: color-mix(
-    in srgb,
-    var(--color-anime-center-heading) 58%,
-    var(--color-anime-side-text) 42%
-  );
-  text-decoration: none;
-  transition: color 160ms ease;
-}
-
-.blogLink:hover {
-  color: var(--color-text-body);
-}
-
-.blogLink:focus-visible {
-  outline: 2px solid var(--color-text-body);
-  outline-offset: 2px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .resumeDownloadButton {
     transition: none;

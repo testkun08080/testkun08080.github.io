@@ -191,7 +191,8 @@
 
 .workSection,
 .skillsSection,
-.contactSection {
+.contactSection,
+.othersSection {
   /* Children of the sticky-side stage need their own stacking context so they
      paint above the sticky background animation while scrolling over it. */
   isolation: isolate;
@@ -244,6 +245,16 @@
   align-items: center;
   gap: 3.5rem;
   margin-top: 6rem;
+  margin-bottom: 3rem;
+}
+
+.othersSection {
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 3.5rem;
   margin-bottom: 6rem;
 }
 
