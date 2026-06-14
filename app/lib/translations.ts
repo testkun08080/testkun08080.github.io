@@ -122,6 +122,7 @@ export type ProductionHomeCopy = {
   workHeading: string;
   skillsHeading: string;
   contactHeading: string;
+  othersHeading: string;
   menuButton: string;
   menuLanguageLabel: string;
   menuItems: { href: string; label: string; iconKey?: string }[];
@@ -133,6 +134,8 @@ export type ProductionHomeCopy = {
   resumeJaLabel: string;
   resumeEnLabel: string;
   resumeDownloadLabel: string;
+  blogLinkLabel: string;
+  blogUrl: string;
   footerLanguageAriaLabel: string;
 };
 
@@ -154,6 +157,7 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     workHeading: "Work",
     skillsHeading: "Skills",
     contactHeading: "Contact",
+    othersHeading: "その他",
     menuButton: "メニュー",
     menuLanguageLabel: "言語",
     menuItems: [
@@ -162,6 +166,7 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
       { href: "#work", label: "作品", iconKey: "work" },
       { href: "#skills", label: "スキル", iconKey: "skills" },
       { href: "#contact", label: "連絡先", iconKey: "contact" },
+      { href: "#others", label: "その他", iconKey: "others" },
     ],
     reelsFallbackPrefix: "埋め込みが表示されない場合は",
     reelsFallbackLink: "YouTubeで開く",
@@ -171,6 +176,8 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeJaLabel: "日本語",
     resumeEnLabel: "英語",
     resumeDownloadLabel: "ダウンロード",
+    blogLinkLabel: "ブログ",
+    blogUrl: "nannyakore.com",
     footerLanguageAriaLabel: "日本語と英語を切り替える",
   },
   en: {
@@ -192,6 +199,7 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     workHeading: "Work",
     skillsHeading: "Skills",
     contactHeading: "Contact",
+    othersHeading: "Others",
     menuButton: "Menu",
     menuLanguageLabel: "Language",
     menuItems: [
@@ -200,6 +208,7 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
       { href: "#work", label: "work", iconKey: "work" },
       { href: "#skills", label: "skills", iconKey: "skills" },
       { href: "#contact", label: "contact", iconKey: "contact" },
+      { href: "#others", label: "others", iconKey: "others" },
     ],
     reelsFallbackPrefix: "If the embed is unavailable,",
     reelsFallbackLink: "open on YouTube",
@@ -209,6 +218,8 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeJaLabel: "Japanese",
     resumeEnLabel: "English",
     resumeDownloadLabel: "Download",
+    blogLinkLabel: "Blog",
+    blogUrl: "nannyakore.com",
     footerLanguageAriaLabel: "Switch language between Japanese and English",
   },
 };

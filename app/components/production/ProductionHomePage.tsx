@@ -3,6 +3,7 @@ import { animate, onScroll } from "animejs";
 import { CurtainMarquee } from "../curtain/CurtainMarquee";
 import { clamp01 } from "../../lib/barcodeTextBridgeMath";
 import { ContactCardSection } from "../dev-integrated/ContactCardSection";
+import { OthersCardSection } from "../dev-integrated/OthersCardSection";
 import { HeroBurstLogoSection } from "../dev-integrated/HeroBurstLogoSection";
 import { ScrollTypingHeading } from "../dev-integrated/ScrollTypingHeading";
 import { SideCenterStickySection } from "../dev-integrated/SideCenterStickySection";
@@ -367,6 +368,24 @@ export function ProductionHomePage() {
               resumeJaLabel={copy.resumeJaLabel}
               resumeEnLabel={copy.resumeEnLabel}
               downloadLabel={copy.resumeDownloadLabel}
+            />
+          </section>
+
+          <section
+            id="others"
+            className={`${styles.section} ${styles.othersSection}`}
+          >
+            <header className={styles.sectionHead}>
+              <ScrollTypingHeading
+                text={copy.othersHeading}
+                headingClassName={styles.sectionHeadingWord}
+                underlineClassName={styles.sectionHeadingLine}
+              />
+            </header>
+            <OthersCardSection
+              blogLabel={copy.blogLinkLabel}
+              blogUrl={copy.blogUrl}
+              blogHref="https://nannyakore.com"
             />
           </section>
         </SideCenterStickySection>
