@@ -367,6 +367,7 @@ export function ProductionHomePage() {
               resumeJaLabel={copy.resumeJaLabel}
               resumeEnLabel={copy.resumeEnLabel}
               downloadLabel={copy.resumeDownloadLabel}
+              blogLinkLabel={copy.blogLinkLabel}
             />
           </section>
         </SideCenterStickySection>

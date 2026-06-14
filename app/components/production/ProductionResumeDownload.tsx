@@ -7,6 +7,7 @@ type ProductionResumeDownloadProps = {
   resumeJaLabel: string;
   resumeEnLabel: string;
   downloadLabel: string;
+  blogLinkLabel: string;
 };
 
 export function ProductionResumeDownload({
@@ -14,6 +15,7 @@ export function ProductionResumeDownload({
   resumeJaLabel,
   resumeEnLabel,
   downloadLabel,
+  blogLinkLabel,
 }: ProductionResumeDownloadProps) {
   const rootRef = useRef<HTMLElement>(null);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
@@ -61,6 +63,14 @@ export function ProductionResumeDownload({
           {resumeEnLabel} {downloadLabel}
         </a>
       </div>
+      <a
+        className={styles.blogLink}
+        href="https://nannyakore.com"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {blogLinkLabel}
+      </a>
     </section>
   );
 }

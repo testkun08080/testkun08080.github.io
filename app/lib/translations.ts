@@ -133,6 +133,7 @@ export type ProductionHomeCopy = {
   resumeJaLabel: string;
   resumeEnLabel: string;
   resumeDownloadLabel: string;
+  blogLinkLabel: string;
   footerLanguageAriaLabel: string;
 };
 
@@ -171,6 +172,7 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeJaLabel: "日本語",
     resumeEnLabel: "英語",
     resumeDownloadLabel: "ダウンロード",
+    blogLinkLabel: "ブログ",
     footerLanguageAriaLabel: "日本語と英語を切り替える",
   },
   en: {
@@ -209,6 +211,7 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeJaLabel: "Japanese",
     resumeEnLabel: "English",
     resumeDownloadLabel: "Download",
+    blogLinkLabel: "Blog",
     footerLanguageAriaLabel: "Switch language between Japanese and English",
   },
 };
