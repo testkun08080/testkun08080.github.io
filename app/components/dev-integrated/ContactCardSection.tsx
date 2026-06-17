@@ -1,5 +1,6 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef } from "react";
+import { animateFadeSlideReveal } from "../../lib/scrollRunOnce";
 import styles from "../shared-dev-assets/DevContact.module.css";
 
 type ContactItem = {
@@ -37,14 +38,9 @@ export function ContactCardSection() {
     const root = rootRef.current;
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
-      animate(root, {
-        opacity: [0, 1],
-        translateY: ["40px", "0px"],
-        autoplay: onScroll({
-          enter: "bottom top",
-          leave: "center center",
-          sync: true,
-        }),
+      animateFadeSlideReveal(animate, onScroll, root, {
+        enter: "bottom top",
+        leave: "center center",
       });
     });
 
