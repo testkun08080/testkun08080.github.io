@@ -1,6 +1,10 @@
 import { animate, createScope, onScroll } from "animejs";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import {
+  createScrollRunOnceLatch,
+  handleScrollRunOnceUpdate,
+} from "../../lib/scrollRunOnce";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { ScrollTypingHeading } from "./ScrollTypingHeading";
 import styles from "./SideCenterStickySection.module.css";
@@ -8,6 +12,8 @@ import styles from "./SideCenterStickySection.module.css";
 const INITIAL_LINE_COUNT = 33;
 const START_OFFSET_VW = 22;
 const SCROLL_IDLE_MS = 140;
+const LEFT_SIDE_FINAL_TRANSFORM = "translate3d(0, 0, 0)";
+const RIGHT_SIDE_FINAL_TRANSFORM = "translate3d(0, 0, 0) scaleX(-1)";
 
 type SideCenterStickySectionProps = {
   aboutHeading?: string;
@@ -141,9 +147,53 @@ export function SideCenterStickySection({
     }
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
+      const sideLatch = createScrollRunOnceLatch();
+      const aboutLatch = createScrollRunOnceLatch();
+      let leftAnim: ReturnType<typeof animate> | null = null;
+      let rightAnim: ReturnType<typeof animate> | null = null;
+      let aboutAnim: ReturnType<typeof animate> | null = null;
+
+      const latchSideColumns = (self: unknown) => {
+        const applySideFinal = () => {
+          leftBlock.style.transform = LEFT_SIDE_FINAL_TRANSFORM;
+          rightBlock.style.transform = RIGHT_SIDE_FINAL_TRANSFORM;
+        };
+
+        handleScrollRunOnceUpdate(
+          sideLatch,
+          self,
+          () => {
+            leftAnim?.revert();
+            rightAnim?.revert();
+            leftAnim = null;
+            rightAnim = null;
+            applySideFinal();
+          },
+          applySideFinal,
+        );
+      };
+
+      const latchAboutText = (self: unknown) => {
+        const applyAboutFinal = () => {
+          aboutTextEl.style.opacity = "1";
+          aboutTextEl.style.transform = "translateY(0px)";
+        };
+
+        handleScrollRunOnceUpdate(
+          aboutLatch,
+          self,
+          () => {
+            aboutAnim?.revert();
+            aboutAnim = null;
+            applyAboutFinal();
+          },
+          applyAboutFinal,
+        );
+      };
+
       // Side typing blocks slide-in and stay visible across the entire stage
       // (covers about, work, skills, contact, footer)
-      animate(leftBlock, {
+      leftAnim = animate(leftBlock, {
         translateX: [`${START_OFFSET_VW}vw`, "0vw"],
         ease: "linear",
         autoplay: onScroll({
@@ -151,10 +201,11 @@ export function SideCenterStickySection({
           enter: "top top",
           leave: "bottom bottom",
           sync: true,
+          onUpdate: latchSideColumns,
         }),
       });
 
-      animate(rightBlock, {
+      rightAnim = animate(rightBlock, {
         translateX: [`-${START_OFFSET_VW}vw`, "0vw"],
         scaleX: [-1, -1],
         ease: "linear",
@@ -163,16 +214,18 @@ export function SideCenterStickySection({
           enter: "top top",
           leave: "bottom bottom",
           sync: true,
+          onUpdate: latchSideColumns,
         }),
       });
 
-      animate(aboutTextEl, {
+      aboutAnim = animate(aboutTextEl, {
         opacity: [0, 1],
         translateY: ["40px", "0px"],
         autoplay: onScroll({
           enter: "bottom top",
           leave: "top center",
           sync: true,
+          onUpdate: latchAboutText,
         }),
       });
 

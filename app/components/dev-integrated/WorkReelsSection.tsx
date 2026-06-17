@@ -1,5 +1,6 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef } from "react";
+import { animateFadeSlideReveal } from "../../lib/scrollRunOnce";
 import styles from "../shared-dev-assets/DevHogehoge.module.css";
 
 const REELS = [
@@ -42,14 +43,9 @@ export function WorkReelsSection({
 
     scopeRef.current = createScope({ root: rootRef.current }).add(() => {
       reelCards.forEach((card) => {
-        animate(card, {
-          opacity: [0, 1],
-          translateY: ["40px", "0px"],
-          autoplay: onScroll({
-            enter: "bottom top",
-            leave: "center center",
-            sync: true,
-          }),
+        animateFadeSlideReveal(animate, onScroll, card, {
+          enter: "bottom top",
+          leave: "center center",
         });
       });
     });
