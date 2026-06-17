@@ -15,14 +15,16 @@ export function getScrollProgress(self: unknown): number {
 /**
  * Returns true when the scroll reveal has latched at completion.
  * Calls `onLatch` the first time progress reaches 1.
+ * After latch, calls `onMaintain` on subsequent updates (if provided).
  */
 export function handleScrollRunOnceUpdate(
   latch: ScrollRunOnceLatch,
   self: unknown,
   onLatch: () => void,
+  onMaintain?: () => void,
 ): boolean {
   if (latch.completed) {
-    onLatch();
+    onMaintain?.();
     return true;
   }
 
@@ -61,12 +63,16 @@ export function animateFadeSlideReveal(
 
   const onUpdate = (self: unknown) => {
     if (!latch) return;
-    handleScrollRunOnceUpdate(latch, self, () => {
-      anim?.revert();
-      anim = null;
-      applyFinal();
-    });
-    if (latch.completed) applyFinal();
+    handleScrollRunOnceUpdate(
+      latch,
+      self,
+      () => {
+        anim?.revert();
+        anim = null;
+        applyFinal();
+      },
+      applyFinal,
+    );
   };
 
   anim = animateFn(target, {

@@ -12,6 +12,8 @@ import styles from "./SideCenterStickySection.module.css";
 const INITIAL_LINE_COUNT = 33;
 const START_OFFSET_VW = 22;
 const SCROLL_IDLE_MS = 140;
+const LEFT_SIDE_FINAL_TRANSFORM = "translate3d(0, 0, 0)";
+const RIGHT_SIDE_FINAL_TRANSFORM = "translate3d(0, 0, 0) scaleX(-1)";
 
 type SideCenterStickySectionProps = {
   aboutHeading?: string;
@@ -152,31 +154,41 @@ export function SideCenterStickySection({
       let aboutAnim: ReturnType<typeof animate> | null = null;
 
       const latchSideColumns = (self: unknown) => {
-        handleScrollRunOnceUpdate(sideLatch, self, () => {
-          leftAnim?.revert();
-          rightAnim?.revert();
-          leftAnim = null;
-          rightAnim = null;
-          leftBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
-          rightBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
-        });
-        if (sideLatch.completed) {
-          leftBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
-          rightBlock.style.transform = "translate3d(0, 0, 0) scaleX(-1)";
-        }
+        const applySideFinal = () => {
+          leftBlock.style.transform = LEFT_SIDE_FINAL_TRANSFORM;
+          rightBlock.style.transform = RIGHT_SIDE_FINAL_TRANSFORM;
+        };
+
+        handleScrollRunOnceUpdate(
+          sideLatch,
+          self,
+          () => {
+            leftAnim?.revert();
+            rightAnim?.revert();
+            leftAnim = null;
+            rightAnim = null;
+            applySideFinal();
+          },
+          applySideFinal,
+        );
       };
 
       const latchAboutText = (self: unknown) => {
-        handleScrollRunOnceUpdate(aboutLatch, self, () => {
-          aboutAnim?.revert();
-          aboutAnim = null;
+        const applyAboutFinal = () => {
           aboutTextEl.style.opacity = "1";
           aboutTextEl.style.transform = "translateY(0px)";
-        });
-        if (aboutLatch.completed) {
-          aboutTextEl.style.opacity = "1";
-          aboutTextEl.style.transform = "translateY(0px)";
-        }
+        };
+
+        handleScrollRunOnceUpdate(
+          aboutLatch,
+          self,
+          () => {
+            aboutAnim?.revert();
+            aboutAnim = null;
+            applyAboutFinal();
+          },
+          applyAboutFinal,
+        );
       };
 
       // Side typing blocks slide-in and stay visible across the entire stage
