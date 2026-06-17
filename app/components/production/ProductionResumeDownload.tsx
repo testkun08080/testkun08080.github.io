@@ -1,5 +1,6 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef } from "react";
+import { animateFadeSlideReveal } from "../../lib/scrollRunOnce";
 import styles from "./ProductionResumeDownload.module.css";
 
 type ProductionResumeDownloadProps = {
@@ -25,14 +26,9 @@ export function ProductionResumeDownload({
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     scopeRef.current = createScope({ root }).add(() => {
-      animate(root, {
-        opacity: [0, 1],
-        translateY: ["40px", "0px"],
-        autoplay: onScroll({
-          enter: "bottom top",
-          leave: "center center",
-          sync: true,
-        }),
+      animateFadeSlideReveal(animate, onScroll, root, {
+        enter: "bottom top",
+        leave: "center center",
       });
     });
 

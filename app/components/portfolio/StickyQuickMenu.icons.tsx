@@ -24,6 +24,7 @@ export const menuIconMap: Record<string, React.FC<IconProps>> = {
   work: LogoIcon,
   skills: LogoIcon,
   contact: LogoIcon,
+  others: LogoIcon,
 };
 
 export type IconKey = keyof typeof menuIconMap;

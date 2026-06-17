@@ -7,7 +7,6 @@ import { sunabaCopy } from "../../lib/translations";
 import { useLanguage } from "../../lib/LanguageContext";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { SunabaBoard } from "./SunabaBoard";
-import { SunabaPinnedTextBackground } from "./SunabaPinnedTextBackground";
 import styles from "./SunabaPage.module.css";
 
 export function SunabaPage() {
@@ -60,7 +59,6 @@ export function SunabaPage() {
 
   return (
     <div className={styles.page}>
-      <SunabaPinnedTextBackground />
       <div className={styles.content}>
         <header className={styles.header}>
           <ScrollTypingHeading

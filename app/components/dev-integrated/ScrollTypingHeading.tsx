@@ -1,6 +1,11 @@
 import { animate, createScope, onScroll } from "animejs";
 import { useEffect, useRef, type MutableRefObject } from "react";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
+import {
+  createScrollRunOnceLatch,
+  getScrollProgress,
+  handleScrollRunOnceUpdate,
+} from "../../lib/scrollRunOnce";
 import { subscribeWindowRaf } from "../../lib/windowRafDriver";
 import styles from "./ScrollTypingHeading.module.css";
 
@@ -8,6 +13,8 @@ export type ScrollTypingHeadingProps = {
   text: string;
   enter?: string;
   leave?: string;
+  /** When true (default), heading stays revealed after first full scroll-through. */
+  scrollRunOnce?: boolean;
   headingClassName?: string;
   underlineClassName?: string;
   /**
@@ -31,6 +38,7 @@ export function ScrollTypingHeading({
   text,
   enter = "bottom top",
   leave = "center top",
+  scrollRunOnce = true,
   headingClassName,
   underlineClassName,
   bridgeScrollProgressRef,
@@ -139,30 +147,84 @@ export function ScrollTypingHeading({
       };
     }
 
+    const applyFinalScrollState = () => {
+      line.style.transform = "scaleX(1)";
+      lineScaleRef.current = 1;
+      word.style.opacity = "1";
+      wordOpacityRef.current = 1;
+      word.textContent = text;
+      typedCountRef.current = text.length;
+    };
+
+    const applyScrollProgress = (progress: number) => {
+      const clamped = getScrollProgress({ progress });
+      if (lineScaleRef.current !== clamped) {
+        lineScaleRef.current = clamped;
+        line.style.transform = `scaleX(${clamped})`;
+      }
+
+      const nextOpacity = lerpOpacity(0.45, 1, clamped);
+      if (wordOpacityRef.current !== nextOpacity) {
+        wordOpacityRef.current = nextOpacity;
+        word.style.opacity = String(nextOpacity);
+      }
+
+      const nextCount = Math.floor(clamped * text.length);
+      if (nextCount === typedCountRef.current) return;
+      typedCountRef.current = nextCount;
+      word.textContent = text.slice(0, nextCount);
+    };
+
     scopeRef.current = createScope({ root }).add(() => {
-      animate(line, {
+      const latch = scrollRunOnce ? createScrollRunOnceLatch() : null;
+      let lineAnim: ReturnType<typeof animate> | null = null;
+      let wordAnim: ReturnType<typeof animate> | null = null;
+
+      const latchIfComplete = (self: unknown) => {
+        if (!latch || !lineAnim || !wordAnim) return;
+        handleScrollRunOnceUpdate(latch, self, () => {
+          lineAnim?.revert();
+          wordAnim?.revert();
+          lineAnim = null;
+          wordAnim = null;
+          applyFinalScrollState();
+        });
+      };
+
+      lineAnim = animate(line, {
         scaleX: [0, 1],
         autoplay: onScroll({
           enter,
           leave,
           sync: true,
+          onUpdate: (self) => {
+            if (latch?.completed) {
+              applyFinalScrollState();
+              return;
+            }
+            latchIfComplete(self);
+          },
         }),
       });
 
-      animate(word, {
+      wordAnim = animate(word, {
         opacity: [0.45, 1],
         autoplay: onScroll({
           enter,
           leave,
           sync: true,
           onUpdate: (self) => {
-            const observer = self as { progress?: number };
-            if (typeof observer.progress !== "number") return;
-            const clamped = Math.min(Math.max(observer.progress, 0), 1);
-            const nextCount = Math.floor(clamped * text.length);
-            if (nextCount === typedCountRef.current) return;
-            typedCountRef.current = nextCount;
-            word.textContent = text.slice(0, nextCount);
+            if (latch?.completed) {
+              applyFinalScrollState();
+              return;
+            }
+
+            if (latch) {
+              latchIfComplete(self);
+              if (latch.completed) return;
+            }
+
+            applyScrollProgress(getScrollProgress(self));
           },
         }),
       });
@@ -182,6 +244,7 @@ export function ScrollTypingHeading({
     enter,
     leave,
     reduceMotion,
+    scrollRunOnce,
     bridgeScrollProgressRef,
     bridgeTypingRevealStart,
     bridgeTypingRevealEnd,

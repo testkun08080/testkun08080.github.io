@@ -1,5 +1,6 @@
 import { animate, createScope, onScroll, stagger } from "animejs";
 import { useEffect, useRef, useState } from "react";
+import { animateFadeSlideReveal } from "../../lib/scrollRunOnce";
 import styles from "../shared-dev-assets/DevSoftwareTools.module.css";
 import { TOOL_CATEGORIES } from "../shared-dev-assets/toolCategories";
 
@@ -38,14 +39,9 @@ export function SkillsToolsSection({
 
     scopeRef.current = createScope({ root: page }).add(() => {
       categorySections.forEach((section) => {
-        animate(section, {
-          opacity: [0, 1],
-          translateY: ["40px", "0px"],
-          autoplay: onScroll({
-            enter: "bottom top",
-            leave: "center center",
-            sync: true,
-          }),
+        animateFadeSlideReveal(animate, onScroll, section, {
+          enter: "bottom top",
+          leave: "center center",
         });
       });
     });
