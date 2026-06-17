@@ -58,14 +58,14 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
     external: true,
   },
   {
-    id: "nannyakore",
+    id: "edisuku",
     category: "web",
-    title: { ja: "なんやこれ", en: "Nannyakore" },
+    title: { ja: "エディスク", en: "Edisuku" },
     description: {
-      ja: "好奇心と興味で生きている人のブログ。AI・ゲーム・投資・ガジェットなど日々の気づきを記録。",
-      en: "Personal blog on curiosity-driven topics — AI, games, investing, gadgets, and daily notes.",
+      ja: "EDINET 開示データを自動収集・構造化するオープンソースの日本株スクリーナー。財務指標での絞り込み、時系列チャート、財務諸表ビューアに対応。",
+      en: "Open-source Japanese stock screener that collects and structures EDINET filings — screening, time-series charts, and financial statement views.",
     },
-    href: "https://nannyakore.com/",
+    href: "https://edisuku.com/",
     external: true,
   },
   {
