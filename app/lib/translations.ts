@@ -3,20 +3,29 @@ export type Language = "ja" | "en";
 export const messages = {
   ja: {
     nav_home: "ホーム",
-    nav_sunaba: "すなば",
+    nav_sunaba: "sunaba",
     nav_about: "アバウト",
     nav_reels: "リール",
     nav_contact: "コンタクト",
     nav_language: "言語",
     hero_title: "ようこそ",
     hero_subtitle: "テクノロジーとアートをつなぐポートフォリオ",
-    hero_cta_primary: "すなばへ",
+    hero_cta_primary: "sunabaへ",
     hero_cta_secondary: "アバウトへ",
     hero_description:
       "Vike + React へ移行した新しいサイトです。マットな質感と滑らかなアニメーションで再構築しました。",
-    sunaba_jp: "すなば",
+    sunaba_jp: "sunaba",
     sunaba_en: "sunaba",
-    sunaba_message: "実験と表現のためのサンドボックス",
+    sunaba_message: "作ってきたものや、趣味で作成したもの",
+    sunaba_index_eyebrow: "作ったもの一覧",
+    sunaba_back_home: "ホームへ戻る",
+    sunaba_empty: "まだ作品がありません。",
+    sunaba_status_wip: "準備中",
+    sunaba_status_live: "公開中",
+    sunaba_section_web: "Web / アプリ",
+    sunaba_section_game: "ゲーム",
+    sunaba_menu_button: "メニュー",
+    sunaba_footer_language_aria: "日本語と英語を切り替える",
     about_title: "アバウト",
     about_greeting:
       "はじめまして！\n(๑•᎑•๑)\nただ面白いと思ったことをただひたすらにやることを決めて生きています。\nその中でもアートやコンテンツを支援・創造することに楽しみを感じています。\n特にレンダリングやシェーダー開発が得意分野です。\n技術面とアート面の問題を解決しながら最後までプロジェクトを成功させる時が快感です",
@@ -57,20 +66,29 @@ export const messages = {
   },
   en: {
     nav_home: "Home",
-    nav_sunaba: "Sunaba",
+    nav_sunaba: "sunaba",
     nav_about: "About",
     nav_reels: "Reels",
     nav_contact: "Contact",
     nav_language: "Language",
     hero_title: "Welcome",
     hero_subtitle: "A portfolio bridging technology and art",
-    hero_cta_primary: "Enter Sunaba",
+    hero_cta_primary: "Enter sunaba",
     hero_cta_secondary: "About",
     hero_description:
       "This site has been migrated to Vike + React, refined with matte textures and smooth motion.",
-    sunaba_jp: "SUNABA",
+    sunaba_jp: "sunaba",
     sunaba_en: "sunaba",
-    sunaba_message: "A sandbox for experiments and expression",
+    sunaba_message: "Things I've made, and things I create for fun",
+    sunaba_index_eyebrow: "Project index",
+    sunaba_back_home: "Back to home",
+    sunaba_empty: "No projects yet.",
+    sunaba_status_wip: "WIP",
+    sunaba_status_live: "Live",
+    sunaba_section_web: "Web / Apps",
+    sunaba_section_game: "Games",
+    sunaba_menu_button: "Menu",
+    sunaba_footer_language_aria: "Switch language between Japanese and English",
     about_title: "About",
     about_greeting:
       "Nice to meet you!\n(๑•᎑•๑)\nI live by doing, with full focus, whatever I genuinely find interesting.\nAmong those pursuits, I especially enjoy supporting and creating art and content.\nMy strengths are in rendering and shader development.\nThe most satisfying part is solving both technical and artistic challenges and carrying a project through to success.",
@@ -136,7 +154,32 @@ export type ProductionHomeCopy = {
   resumeDownloadLabel: string;
   blogLinkLabel: string;
   blogUrl: string;
+  sunabaLinkLabel: string;
+  sunabaUrl: string;
   footerLanguageAriaLabel: string;
+};
+
+export type SunabaCopy = {
+  menuItems: { href: string; label: string; iconKey?: string }[];
+};
+
+export const sunabaCopy: Record<Language, SunabaCopy> = {
+  ja: {
+    menuItems: [
+      { href: "/", label: "ホーム", iconKey: "home" },
+      { href: "/sunaba", label: "sunaba", iconKey: "work" },
+      { href: "/#work", label: "ポートフォリオ", iconKey: "info" },
+      { href: "/#contact", label: "コンタクト", iconKey: "contact" },
+    ],
+  },
+  en: {
+    menuItems: [
+      { href: "/", label: "Home", iconKey: "home" },
+      { href: "/sunaba", label: "sunaba", iconKey: "work" },
+      { href: "/#work", label: "Portfolio", iconKey: "info" },
+      { href: "/#contact", label: "Contact", iconKey: "contact" },
+    ],
+  },
 };
 
 export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
@@ -178,6 +221,8 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeDownloadLabel: "ダウンロード",
     blogLinkLabel: "Blog",
     blogUrl: "nannyakore.com",
+    sunabaLinkLabel: "作ってきたものリンク集",
+    sunabaUrl: "/sunaba",
     footerLanguageAriaLabel: "日本語と英語を切り替える",
   },
   en: {
@@ -220,6 +265,8 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeDownloadLabel: "Download",
     blogLinkLabel: "Blog",
     blogUrl: "nannyakore.com",
+    sunabaLinkLabel: "Project collections",
+    sunabaUrl: "/sunaba",
     footerLanguageAriaLabel: "Switch language between Japanese and English",
   },
 };

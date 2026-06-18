@@ -1,6 +1,13 @@
 .heading {
   display: grid;
   justify-items: center;
+}
+
+.textBlock {
+  display: grid;
+  justify-items: stretch;
+  width: fit-content;
+  max-width: 100%;
   gap: 0.55rem;
 }
 
@@ -26,8 +33,7 @@
 }
 
 .underline {
-  justify-self: center;
-  width: clamp(220px, 50vw, 640px);
+  width: 100%;
   height: 6px;
   background: var(--color-anime-underline);
   transform: scaleX(0);
@@ -40,7 +46,6 @@
   }
 
   .underline {
-    width: clamp(140px, 56vw, 280px);
     height: 5px;
   }
 }

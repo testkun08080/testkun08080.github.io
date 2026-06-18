@@ -1,10 +1,5 @@
-import { SunabaSection } from "../../components/SunabaSection";
-import { LanguageProvider } from "../../lib/LanguageContext";
+import { SunabaPage } from "../../components/sunaba/SunabaPage";
 
 export default function Page() {
-  return (
-    <LanguageProvider>
-      <SunabaSection />
-    </LanguageProvider>
-  );
+  return <SunabaPage />;
 }

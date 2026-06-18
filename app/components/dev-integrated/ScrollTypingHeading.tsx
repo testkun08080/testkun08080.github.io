@@ -252,23 +252,25 @@ export function ScrollTypingHeading({
 
   return (
     <div ref={rootRef} className={styles.heading}>
-      <div className={styles.wordWrap}>
-        {/* Invisible spacer: always holds the full-text height so layout never shifts during typing */}
-        <h2
-          className={headingClassName ?? styles.word}
-          aria-hidden="true"
-          style={{ visibility: "hidden" }}
-        >
-          {text}
-        </h2>
-        <h2
-          ref={wordRef}
-          className={`${headingClassName ?? styles.word} ${styles.wordOverlay}`}
-        >
-          {reduceMotion ? text : ""}
-        </h2>
+      <div className={styles.textBlock}>
+        <div className={styles.wordWrap}>
+          {/* Invisible spacer: always holds the full-text height so layout never shifts during typing */}
+          <h2
+            className={headingClassName ?? styles.word}
+            aria-hidden="true"
+            style={{ visibility: "hidden" }}
+          >
+            {text}
+          </h2>
+          <h2
+            ref={wordRef}
+            className={`${headingClassName ?? styles.word} ${styles.wordOverlay}`}
+          >
+            {reduceMotion ? text : ""}
+          </h2>
+        </div>
+        <div ref={lineRef} className={underlineClassName ?? styles.underline} />
       </div>
-      <div ref={lineRef} className={underlineClassName ?? styles.underline} />
     </div>
   );
 }
