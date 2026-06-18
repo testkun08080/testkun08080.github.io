@@ -1,5 +1,5 @@
 import { animate } from "animejs";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ScrollTypingHeading } from "../dev-integrated/ScrollTypingHeading";
 import { StickyQuickMenu } from "../portfolio/StickyQuickMenu";
 import { ProductionFooter } from "../production/ProductionFooter";
@@ -9,15 +9,13 @@ import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import { SunabaBoard } from "./SunabaBoard";
 import styles from "./SunabaPage.module.css";
 
+const SUNABA_TITLE = "sunaba";
+
 export function SunabaPage() {
   const { language, toggleLanguage, t } = useLanguage();
   const reducedMotion = usePrefersReducedMotion();
   const bridgeProgressRef = useRef(0);
   const copy = sunabaCopy[language];
-  const typingText = useMemo(
-    () => String(language === "ja" ? t("sunaba_jp") : t("sunaba_en")),
-    [language, t],
-  );
 
   useEffect(() => {
     const previousLang = document.documentElement.lang;
@@ -55,15 +53,15 @@ export function SunabaPage() {
       anim.pause();
       bridgeProgressRef.current = 1;
     };
-  }, [reducedMotion, typingText]);
+  }, [reducedMotion]);
 
   return (
     <div className={styles.page}>
       <div className={styles.content}>
         <header className={styles.header}>
           <ScrollTypingHeading
-            key={typingText}
-            text={typingText}
+            key={SUNABA_TITLE}
+            text={SUNABA_TITLE}
             headingClassName={styles.typingWord}
             underlineClassName={styles.typingUnderline}
             bridgeScrollProgressRef={bridgeProgressRef}

@@ -20,8 +20,9 @@ import type { Language } from "../../lib/translations";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
 import burstStyles from "../shared-dev-assets/DevBurstOverlayAnime.module.css";
 import {
+  getHeroCurtainCloseEnd,
+  isMobileBridgeViewport,
   P_CURTAIN_OPEN_END,
-  P_HERO_CURTAIN_CLOSE_END,
 } from "./bridgeScrollPhases";
 import { GreetingBurstSection } from "./GreetingBurstSection";
 import type { HeroBurstLogoSectionProps } from "./HeroBurstLogoSection";
@@ -61,7 +62,6 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
     INITIAL_CURTAIN_LINES,
   );
 
-  const p1 = P_HERO_CURTAIN_CLOSE_END;
   const p2 = P_CURTAIN_OPEN_END;
 
   useEffect(() => {
@@ -111,6 +111,7 @@ export function GreetingWithBarcodeBridge({ language, hero }: Props) {
       const p = range > 0 ? clamp01((scrollY - trackTop) / range) : 0;
       bridgeScrollProgressRef.current = p;
 
+      const p1 = getHeroCurtainCloseEnd(isMobileBridgeViewport());
       const heroOpacity = clamp01(1 - p / p1);
       const heroEl = heroUnderlayRef.current;
       if (heroEl) {

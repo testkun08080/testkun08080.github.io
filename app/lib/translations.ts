@@ -3,20 +3,20 @@ export type Language = "ja" | "en";
 export const messages = {
   ja: {
     nav_home: "ホーム",
-    nav_sunaba: "すなば",
+    nav_sunaba: "sunaba",
     nav_about: "アバウト",
     nav_reels: "リール",
     nav_contact: "コンタクト",
     nav_language: "言語",
     hero_title: "ようこそ",
     hero_subtitle: "テクノロジーとアートをつなぐポートフォリオ",
-    hero_cta_primary: "すなばへ",
+    hero_cta_primary: "sunabaへ",
     hero_cta_secondary: "アバウトへ",
     hero_description:
       "Vike + React へ移行した新しいサイトです。マットな質感と滑らかなアニメーションで再構築しました。",
-    sunaba_jp: "すなば",
+    sunaba_jp: "sunaba",
     sunaba_en: "sunaba",
-    sunaba_message: "作ってきたもの・集めたもの",
+    sunaba_message: "作ってきたものや、趣味で作成したもの",
     sunaba_index_eyebrow: "作ったもの一覧",
     sunaba_back_home: "ホームへ戻る",
     sunaba_empty: "まだ作品がありません。",
@@ -66,20 +66,20 @@ export const messages = {
   },
   en: {
     nav_home: "Home",
-    nav_sunaba: "Sunaba",
+    nav_sunaba: "sunaba",
     nav_about: "About",
     nav_reels: "Reels",
     nav_contact: "Contact",
     nav_language: "Language",
     hero_title: "Welcome",
     hero_subtitle: "A portfolio bridging technology and art",
-    hero_cta_primary: "Enter Sunaba",
+    hero_cta_primary: "Enter sunaba",
     hero_cta_secondary: "About",
     hero_description:
       "This site has been migrated to Vike + React, refined with matte textures and smooth motion.",
-    sunaba_jp: "SUNABA",
+    sunaba_jp: "sunaba",
     sunaba_en: "sunaba",
-    sunaba_message: "Things I've made and gathered",
+    sunaba_message: "Things I've made, and things I create for fun",
     sunaba_index_eyebrow: "Project index",
     sunaba_back_home: "Back to home",
     sunaba_empty: "No projects yet.",
@@ -165,7 +165,7 @@ export const sunabaCopy: Record<Language, SunabaCopy> = {
   ja: {
     menuItems: [
       { href: "/", label: "ホーム", iconKey: "home" },
-      { href: "/sunaba", label: "すなば", iconKey: "work" },
+      { href: "/sunaba", label: "sunaba", iconKey: "work" },
       { href: "/#work", label: "ポートフォリオ", iconKey: "info" },
       { href: "/#contact", label: "コンタクト", iconKey: "contact" },
     ],
@@ -173,7 +173,7 @@ export const sunabaCopy: Record<Language, SunabaCopy> = {
   en: {
     menuItems: [
       { href: "/", label: "Home", iconKey: "home" },
-      { href: "/sunaba", label: "Sunaba", iconKey: "work" },
+      { href: "/sunaba", label: "sunaba", iconKey: "work" },
       { href: "/#work", label: "Portfolio", iconKey: "info" },
       { href: "/#contact", label: "Contact", iconKey: "contact" },
     ],

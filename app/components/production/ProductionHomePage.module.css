@@ -72,8 +72,7 @@
 }
 
 .typingUnderline {
-  justify-self: center;
-  width: clamp(380px, 46vw, 520px);
+  width: 100%;
   height: 6px;
   background: var(--color-anime-about-text);
   transform: scaleX(0);
@@ -216,7 +215,7 @@
 }
 
 .sectionHeadingLine {
-  width: min(72vw, 520px);
+  width: 100%;
   height: 6px;
   background: var(--color-anime-about-text);
   transform: scaleX(0);

@@ -6,7 +6,7 @@ import {
 } from "../../components/portfolio/HeroLogoInkWebGL";
 import { PathBarcodeTemplate3D } from "../../components/portfolio/PathBarcodeTemplate3D";
 import { usePrefersReducedMotion } from "../../lib/usePrefersReducedMotion";
-import { P_HERO_CURTAIN_CLOSE_END } from "./bridgeScrollPhases";
+import { getHeroCurtainCloseEnd } from "./bridgeScrollPhases";
 import styles from "../shared-dev-assets/DevBurstOverlayAnimeLogo.module.css";
 
 const HERO_BARCODE = {
@@ -91,7 +91,7 @@ export function HeroBurstLogoSection({
     }
 
     const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1);
-    const p1 = P_HERO_CURTAIN_CLOSE_END;
+    const p1 = getHeroCurtainCloseEnd(isMobile);
     const applyProgress = (progress: number) => {
       const progressed = clamp01(progress);
       const scale = 1 + progressed * 0.9;
@@ -173,7 +173,7 @@ export function HeroBurstLogoSection({
       logoRuntimeRef.current.warpScale = 2.0;
       logoRuntimeRef.current.opacity = 1;
     };
-  }, [reduceMotion, bridgeScrollProgressRef, registerBridgeApply]);
+  }, [reduceMotion, bridgeScrollProgressRef, registerBridgeApply, isMobile]);
 
   const fs = HERO_BARCODE.fontSize;
   const textRepeat = isMobile ? TEXT_REPEAT_MOBILE : TEXT_REPEAT_DESKTOP;
