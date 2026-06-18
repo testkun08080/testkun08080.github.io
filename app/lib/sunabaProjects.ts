@@ -76,8 +76,8 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
       en: "Currency Converter Board",
     },
     description: {
-      ja: "Wise を毎日使う開発者向けの通貨変換ダッシュボード。複数通貨を一覧で比較。",
-      en: "Currency conversion dashboard for daily Wise users — compare multiple rates at a glance.",
+      ja: "250以上の通貨に対応したリアルタイム為替レートボードの作成・埋め込み無料ツール。画像エクスポートやブログ・EC サイトへの埋め込みに対応。",
+      en: "Free real-time exchange rate board creator supporting 250+ currencies — embeddable in blogs and sites, with image export.",
     },
     href: "https://currency-converter-board.com/",
     external: true,
@@ -98,8 +98,8 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
     category: "game",
     title: { ja: "デビル メイ クライ 5", en: "Devil May Cry 5" },
     description: {
-      ja: "CAPCOM にてシェーダーアーティストとして参画。キャラクタ・背景シェーダーとカットシーン向けシェーダーを担当。",
-      en: "Shader artist at CAPCOM — character, background, and cutscene shader development.",
+      ja: "CAPCOM にてシェーダーアーティストとして参画。キャラクタ・背景・カットシーン向けシェーダー開発と、PIX / RenderDoc を用いた GPU 最適化を担当。",
+      en: "Shader artist at CAPCOM — character, background, and cutscene shaders; GPU optimization with PIX and RenderDoc.",
     },
     href: "https://www.devilmaycry.com/5/ja/",
     external: true,
@@ -123,8 +123,8 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
       en: "The Last of Us Part II - Remastered",
     },
     description: {
-      ja: "SIE にて TA サポート。ワークフロー・開発環境のセットアップとシェーダー関連のサポートを担当。",
-      en: "TA support at SIE — workflow setup, dev environment, and shader-related assistance.",
+      ja: "SIE にて TA サポート。Naughty Dog のワークフローセットアップ、PlayStation DevKit を使ったシェーダーデバッグ、データ提出フローの保守を担当。",
+      en: "TA support at SIE — set up Naughty Dog's artist workflows, debugged shaders on PlayStation DevKit, and maintained asset submission pipelines.",
     },
     href: "https://www.playstation.com/ja-jp/games/the-last-of-us-part-ii-remastered/",
     external: true,
@@ -134,8 +134,8 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
     category: "game",
     title: { ja: "Climate Station", en: "Climate Station" },
     description: {
-      ja: "SIE Malaysia Studio にて Unity 向けシーンスクリプト・マクロ開発とビルド CI サポートを担当。",
-      en: "Unity scene scripts and macros plus build CI support at SIE Malaysia Studio.",
+      ja: "SIE Malaysia Studio にて Unity 向け C# エディタツール・マクロ開発、Jenkins / Git によるビルドパイプラインサポート、多言語キャプションフレームワークの保守を担当。",
+      en: "TA at SIE Malaysia Studio — Unity C# editor tools and macros, build pipeline support via Jenkins and Git, and multilingual caption framework maintenance.",
     },
     href: "https://www.playstation.com/en-us/games/climate-station/",
     external: true,

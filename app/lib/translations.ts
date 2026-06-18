@@ -265,7 +265,7 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeDownloadLabel: "Download",
     blogLinkLabel: "Blog",
     blogUrl: "nannyakore.com",
-    sunabaLinkLabel: "Things I've made",
+    sunabaLinkLabel: "Project collections",
     sunabaUrl: "/sunaba",
     footerLanguageAriaLabel: "Switch language between Japanese and English",
   },
