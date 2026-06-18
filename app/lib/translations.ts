@@ -154,6 +154,8 @@ export type ProductionHomeCopy = {
   resumeDownloadLabel: string;
   blogLinkLabel: string;
   blogUrl: string;
+  sunabaLinkLabel: string;
+  sunabaUrl: string;
   footerLanguageAriaLabel: string;
 };
 
@@ -219,6 +221,8 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeDownloadLabel: "ダウンロード",
     blogLinkLabel: "Blog",
     blogUrl: "nannyakore.com",
+    sunabaLinkLabel: "作ってきたものリンク集",
+    sunabaUrl: "/sunaba",
     footerLanguageAriaLabel: "日本語と英語を切り替える",
   },
   en: {
@@ -261,6 +265,8 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeDownloadLabel: "Download",
     blogLinkLabel: "Blog",
     blogUrl: "nannyakore.com",
+    sunabaLinkLabel: "Things I've made",
+    sunabaUrl: "/sunaba",
     footerLanguageAriaLabel: "Switch language between Japanese and English",
   },
 };

@@ -386,6 +386,9 @@ export function ProductionHomePage() {
               blogLabel={copy.blogLinkLabel}
               blogUrl={copy.blogUrl}
               blogHref="https://nannyakore.com"
+              sunabaLabel={copy.sunabaLinkLabel}
+              sunabaUrl={copy.sunabaUrl}
+              sunabaHref="/sunaba"
             />
           </section>
         </SideCenterStickySection>
