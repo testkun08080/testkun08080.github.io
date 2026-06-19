@@ -9,6 +9,7 @@ import { ScrollTypingHeading } from "../dev-integrated/ScrollTypingHeading";
 import { SideCenterStickySection } from "../dev-integrated/SideCenterStickySection";
 import { SkillsToolsSection } from "../dev-integrated/SkillsToolsSection";
 import { WorkReelsSection } from "../dev-integrated/WorkReelsSection";
+import { SunabaCollapsiblePanel } from "../sunaba/SunabaCollapsiblePanel";
 import { StickyQuickMenu } from "../portfolio/StickyQuickMenu";
 import { LoadingScreen } from "./LoadingScreen";
 import { ProductionFooter } from "./ProductionFooter";
@@ -332,6 +333,10 @@ export function ProductionHomePage() {
               fallbackPrefix={copy.reelsFallbackPrefix}
               fallbackLinkLabel={copy.reelsFallbackLink}
             />
+            <SunabaCollapsiblePanel
+              openLabel={copy.sunabaWorkPanelOpen}
+              closeLabel={copy.sunabaWorkPanelClose}
+            />
           </section>
 
           <section
@@ -386,9 +391,6 @@ export function ProductionHomePage() {
               blogLabel={copy.blogLinkLabel}
               blogUrl={copy.blogUrl}
               blogHref="https://nannyakore.com"
-              sunabaLabel={copy.sunabaLinkLabel}
-              sunabaUrl={copy.sunabaUrl}
-              sunabaHref="/sunaba"
             />
           </section>
         </SideCenterStickySection>

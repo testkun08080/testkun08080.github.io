@@ -7,18 +7,12 @@ type OthersCardSectionProps = {
   blogLabel: string;
   blogUrl: string;
   blogHref: string;
-  sunabaLabel: string;
-  sunabaUrl: string;
-  sunabaHref: string;
 };
 
 export function OthersCardSection({
   blogLabel,
   blogUrl,
   blogHref,
-  sunabaLabel,
-  sunabaUrl,
-  sunabaHref,
 }: OthersCardSectionProps) {
   const rootRef = useRef<HTMLElement>(null);
   const scopeRef = useRef<ReturnType<typeof createScope> | null>(null);
@@ -55,14 +49,6 @@ export function OthersCardSection({
             rel="noreferrer noopener"
           >
             {blogUrl}
-          </a>
-        </li>
-        <li className={styles.item}>
-          <div className={styles.itemMeta}>
-            <span className={styles.label}>{sunabaLabel}</span>
-          </div>
-          <a className={styles.valueLink} href={sunabaHref}>
-            {sunabaUrl}
           </a>
         </li>
       </ul>

@@ -6,6 +6,8 @@
   place-content: center;
   background: #f7efe4;
   pointer-events: auto;
+  touch-action: none;
+  overscroll-behavior: none;
 }
 
 .hiding {

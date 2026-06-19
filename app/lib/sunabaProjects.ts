@@ -22,17 +22,6 @@ export function pickLocalized(
 
 export const SUNABA_PROJECTS: readonly SunabaProject[] = [
   {
-    id: "yfinance-screener",
-    category: "web",
-    title: { ja: "日本株スクリーニング", en: "Japan Stock Screener" },
-    description: {
-      ja: "yfinance と投資術を組み合わせた日本株の小型株・割安株スクリーナー。CSV 分析と検索プリセットに対応。",
-      en: "Japanese small-cap and value stock screener powered by yfinance, with CSV export and search presets.",
-    },
-    href: "https://yfinance-jp-screener-search.vercel.app/",
-    external: true,
-  },
-  {
     id: "visu-ai-innei",
     category: "web",
     title: { ja: "VisuAI-INNEI", en: "VisuAI-INNEI" },
@@ -41,6 +30,39 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
       en: "Real-time GLSL shader editor and preview playground with AI-assisted generation and live parameters.",
     },
     href: "https://visu-ai-innei.vercel.app/",
+    external: true,
+  },
+  {
+    id: "hennani",
+    category: "web",
+    title: { ja: "へんなアニマル", en: "Hennani" },
+    description: {
+      ja: "へんなアニマルたちの診断ウェブアプリ",
+      en: "Personality quiz web app featuring quirky animal characters.",
+    },
+    href: "https://hennani.com/",
+    external: true,
+  },
+  {
+    id: "edisuku",
+    category: "web",
+    title: { ja: "エディスク", en: "Edisuku" },
+    description: {
+      ja: "EDINET 開示データを自動収集・構造化するオープンソースの日本株スクリーナー。財務指標での絞り込み、時系列チャート、財務諸表ビューアに対応。",
+      en: "Open-source Japanese stock screener that collects and structures EDINET filings — screening, time-series charts, and financial statement views.",
+    },
+    href: "https://edisuku.com/",
+    external: true,
+  },
+  {
+    id: "yfinance-screener",
+    category: "web",
+    title: { ja: "日本株スクリーニング", en: "Japan Stock Screener" },
+    description: {
+      ja: "yfinance と投資術を組み合わせた日本株の小型株・割安株スクリーナー。CSV 分析と検索プリセットに対応。",
+      en: "Japanese small-cap and value stock screener powered by yfinance, with CSV export and search presets.",
+    },
+    href: "https://yfinance-jp-screener-search.vercel.app/",
     external: true,
   },
   {
@@ -55,17 +77,6 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
       en: "Free tool to create mesh-gradient thumbnails and OGP images for note and blogs with drag controls.",
     },
     href: "https://gradient-thumbnail-maker.testkun-08080.workers.dev/",
-    external: true,
-  },
-  {
-    id: "edisuku",
-    category: "web",
-    title: { ja: "エディスク", en: "Edisuku" },
-    description: {
-      ja: "EDINET 開示データを自動収集・構造化するオープンソースの日本株スクリーナー。財務指標での絞り込み、時系列チャート、財務諸表ビューアに対応。",
-      en: "Open-source Japanese stock screener that collects and structures EDINET filings — screening, time-series charts, and financial statement views.",
-    },
-    href: "https://edisuku.com/",
     external: true,
   },
   {

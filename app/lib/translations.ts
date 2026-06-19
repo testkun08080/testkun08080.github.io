@@ -16,7 +16,7 @@ export const messages = {
       "Vike + React へ移行した新しいサイトです。マットな質感と滑らかなアニメーションで再構築しました。",
     sunaba_jp: "sunaba",
     sunaba_en: "sunaba",
-    sunaba_message: "作ってきたものや、趣味で作成したもの",
+    sunaba_message: "制作物のリンク集",
     sunaba_index_eyebrow: "作ったもの一覧",
     sunaba_back_home: "ホームへ戻る",
     sunaba_empty: "まだ作品がありません。",
@@ -79,7 +79,7 @@ export const messages = {
       "This site has been migrated to Vike + React, refined with matte textures and smooth motion.",
     sunaba_jp: "sunaba",
     sunaba_en: "sunaba",
-    sunaba_message: "Things I've made, and things I create for fun",
+    sunaba_message: "Collection of project links",
     sunaba_index_eyebrow: "Project index",
     sunaba_back_home: "Back to home",
     sunaba_empty: "No projects yet.",
@@ -154,8 +154,8 @@ export type ProductionHomeCopy = {
   resumeDownloadLabel: string;
   blogLinkLabel: string;
   blogUrl: string;
-  sunabaLinkLabel: string;
-  sunabaUrl: string;
+  sunabaWorkPanelOpen: string;
+  sunabaWorkPanelClose: string;
   footerLanguageAriaLabel: string;
 };
 
@@ -221,8 +221,8 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeDownloadLabel: "ダウンロード",
     blogLinkLabel: "Blog",
     blogUrl: "nannyakore.com",
-    sunabaLinkLabel: "作ってきたものリンク集",
-    sunabaUrl: "/sunaba",
+    sunabaWorkPanelOpen: "sunaba — 制作物のリンク集を見る",
+    sunabaWorkPanelClose: "閉じる",
     footerLanguageAriaLabel: "日本語と英語を切り替える",
   },
   en: {
@@ -265,8 +265,8 @@ export const productionHomeCopy: Record<Language, ProductionHomeCopy> = {
     resumeDownloadLabel: "Download",
     blogLinkLabel: "Blog",
     blogUrl: "nannyakore.com",
-    sunabaLinkLabel: "Project collections",
-    sunabaUrl: "/sunaba",
+    sunabaWorkPanelOpen: "View sunaba project links",
+    sunabaWorkPanelClose: "Close",
     footerLanguageAriaLabel: "Switch language between Japanese and English",
   },
 };

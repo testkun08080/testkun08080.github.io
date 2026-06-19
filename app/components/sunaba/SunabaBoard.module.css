@@ -24,13 +24,14 @@
   grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
   gap: 1.25rem;
   margin: 0;
-  padding: 0;
+  padding: 0.35rem 0.15rem;
   list-style: none;
 }
 
 .item {
   margin: 0;
   min-width: 0;
+  padding: 0.2rem;
 }
 
 .empty {
