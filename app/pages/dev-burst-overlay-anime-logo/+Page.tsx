@@ -21,33 +21,6 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function debugLog(
-  runId: string,
-  hypothesisId: string,
-  location: string,
-  message: string,
-  data: Record<string, unknown>,
-) {
-  // #region agent log
-  fetch("http://127.0.0.1:7935/ingest/62717cfa-0848-4f80-be4f-ac448c9e6877", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": "a51b4c",
-    },
-    body: JSON.stringify({
-      sessionId: "a51b4c",
-      runId,
-      hypothesisId,
-      location,
-      message,
-      data,
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-}
-
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
 
@@ -68,7 +41,6 @@ export default function Page() {
   const [mounted, setMounted] = useState(false);
   const [scrollLogoBoost, setScrollLogoBoost] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const lastLoggedProgressRef = useRef(-1);
   const stageRef = useRef<HTMLElement>(null);
   const barcodeFrameRef = useRef<HTMLDivElement>(null);
   useEffect(() => setMounted(true), []);
@@ -143,15 +115,6 @@ export default function Page() {
       barcodeFrame.style.transform = "scale(1)";
       setScrollLogoBoost(0);
       setScrollProgress(0);
-      debugLog(
-        "initial",
-        "H3",
-        "dev-burst-overlay/+Page.tsx:reduceMotion",
-        "Reduced motion branch active",
-        {
-          reduceMotion: true,
-        },
-      );
       return;
     }
 
@@ -167,27 +130,6 @@ export default function Page() {
       barcodeFrame.style.opacity = String(opacity);
       setScrollLogoBoost(progressed * 0.16);
       setScrollProgress(progressed);
-      const shouldLogProgress =
-        lastLoggedProgressRef.current < 0 ||
-        Math.abs(progressed - lastLoggedProgressRef.current) >= 0.15;
-      if (shouldLogProgress) {
-        lastLoggedProgressRef.current = progressed;
-        debugLog(
-          "initial",
-          "H1",
-          "dev-burst-overlay/+Page.tsx:updateByScroll",
-          "Scroll progression updated",
-          {
-            progressed: Number(progressed.toFixed(4)),
-            stageTop: Number(rect.top.toFixed(2)),
-            stageHeight: Number(rect.height.toFixed(2)),
-            viewportHeight: window.innerHeight,
-            scale: Number(scale.toFixed(4)),
-            opacity: Number(opacity.toFixed(4)),
-            scrollLogoBoost: Number((progressed * 0.16).toFixed(4)),
-          },
-        );
-      }
     };
     const onScroll = () => {
       cancelAnimationFrame(rafId);
@@ -218,20 +160,6 @@ export default function Page() {
   );
   const shaderOpacity = reduceMotion ? 1 : lerp(1, 0, scrollProgress);
   const isNextItemVisible = reduceMotion ? true : scrollProgress >= 0.75;
-
-  useEffect(() => {
-    debugLog(
-      "initial",
-      "H2",
-      "dev-burst-overlay/+Page.tsx:shaderScale",
-      "Derived shader scales changed",
-      {
-        scrollProgress: Number(scrollProgress.toFixed(4)),
-        shaderInkScale: Number(shaderInkScale.toFixed(4)),
-        shaderWarpScale: Number(shaderWarpScale.toFixed(4)),
-      },
-    );
-  }, [scrollProgress, shaderInkScale, shaderWarpScale]);
 
   return (
     <main className={styles.page}>

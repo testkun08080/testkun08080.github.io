@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Dev / sandbox routes are for local iteration (prefix match).
+Disallow: /dev
+Disallow: /sunaba
