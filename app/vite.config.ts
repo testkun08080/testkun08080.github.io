@@ -18,11 +18,15 @@ export default defineConfig(({ mode }) => {
           : undefined,
     },
     server: {
-      // Keep dev server private (localhost only)
-      // host: "127.0.0.1",
-      // Allow custom port via PORT, otherwise use Vite default
+      // Keep the Vite dev server loopback-only (Cloud Agent / shared VMs)
+      host: "127.0.0.1",
       port: Number(env.PORT) || 5173,
       // If taken, Vite automatically picks the next available port
+      strictPort: false,
+    },
+    preview: {
+      host: "127.0.0.1",
+      port: Number(env.PORT) || 4173,
       strictPort: false,
     },
   };
