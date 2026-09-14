@@ -543,7 +543,10 @@ export function HeroLogoInkWebGL({
       renderer = new WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: true,
+        // The scene is a single full-screen quad shaded per-fragment, so there are
+        // no geometry edges for MSAA to smooth. Enabling it only costs a
+        // multisampled buffer and a resolve every frame, for an identical image.
+        antialias: false,
         premultipliedAlpha: true,
       });
     } catch {
