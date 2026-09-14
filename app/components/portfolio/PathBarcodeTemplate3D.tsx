@@ -98,8 +98,13 @@ export function PathBarcodeTemplate3D({
       };
     };
 
+    // `placeItems` runs every frame and writes transforms to every item, so reading
+    // the layer bounds inside it forced a synchronous layout on each frame. The
+    // layer only changes size on resize, so cache it and refresh from the
+    // ResizeObserver below instead.
+    let bounds = itemsLayer.getBoundingClientRect();
+
     const placeItems = () => {
-      const bounds = itemsLayer.getBoundingClientRect();
       const scaleX = bounds.width / (vbW || 1);
       const scaleY = bounds.height / (vbH || 1);
       for (let i = 0; i < items.length; i += 1) {
@@ -115,6 +120,7 @@ export function PathBarcodeTemplate3D({
     placeItems();
 
     const resizeObserver = new ResizeObserver(() => {
+      bounds = itemsLayer.getBoundingClientRect();
       placeItems();
     });
     resizeObserver.observe(itemsLayer);
