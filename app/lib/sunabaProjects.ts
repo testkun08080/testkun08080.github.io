@@ -158,8 +158,8 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
     category: "app",
     title: { ja: "LIFE OFFICE", en: "LIFE OFFICE" },
     description: {
-      ja: "打刻という物理的な行為をスマホで再現し、仕事モードへの切り替えトリガーにする iOS アプリ。毎朝の出勤儀式を、スマホで。",
-      en: "An iOS app that turns a physical clock-in gesture into a phone ritual — your morning switch into work mode.",
+      ja: "怠惰になりがちな出勤スイッチを、スマホで。",
+      en: "Your commute switch — for when getting up and out tends to be a struggle.",
     },
     href: "https://apps.apple.com/jp/app/id6773638323",
     external: true,
@@ -171,8 +171,8 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
     category: "app",
     title: { ja: "下書き", en: "Draft" },
     description: {
-      ja: "写真を見ながら話すだけで、AI が Markdown 記事を生成する iOS アプリ。音声入力ファーストで、タイトル・アウトライン・録音メモも入力できる。",
-      en: "An iOS app that generates a Markdown article with AI from you just talking while you look at photos — voice-first, with typing also supported.",
+      ja: "ブログなどの下書きを、写真を見ながら喋るだけで作成。",
+      en: "Create a blog draft just by talking while you look at your photos.",
     },
     href: "https://apps.apple.com/app/id6774141263",
     external: true,
@@ -184,8 +184,8 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
     category: "app",
     title: { ja: "Watcher", en: "Watcher" },
     description: {
-      ja: "登録した監視テーマを AI が定期的に調査し、日本語レポートとしてまとめて届ける iOS アプリ。準備中。",
-      en: "An iOS app where AI periodically researches the topics you register and delivers Japanese reports. Coming soon.",
+      ja: "追いたい日々のニュースを届ける。",
+      en: "Delivers the daily news you want to keep up with.",
     },
     href: "https://legal.testkun.net/watcher/",
     external: true,
