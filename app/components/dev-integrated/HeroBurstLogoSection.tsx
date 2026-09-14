@@ -50,6 +50,7 @@ export function HeroBurstLogoSection({
   const reduceMotion = usePrefersReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
   const [heavyEffectsPaused, setHeavyEffectsPaused] = useState(false);
+  const [offscreen, setOffscreen] = useState(false);
   const stageRef = useRef<HTMLElement>(null);
   const barcodeFrameRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
@@ -61,6 +62,28 @@ export function HeroBurstLogoSection({
     warpScale: 2.0,
     opacity: 1,
   });
+
+  // The hero sits in a 360vh scroll track, so `heavyEffectsPaused` (which only
+  // latches near the end of the bridge) leaves the shader and the barcode running
+  // at full rate for roughly three screens of scrolling. Stop them outright once
+  // the stage is off-screen — nothing visible changes.
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) setOffscreen(!entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+    observer.observe(stage);
+
+    return () => {
+      observer.disconnect();
+      setOffscreen(false);
+    };
+  }, []);
 
   // Detect mobile once on mount
   useEffect(() => {
@@ -183,7 +206,7 @@ export function HeroBurstLogoSection({
       <div className={styles.stickyViewport}>
         <HeroLogoInkWebGL
           className={styles.logoLayer}
-          paused={reduceMotion || heavyEffectsPaused}
+          paused={reduceMotion || heavyEffectsPaused || offscreen}
           flowMode={"radial" as FlowMode}
           logoSize={0.2}
           mouseEnabled={!reduceMotion}
@@ -195,7 +218,7 @@ export function HeroBurstLogoSection({
 
         <div ref={barcodeFrameRef} className={styles.barcodeFrame}>
           <PathBarcodeTemplate3D
-            paused={reduceMotion || heavyEffectsPaused}
+            paused={reduceMotion || heavyEffectsPaused || offscreen}
             className={styles.barcodeTheme}
             flowDurationMs={33000}
             textUnit="*0123456789ABCDEF* "

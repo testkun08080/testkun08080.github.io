@@ -47,6 +47,7 @@ export function ProductionHomePage() {
   const reduceMotion = usePrefersReducedMotion();
   const { language, toggleLanguage } = useLanguage();
   const trackRef = useRef<HTMLDivElement>(null);
+  const bridgePinRef = useRef<HTMLDivElement>(null);
   const layerARef = useRef<HTMLElement>(null);
   const layerBRef = useRef<HTMLElement>(null);
   const measureRowRef = useRef<HTMLParagraphElement>(null);
@@ -97,6 +98,30 @@ export function ProductionHomePage() {
       document.documentElement.lang = previousLang;
     };
   }, [language]);
+
+  // The curtain marquees are `infinite` CSS animations, so they keep compositing
+  // long after the hero has scrolled away. Pause them while the pinned scene is
+  // off-screen. The class is toggled directly rather than through state so that
+  // the 128 marquee ref callbacks are not torn down and re-attached.
+  useEffect(() => {
+    const pin = bridgePinRef.current;
+    if (!pin || typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          pin.classList.toggle(styles.bridgePaused, !entry.isIntersecting);
+        }
+      },
+      { threshold: 0 },
+    );
+    observer.observe(pin);
+
+    return () => {
+      observer.disconnect();
+      pin.classList.remove(styles.bridgePaused);
+    };
+  }, []);
 
   useEffect(() => {
     const measure = measureRowRef.current;
@@ -261,7 +286,7 @@ export function ProductionHomePage() {
       <LoadingScreen visible={isLoadingVisible} />
       <div className={styles.section}>
         <div ref={trackRef} className={styles.bridgeTrack}>
-          <div className={styles.bridgePin}>
+          <div ref={bridgePinRef} className={styles.bridgePin}>
             <div className={styles.bridgeScene}>
               <p
                 ref={measureRowRef}
