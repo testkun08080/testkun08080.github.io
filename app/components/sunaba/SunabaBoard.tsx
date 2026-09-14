@@ -36,8 +36,9 @@ export function SunabaBoard() {
   const { t } = useLanguage();
   const web = getSunabaProjectsByCategory("web");
   const game = getSunabaProjectsByCategory("game");
+  const app = getSunabaProjectsByCategory("app");
 
-  if (!web.length && !game.length) {
+  if (!web.length && !game.length && !app.length) {
     return <p className={styles.empty}>{t("sunaba_empty")}</p>;
   }
 
@@ -46,6 +47,10 @@ export function SunabaBoard() {
       <ProjectSection
         category="game"
         heading={String(t("sunaba_section_game"))}
+      />
+      <ProjectSection
+        category="app"
+        heading={String(t("sunaba_section_app"))}
       />
       <ProjectSection
         category="web"

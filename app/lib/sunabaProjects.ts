@@ -2,7 +2,7 @@ import type { Language } from "./translations";
 
 export type LocalizedString = { ja: string; en: string };
 
-export type SunabaProjectCategory = "web" | "game";
+export type SunabaProjectCategory = "web" | "game" | "app";
 
 export type SunabaProject = {
   id: string;
@@ -11,6 +11,8 @@ export type SunabaProject = {
   description: LocalizedString;
   href: string;
   external?: boolean;
+  status?: "live" | "wip";
+  icon?: string;
 };
 
 export function pickLocalized(
@@ -22,14 +24,14 @@ export function pickLocalized(
 
 export const SUNABA_PROJECTS: readonly SunabaProject[] = [
   {
-    id: "visu-ai-innei",
+    id: "slang-ai-lab",
     category: "web",
-    title: { ja: "VisuAI-INNEI", en: "VisuAI-INNEI" },
+    title: { ja: "Slang AI Lab", en: "Slang AI Lab" },
     description: {
-      ja: "GLSL シェーダーをリアルタイム編集・プレビューできる Web アプリ。AI による生成とパラメータ調整に対応。",
-      en: "Real-time GLSL shader editor and preview playground with AI-assisted generation and live parameters.",
+      ja: "AI が生成した Slang シェーダーを、本物の Slang コンパイラ（WebAssembly）でブラウザ内コンパイルし、WebGPU でリアルタイムプレビューできるプレイグラウンド。",
+      en: "AI-generated Slang shaders compiled in-browser by a real Slang compiler (WebAssembly) to WGSL, with real-time WebGPU preview.",
     },
-    href: "https://visu-ai-innei.vercel.app/",
+    href: "https://slang-ai-lab.vercel.app",
     external: true,
   },
   {
@@ -150,6 +152,45 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
     },
     href: "https://www.playstation.com/en-us/games/climate-station/",
     external: true,
+  },
+  {
+    id: "life-office",
+    category: "app",
+    title: { ja: "LIFE OFFICE", en: "LIFE OFFICE" },
+    description: {
+      ja: "打刻という物理的な行為をスマホで再現し、仕事モードへの切り替えトリガーにする iOS アプリ。毎朝の出勤儀式を、スマホで。",
+      en: "An iOS app that turns a physical clock-in gesture into a phone ritual — your morning switch into work mode.",
+    },
+    href: "https://apps.apple.com/jp/app/id6773638323",
+    external: true,
+    status: "live",
+    icon: "/app-icons/life-office.png",
+  },
+  {
+    id: "shitagaki",
+    category: "app",
+    title: { ja: "下書き", en: "Draft" },
+    description: {
+      ja: "写真を見ながら話すだけで、AI が Markdown 記事を生成する iOS アプリ。音声入力ファーストで、タイトル・アウトライン・録音メモも入力できる。",
+      en: "An iOS app that generates a Markdown article with AI from you just talking while you look at photos — voice-first, with typing also supported.",
+    },
+    href: "https://apps.apple.com/app/id6774141263",
+    external: true,
+    status: "live",
+    icon: "/app-icons/shitagaki.png",
+  },
+  {
+    id: "watcher",
+    category: "app",
+    title: { ja: "Watcher", en: "Watcher" },
+    description: {
+      ja: "登録した監視テーマを AI が定期的に調査し、日本語レポートとしてまとめて届ける iOS アプリ。準備中。",
+      en: "An iOS app where AI periodically researches the topics you register and delivers Japanese reports. Coming soon.",
+    },
+    href: "https://legal.testkun.net/watcher/",
+    external: true,
+    status: "wip",
+    icon: "/app-icons/watcher.png",
   },
 ] as const;
 
