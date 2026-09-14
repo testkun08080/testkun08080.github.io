@@ -668,6 +668,8 @@ export function HeroLogoInkWebGL({
     // Cap DPR at 1.5 on mobile to reduce GPU load significantly
     const mobile = isMobileDevice();
     const maxDpr = mobile ? 1.5 : 2;
+    // Cap the shader to 30fps on mobile; desktop keeps the full refresh rate.
+    const minFrameMs = mobile ? 1000 / 30 - 1 : 0;
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
       const w = Math.max(1, canvas.clientWidth);
@@ -824,6 +826,14 @@ export function HeroLogoInkWebGL({
       if (!running) return;
       rafId = 0;
       if (propsRef.current.paused) return;
+      // The ink flow is slow enough that 30fps reads the same on a phone, and
+      // halving the draws halves the fragment work, which is what actually heats
+      // the device. Skip via rAF rather than a timer so the frames that do render
+      // stay aligned to vsync; the wasted wake-up is cheap next to this shader.
+      if (minFrameMs > 0 && now - lastNow < minFrameMs) {
+        rafId = window.requestAnimationFrame(draw);
+        return;
+      }
       const elapsed = (now - start) / 1000;
       const dt = Math.min(0.1, (now - lastNow) / 1000);
       lastNow = now;
