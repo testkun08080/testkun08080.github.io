@@ -10,11 +10,17 @@ type Props = {
 };
 
 export function SunabaProjectCard({ project, style, className }: Props) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const title = pickLocalized(project.title, language);
   const description = pickLocalized(project.description, language);
   const isExternal =
     project.external ?? /^https?:\/\//.test(project.href);
+  const statusLabel =
+    project.status === "live"
+      ? t("sunaba_status_live")
+      : project.status === "wip"
+        ? t("sunaba_status_wip")
+        : null;
 
   return (
     <a
@@ -25,7 +31,29 @@ export function SunabaProjectCard({ project, style, className }: Props) {
         ? { target: "_blank", rel: "noopener noreferrer" }
         : undefined)}
     >
-      <h2 className={styles.title}>{title}</h2>
+      <div className={styles.header}>
+        {project.icon ? (
+          <img
+            src={project.icon}
+            alt=""
+            className={styles.icon}
+            width={40}
+            height={40}
+            loading="lazy"
+          />
+        ) : null}
+        <h2 className={styles.title}>{title}</h2>
+        {statusLabel ? (
+          <span
+            className={[
+              styles.status,
+              project.status === "live" ? styles.statusLive : styles.statusWip,
+            ].join(" ")}
+          >
+            {String(statusLabel)}
+          </span>
+        ) : null}
+      </div>
       <p className={styles.description}>{description}</p>
     </a>
   );

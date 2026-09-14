@@ -2,7 +2,7 @@ import type { Language } from "./translations";
 
 export type LocalizedString = { ja: string; en: string };
 
-export type SunabaProjectCategory = "web" | "game";
+export type SunabaProjectCategory = "web" | "game" | "app";
 
 export type SunabaProject = {
   id: string;
@@ -11,6 +11,8 @@ export type SunabaProject = {
   description: LocalizedString;
   href: string;
   external?: boolean;
+  status?: "live" | "wip";
+  icon?: string;
 };
 
 export function pickLocalized(
@@ -22,14 +24,14 @@ export function pickLocalized(
 
 export const SUNABA_PROJECTS: readonly SunabaProject[] = [
   {
-    id: "visu-ai-innei",
+    id: "slang-ai-lab",
     category: "web",
-    title: { ja: "VisuAI-INNEI", en: "VisuAI-INNEI" },
+    title: { ja: "Slang AI Lab", en: "Slang AI Lab" },
     description: {
-      ja: "GLSL シェーダーをリアルタイム編集・プレビューできる Web アプリ。AI による生成とパラメータ調整に対応。",
-      en: "Real-time GLSL shader editor and preview playground with AI-assisted generation and live parameters.",
+      ja: "AI が生成した Slang シェーダーを、本物の Slang コンパイラ（WebAssembly）でブラウザ内コンパイルし、WebGPU でリアルタイムプレビューできるプレイグラウンド。",
+      en: "AI-generated Slang shaders compiled in-browser by a real Slang compiler (WebAssembly) to WGSL, with real-time WebGPU preview.",
     },
-    href: "https://visu-ai-innei.vercel.app/",
+    href: "https://slang-ai-lab.vercel.app",
     external: true,
   },
   {
@@ -150,6 +152,45 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
     },
     href: "https://www.playstation.com/en-us/games/climate-station/",
     external: true,
+  },
+  {
+    id: "life-office",
+    category: "app",
+    title: { ja: "LIFE OFFICE", en: "LIFE OFFICE" },
+    description: {
+      ja: "怠惰になりがちな出勤スイッチを、スマホで。",
+      en: "Your commute switch — for when getting up and out tends to be a struggle.",
+    },
+    href: "https://apps.apple.com/jp/app/id6773638323",
+    external: true,
+    status: "live",
+    icon: "/app-icons/life-office.png",
+  },
+  {
+    id: "shitagaki",
+    category: "app",
+    title: { ja: "下書き", en: "Draft" },
+    description: {
+      ja: "ブログなどの下書きを、写真を見ながら喋るだけで作成。",
+      en: "Create a blog draft just by talking while you look at your photos.",
+    },
+    href: "https://apps.apple.com/app/id6774141263",
+    external: true,
+    status: "live",
+    icon: "/app-icons/shitagaki.png",
+  },
+  {
+    id: "watcher",
+    category: "app",
+    title: { ja: "Watcher", en: "Watcher" },
+    description: {
+      ja: "追いたい日々のニュースを届ける。",
+      en: "Delivers the daily news you want to keep up with.",
+    },
+    href: "https://legal.testkun.net/watcher/",
+    external: true,
+    status: "wip",
+    icon: "/app-icons/watcher.png",
   },
 ] as const;
 
