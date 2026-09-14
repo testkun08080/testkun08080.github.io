@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { usePageContext } from "vike-react/usePageContext";
 
 const SCALE = 0.28;
 const DESKTOP_FPS = 18;
@@ -7,6 +8,7 @@ const SCROLLING_FPS = 4;
 const REDUCED_MOTION_FPS = 2;
 const SCROLL_IDLE_MS = 140;
 const NOISE_BUFFER_COUNT = 4;
+const RESIZE_DEBOUNCE_MS = 150;
 const TARGET_PATHS = new Set(["/", "/index", "/production", "/dev-integrated"]);
 
 /**
@@ -14,6 +16,11 @@ const TARGET_PATHS = new Set(["/", "/index", "/production", "/dev-integrated"]);
  * app の NoiseCanvas / Layout の grain を参考に、動きを足した版。
  */
 export function AnimatedNoise() {
+  // This component lives in the root layout, so it survives Vike's client-side
+  // navigation. Read the path from the page context rather than `location` so the
+  // target-route check re-evaluates on navigation instead of sticking at whatever
+  // page happened to be loaded first.
+  const { urlPathname } = usePageContext();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const reducedRef = useRef(false);
   const mobileRef = useRef(false);
@@ -52,6 +59,7 @@ export function AnimatedNoise() {
     }
 
     let raf = 0;
+    let frameTimer = 0;
     let frame = 0;
     let lastDrawAt = 0;
     let lastWidth = 0;
@@ -99,14 +107,23 @@ export function AnimatedNoise() {
     };
 
     resize();
-    window.addEventListener("resize", resize);
+    // Mobile browsers fire `resize` repeatedly as the URL bar shows and hides, and
+    // each `resize` regenerates every noise buffer. Debounce so a scroll does not
+    // trigger a burst of full buffer rebuilds.
+    let resizeTimer = 0;
+    const onResize = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(resize, RESIZE_DEBOUNCE_MS);
+    };
+    window.addEventListener("resize", onResize, { passive: true });
 
-    const isTargetRoute = TARGET_PATHS.has(window.location.pathname);
+    const isTargetRoute = TARGET_PATHS.has(urlPathname);
     if (!isTargetRoute) {
       return () => {
         mq.removeEventListener("change", onMq);
         mobileMq.removeEventListener("change", onMobileMq);
-        window.removeEventListener("resize", resize);
+        window.removeEventListener("resize", onResize);
+        window.clearTimeout(resizeTimer);
       };
     }
 
@@ -139,7 +156,7 @@ export function AnimatedNoise() {
             : DESKTOP_FPS;
       const minFrameMs = 1000 / Math.max(1, targetFps);
       if (now - lastDrawAt < minFrameMs) {
-        raf = requestAnimationFrame(loop);
+        scheduleNext(minFrameMs - (now - lastDrawAt));
         return;
       }
       lastDrawAt = now;
@@ -153,7 +170,7 @@ export function AnimatedNoise() {
         if (reducedFrame) {
           ctx.putImageData(reducedFrame, 0, 0);
         }
-        raf = requestAnimationFrame(loop);
+        scheduleNext(minFrameMs);
         return;
       }
 
@@ -162,7 +179,7 @@ export function AnimatedNoise() {
       }
       const source = noiseBuffers[frame % noiseBuffers.length];
       if (!source) {
-        raf = requestAnimationFrame(loop);
+        scheduleNext(minFrameMs);
         return;
       }
 
@@ -172,22 +189,39 @@ export function AnimatedNoise() {
       ctx.globalAlpha = flicker;
       ctx.putImageData(source, 0, 0);
       ctx.globalAlpha = 1;
-      raf = requestAnimationFrame(loop);
+      scheduleNext(minFrameMs);
     };
+
+    // The canvas is drawn at 10-18fps, but re-arming with a bare rAF woke the main
+    // thread 60 times a second just to decide not to draw, which kept the CPU from
+    // idling. Sleep out the remainder of the frame budget instead; the draw cadence
+    // (and so the rendered output) is unchanged.
+    function scheduleNext(delayMs: number) {
+      if (delayMs <= 0) {
+        raf = requestAnimationFrame(loop);
+        return;
+      }
+      frameTimer = window.setTimeout(() => {
+        frameTimer = 0;
+        raf = requestAnimationFrame(loop);
+      }, delayMs);
+    }
 
     raf = requestAnimationFrame(loop);
 
     return () => {
       mq.removeEventListener("change", onMq);
       mobileMq.removeEventListener("change", onMobileMq);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onScroll);
+      window.clearTimeout(resizeTimer);
+      window.clearTimeout(frameTimer);
       if (idleTimerRef.current) {
         window.clearTimeout(idleTimerRef.current);
       }
       cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [urlPathname]);
 
   return (
     <div className="pointer-events-none fixed inset-0 z-100 overflow-hidden" aria-hidden>
