@@ -99,6 +99,12 @@ export function PathBarcodeTemplate3D({
     };
 
     const placeItems = () => {
+      // Must be read every frame: the hero scales this layer's ancestor while
+      // scrolling, and getBoundingClientRect reflects that transform. Caching it
+      // latches whatever scale happened to be applied when the effect last ran and
+      // leaves the barcode laid out at the wrong size once the scale returns to 1.
+      // ResizeObserver cannot stand in for this — transforms leave the border-box
+      // size it observes unchanged.
       const bounds = itemsLayer.getBoundingClientRect();
       const scaleX = bounds.width / (vbW || 1);
       const scaleY = bounds.height / (vbH || 1);

@@ -288,3 +288,9 @@
   }
 
 }
+/* Paused while the pinned hero scene is scrolled out of view (see ProductionHomePage.tsx).
+   Purely a no-op for what is on screen: the marquees are not visible at this point. */
+.bridgePaused .marqueeLeft,
+.bridgePaused .marqueeRight {
+  animation-play-state: paused;
+}
