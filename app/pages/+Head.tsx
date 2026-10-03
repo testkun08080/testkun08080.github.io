@@ -25,16 +25,8 @@ export function Head() {
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-EY0MWFVRQB"
       />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-EY0MWFVRQB');
-          `,
-        }}
-      />
+      {/* Served from /public so the CSP can stay free of inline scripts. */}
+      <script async src="/gtag-init.js" />
 
       {/* Google Fonts: preconnect first, then stylesheet — avoids blocking @import in CSS */}
       <link rel="preconnect" href="https://fonts.googleapis.com" />
