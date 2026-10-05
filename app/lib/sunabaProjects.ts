@@ -187,9 +187,9 @@ export const SUNABA_PROJECTS: readonly SunabaProject[] = [
       ja: "追いたい日々のニュースを届ける。",
       en: "Delivers the daily news you want to keep up with.",
     },
-    href: "https://legal.testkun.net/watcher/",
+    href: "https://apps.apple.com/app/id6772545052",
     external: true,
-    status: "wip",
+    status: "live",
     icon: "/app-icons/watcher.png",
   },
 ] as const;
